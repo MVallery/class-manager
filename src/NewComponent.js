@@ -39,7 +39,9 @@ class NewComponent extends React.Component {
     render(){
       console.log(this.props);
       return (
-        <div style={{ width: '100px', height: '100px', border: '1px solid black' }}>
+        <div onClick={() => {
+          this.props.randomFunction();
+        }} style={{ width: '100px', height: '100px', border: '1px solid black' }}>
           {this.props.randomProp}
         </div>
       )
@@ -51,5 +53,6 @@ class NewComponent extends React.Component {
 
   NewComponent.propTypes = {
     randomProp: PropTypes.any,
+    randomFunction: PropTypes.func,
   };
 export default NewComponent;

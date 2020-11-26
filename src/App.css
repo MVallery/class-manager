@@ -36,3 +36,24 @@
     transform: rotate(360deg);
   }
 }
+
+textarea {
+  background-color:blue;
+}
+.main-container {
+  height:100vh;
+}
+.multi-select-container {
+  display:flex;
+  position:fixed;
+  bottom:0;
+  width:100vw;
+  justify-content:center;
+  align-items:center;
+  background-color:rgb(118, 195, 209);
+}
+.multi-select {
+}
+.iconbutton {
+  /* padding:0px 20px 0px 20px; */
+}
