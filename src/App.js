@@ -134,16 +134,7 @@ class MyStudents extends React.Component {
     };
   }
 
-  handleGridSelect =() => {
-    var arr = [];
-    for (let i = 0; i<this.state.userGridSelection[0]; i++) {
-      arr.push([])
-      for (let i=0; i<this.state.userGridSelection[1]; i++) {
-        arr[arr.length-1].push(null)
-      }
-    }
-    this.state.gridDisplay = arr
-  }
+
   handleSubmit = () => {
     if (this.state.nameList.length > 0) {
       if (window.confirm(
@@ -239,11 +230,13 @@ class MyStudents extends React.Component {
     });
   };
   handleRows = (e) => {
-    var arr = [e.target.value]
+    var arr = []
+    arr.push(e.target.value)
 
     this.setState({
       userGridSelection: arr,
     });
+    console.log("rows: "+ this.state.userGridSelection)
   };
   handleColumns = (e) => {
     var arr = this.state.userGridSelection;
@@ -251,7 +244,48 @@ class MyStudents extends React.Component {
     this.setState({
       userGridSelection:arr
     });
+    console.log("rows: "+ this.state.userGridSelection[0])
+
+    console.log("columns: "+ this.state.userGridSelection[1])
+
   };
+  handleGridSelect =() => {
+    var arr = [];
+    for (let i = 0; i<this.state.userGridSelection[0]; i++) {
+      arr.push([])
+      for (let i=0; i<this.state.userGridSelection[1]; i++) {
+        arr[arr.length-1].push(null)
+      }
+    }
+    var testingForLoop = arr
+    this.setState({
+      gridDisplay:arr,
+    })
+    console.log(testingForLoop)
+    console.log("GridDisplay after GridSelect "+ this.state.gridDisplay)
+    
+  }
+  formGridDisplay = (names) => {
+    var tempGridFill = []
+    var gridFill = this.state.gridDisplay
+    for (var x=0; x< names.length; x++){
+      for (var r=0; r<this.state.gridDisplay.length; r++){
+        for (var i=0; i<this.state.gridDisplay[r].length; i++){
+          gridFill[r][i] = names[x]
+
+        }
+      }
+        
+
+    }  
+    tempGridFill = gridFill
+    this.setState({ //tried putting in if else, tried setting up extra temparray
+      gridDisplay:tempGridFill,
+    });
+    console.log(this.state.gridDisplay)
+
+
+  }
   handleChangeGroups = (e) => {
     this.setState({
       numGroups: e.target.value,
@@ -512,27 +546,7 @@ class MyStudents extends React.Component {
   onDragEnd = () => {
     this.draggedIdx = null;
   };
-  formGridDisplay = (names) => {
-    var tempGridFill = []
-    var gridFill = []
-    for (var x=0; x< names.length; x++){
-      for (var r=0; r<this.state.gridDisplay.length; r++){
-        for (var i=0; i<this.state.gridDisplay[r].length; i++){
-          gridFill[r][i] = names[x]
 
-        }
-      }
-        
-
-    }  
-    tempGridFill = gridFill
-    this.setState({ //tried putting in if else, tried setting up extra temparray
-      gridDisplay:tempGridFill,
-    });
-    console.log(this.state.gridDisplay)
-
-
-  }
   FormRow = (names) => {
     var i;
     var nameList = []; // item xs={3} changes the number that appear on each row but squishes them together
@@ -751,9 +765,9 @@ class MyStudents extends React.Component {
           <br />
           {/* <button onClick={this.handleSubmitGroups}>Create Groups</button> */}
           <h1>My Class:</h1>
-
+          {this.state.gridDisplay}
           <ul>{/* {names} */}</ul>
-
+          <button onClick = {this.handleGridSelect}>Grid Selection</button>
           <button onClick = {() => this.formGridDisplay(names)}>Create Grid Display</button>
           {/* {this.formGridDisplay(names)} */}
 
