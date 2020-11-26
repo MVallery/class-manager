@@ -38,7 +38,11 @@
 }
 
 textarea {
-  background-color:blue;
+  border-radius:10px;
+  border: 7px solid teal;
+  font-style:arial;
+  font-size:15px;
+
 }
 .main-container {
   height:100vh;
@@ -61,6 +65,8 @@ textarea {
   width:200px;
   height:200px;
   padding: 0px;
+  display: flex;
+  flex-direction:column;
 }
 .student-name-points-container {
   border-top-left-radius: 20px;
@@ -68,16 +74,23 @@ textarea {
   display:flex;
   color: white;
   font-size: 30px;
+  justify-content:center;
   background-color: black;
 
 }
 .student-card-name {
-  flex-grow:2
+  /* flex-grow:2 */
 }
 .student-card-points {
-  flex-grow:1;
-  text-align:right;
+  /* flex-grow:1; */
+  text-align:center;
+  font-size:55px;
+  font-weight:bold;
+  /* justify-content:center; */
+  align-self:center;
+
 }
+
 .student-card-popup {
   display:flex;
   justify-content:center;

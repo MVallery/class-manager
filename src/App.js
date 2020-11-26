@@ -553,9 +553,10 @@ class MyStudents extends React.Component {
             <div className="student-card-name">
             <div className={classes.count}>{record.name}</div>
             </div>
+
+            </div>
             <div className="student-card-points">
             <div className={classes.count}>{record.count}</div>
-            </div>
             </div>
             <br />
             <div className="student-card-popup">
@@ -699,8 +700,8 @@ class MyStudents extends React.Component {
 
           <ul>{/* {names} */}</ul>
           <div className="form-row">
-          <Grid container spacing={8}>
-            <Grid container item md={12} spacing={24}>
+          <Grid container spacing={4}>
+            <Grid container item md={12} spacing={12}>
               {this.FormRow(names)}
             </Grid>
           </Grid>
