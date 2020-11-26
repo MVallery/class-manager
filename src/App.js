@@ -129,9 +129,21 @@ class MyStudents extends React.Component {
       searchNameList: [],
       hideClass: false,
       checkAll: false,
+      gridDisplay: [],
+      userGridSelection: [],
     };
   }
 
+  handleGridSelect =() => {
+    var arr = [];
+    for (let i = 0; i<this.state.userGridSelection[0]; i++) {
+      arr.push([])
+      for (let i=0; i<this.state.userGridSelection[1]; i++) {
+        arr[arr.length-1].push(null)
+      }
+    }
+    this.state.gridDisplay = arr
+  }
   handleSubmit = () => {
     if (this.state.nameList.length > 0) {
       if (window.confirm(
@@ -224,6 +236,20 @@ class MyStudents extends React.Component {
   handleChange = (e) => {
     this.setState({
       inputNames: e.target.value,
+    });
+  };
+  handleRows = (e) => {
+    var arr = [e.target.value]
+
+    this.setState({
+      userGridSelection: arr,
+    });
+  };
+  handleColumns = (e) => {
+    var arr = this.state.userGridSelection;
+    arr.push(e.target.value)
+    this.setState({
+      userGridSelection:arr
     });
   };
   handleChangeGroups = (e) => {
@@ -486,6 +512,27 @@ class MyStudents extends React.Component {
   onDragEnd = () => {
     this.draggedIdx = null;
   };
+  formGridDisplay = (names) => {
+    var tempGridFill = []
+    var gridFill = []
+    for (var x=0; x< names.length; x++){
+      for (var r=0; r<this.state.gridDisplay.length; r++){
+        for (var i=0; i<this.state.gridDisplay[r].length; i++){
+          gridFill[r][i] = names[x]
+
+        }
+      }
+        
+
+    }  
+    tempGridFill = gridFill
+    this.setState({ //tried putting in if else, tried setting up extra temparray
+      gridDisplay:tempGridFill,
+    });
+    console.log(this.state.gridDisplay)
+
+
+  }
   FormRow = (names) => {
     var i;
     var nameList = []; // item xs={3} changes the number that appear on each row but squishes them together
@@ -688,6 +735,13 @@ class MyStudents extends React.Component {
 
           <button onClick={this.handleSubmit}>Create List</button>
           <button onClick={this.handleNewStu}>Add Student</button>
+          <input onChange={this.handleRows}
+                value={this.state.userGridSelection[0]}
+                placeholder="rows"></input>
+          <input onChange={this.handleColumns}
+                value={this.state.userGridSelection[1]}
+                placeholder="columns"></input>
+          {/* <button onClick= {this.formGridDisplay}>Create Grid Display</button>  */}
           {/* <textarea
             onChange={this.handleChangeGroups}
             value={this.state.numGroups}
@@ -699,6 +753,12 @@ class MyStudents extends React.Component {
           <h1>My Class:</h1>
 
           <ul>{/* {names} */}</ul>
+
+          <button onClick = {() => this.formGridDisplay(names)}>Create Grid Display</button>
+          {/* {this.formGridDisplay(names)} */}
+
+
+{/* uncomment this for old student list display
           <div className="form-row">
           <Grid container spacing={4}>
             <Grid container item md={12} spacing={12}>
@@ -706,15 +766,23 @@ class MyStudents extends React.Component {
             </Grid>
           </Grid>
           </div>
-          {/* <button onClick={this.handleRandom}>Select Random Student:</button> */}
-          {/* <ul>{this.state.randName}</ul> */}
+
           <div className= "what">
           <Grid container spacing={20}>
             <Grid container item md={12} spacing={12}>
               {this.FormRowRandStudent(this.state.randName)}
             </Grid>
           </Grid>
-          </div>
+          </div> */}
+
+
+
+          {/* <button onClick={this.handleRandom}>Select Random Student:</button> */}
+          {/* <ul>{this.state.randName}</ul> */}
+
+
+
+
           <h3>{this.state.searchNameList}</h3>
         </div>
         </div>
