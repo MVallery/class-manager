@@ -57,3 +57,39 @@ textarea {
 .iconbutton {
   /* padding:0px 20px 0px 20px; */
 }
+.student-card-container { /* changes style under card */
+  width:200px;
+  height:200px;
+  padding: 0px;
+}
+.student-name-points-container {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  display:flex;
+  color: white;
+  font-size: 30px;
+  background-color: black;
+
+}
+.student-card-name {
+  flex-grow:2
+}
+.student-card-points {
+  flex-grow:1;
+  text-align:right;
+}
+.student-card-popup {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+  bottom:0;
+}
+.form-row {
+  /* width:300px; */
+  padding: 0px 20px 0px 20px;
+  /* margin: 0px 20px 0px 20px; */
+}
+.what {
+  width:1000px;
+}

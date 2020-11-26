@@ -488,12 +488,12 @@ class MyStudents extends React.Component {
   };
   FormRow = (names) => {
     var i;
-    var nameList = [];
+    var nameList = []; // item xs={3} changes the number that appear on each row but squishes them together
     for (i = 0; i < names.length; i++) {
       nameList.push(
-        <React.Fragment>
-          <Grid item xs={3}>
-            <Paper>{names[i]}</Paper>
+        <React.Fragment >
+          <Grid  item xs={3}> 
+            <Paper >{names[i]}</Paper>
           </Grid>
         </React.Fragment>
       );
@@ -529,14 +529,19 @@ class MyStudents extends React.Component {
     const names = this.state.nameList.map((record, index) => {
       var key = record.key;
       let keyString = JSON.parse(JSON.stringify(key));
-      var myStyle = {
+      var myStyle = {//changes style on top of card
         color: "black",
         fontSize: "20px",
+        height:"180px",
+        width:"180px",
+        borderRadius: "20px",
+        boxShadow: "10px 10px 10px grey",
+        // margin: "0px 20px 20px",
         backgroundColor: record.background,
       };
 
       return (
-        <div key={record.key} style={hideStyle}>
+        <div className="student-card-container"key={record.key} style={hideStyle}>
           <div
             style={myStyle}
             className="drag"
@@ -544,10 +549,16 @@ class MyStudents extends React.Component {
             onDragStart={(e) => this.onDragStart(e, index)}
             onDragEnd={this.onDragEnd}
             onDragOver={() => this.onDragOver(index)}
-          >
+          ><div className="student-name-points-container">
+            <div className="student-card-name">
             <div className={classes.count}>{record.name}</div>
+            </div>
+            <div className="student-card-points">
             <div className={classes.count}>{record.count}</div>
+            </div>
+            </div>
             <br />
+            <div className="student-card-popup">
             <IconButton
               onClick={() => {
                 this.handleAdd(index);
@@ -589,7 +600,7 @@ class MyStudents extends React.Component {
               </div>
             ) : null}
             {/* </div> */}
-
+            <div>
             <FormGroup row>
               <div key={record.key}>
                 <FormControlLabel
@@ -606,6 +617,9 @@ class MyStudents extends React.Component {
                 />
               </div>
             </FormGroup>
+            </div>
+            </div>
+            
           </div>
         </div>
       );
@@ -684,19 +698,22 @@ class MyStudents extends React.Component {
           <h1>My Class:</h1>
 
           <ul>{/* {names} */}</ul>
+          <div className="form-row">
           <Grid container spacing={8}>
             <Grid container item md={12} spacing={24}>
               {this.FormRow(names)}
             </Grid>
           </Grid>
+          </div>
           {/* <button onClick={this.handleRandom}>Select Random Student:</button> */}
           {/* <ul>{this.state.randName}</ul> */}
-
-          <Grid container spacing={8}>
+          <div className= "what">
+          <Grid container spacing={20}>
             <Grid container item md={12} spacing={12}>
               {this.FormRowRandStudent(this.state.randName)}
             </Grid>
           </Grid>
+          </div>
           <h3>{this.state.searchNameList}</h3>
         </div>
         </div>
