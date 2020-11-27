@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import "./App.css";
-import ReactDOM from "react-dom";
+// import ReactDOM from "react-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Badge from "@material-ui/core/Badge";
 import BottomNavigation from "@material-ui/core/BottomNavigation";
-import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
+// import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import Checkbox from "@material-ui/core/Checkbox";
 import ColorLens from "@material-ui/icons/ColorLens";
 import Delete from "@material-ui/icons/Delete";
@@ -13,25 +13,25 @@ import FormGroup from "@material-ui/core/FormGroup";
 import green from "@material-ui/core/colors/green";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
-import InputBase from "@material-ui/core/InputBase";
+// import InputBase from "@material-ui/core/InputBase";
 import MenuIcon from "@material-ui/icons/Menu";
-import NewComponent from "./NewComponent";
+// import NewComponent from "./NewComponent";
 import PropTypes from "prop-types";
 import Paper from "@material-ui/core/Paper";
 import Sync from "@material-ui/icons/Sync";
 import ThumbDown from "@material-ui/icons/ThumbDown";
 import ThumbUp from "@material-ui/icons/ThumbUp";
 import Typography from "@material-ui/core/Typography";
-import SearchIcon from "@material-ui/icons/Search";
+// import SearchIcon from "@material-ui/icons/Search";
 import SelectAll from "@material-ui/icons/SelectAll";
-import Student from "./student";
+// import Student from "./student";
 import { withStyles } from "@material-ui/core/styles";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import Toolbar from "@material-ui/core/Toolbar";
 import { SketchPicker } from "react-color";
-import { DragDropContext } from "react-beautiful-dnd";
+// import { DragDropContext } from "react-beautiful-dnd";
 // import reorder, { reorderQuoteMap } from '../reorder';
-import { Droppable } from "react-beautiful-dnd";
+// import { Droppable } from "react-beautiful-dnd";
 
 const styles = (theme) => ({
   root: {
@@ -265,27 +265,37 @@ class MyStudents extends React.Component {
     console.log("GridDisplay after GridSelect "+ this.state.gridDisplay)
     
   }
-  formGridDisplay = (names) => {
-    var tempGridFill = []
-    var gridFill = this.state.gridDisplay
-    for (var x=0; x< names.length; x++){
-      for (var r=0; r<this.state.gridDisplay.length; r++){
-        for (var i=0; i<this.state.gridDisplay[r].length; i++){
-          gridFill[r][i] = names[x]
+  formFilledGrid = (names) => {
+    var gridFlat = this.state.gridDisplay.flat()
+    for (var i=0; i<names.length;i++) {
+      gridFlat[i] = names[i]
 
-        }
-      }
-        
-
-    }  
-    tempGridFill = gridFill
-    this.setState({ //tried putting in if else, tried setting up extra temparray
-      gridDisplay:tempGridFill,
-    });
+    }
+    var filledGrid = [], size = this.state.gridDisplay[0].length;
+    while (gridFlat.length>0) filledGrid.push(gridFlat.splice(0, size));
+    console.log(filledGrid)
+    this.setState({
+      gridDisplay: filledGrid,
+    })
     console.log(this.state.gridDisplay)
-
-
   }
+  // formFilledGrid = (names) => {
+  //   var tempGridFill = []
+  //   var gridFill = this.state.gridDisplay
+  //   for (var x=0; x< names.length; x++){
+  //     for (var r=0; r<this.state.gridDisplay.length; r++){
+  //       for (var i=0; i<this.state.gridDisplay[r].length; i++){
+  //         gridFill[r][i] = names[x]
+
+  //       }
+  //     }
+  //   }  
+  //   tempGridFill = gridFill
+  //   this.setState({ //tried putting in if else, tried setting up extra temparray
+  //     gridDisplay:tempGridFill,
+  //   });
+  //   console.log(this.state.gridDisplay)
+  // }
   handleChangeGroups = (e) => {
     this.setState({
       numGroups: e.target.value,
@@ -755,7 +765,7 @@ class MyStudents extends React.Component {
           <input onChange={this.handleColumns}
                 value={this.state.userGridSelection[1]}
                 placeholder="columns"></input>
-          {/* <button onClick= {this.formGridDisplay}>Create Grid Display</button>  */}
+          {/* <button onClick= {this.formFilledGrid}>Create Grid Display</button>  */}
           {/* <textarea
             onChange={this.handleChangeGroups}
             value={this.state.numGroups}
@@ -768,8 +778,8 @@ class MyStudents extends React.Component {
           {this.state.gridDisplay}
           <ul>{/* {names} */}</ul>
           <button onClick = {this.handleGridSelect}>Grid Selection</button>
-          <button onClick = {() => this.formGridDisplay(names)}>Create Grid Display</button>
-          {/* {this.formGridDisplay(names)} */}
+          <button onClick = {() => this.formFilledGrid(names)}>Create Grid Display</button>
+          {/* {this.formFilledGrid(names)} */}
 
 
 {/* uncomment this for old student list display
