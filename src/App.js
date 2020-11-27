@@ -279,6 +279,25 @@ class MyStudents extends React.Component {
     })
     console.log(this.state.gridDisplay)
   }
+
+  formGridDisplay = () => {
+    var newArray = this.state.gridDisplay
+    var newGridDisplay = []
+      for (var i=0; i<newArray.length;i++) {
+        newGridDisplay.push(<div className="grid-row"> {newArray[i]}</div>)
+      }
+      // el === null ? <div> </div>
+    // newArray.map(() => {
+    //   for (var i=0; i<newArray.length;i++) {
+    //     <div className="grid-row"> {newArray[i]}</div>
+    //   }
+    //   // el === null ? <div> </div>
+    // })
+    console.log(newArray)
+    this.setState({
+      gridDisplay:newGridDisplay
+    })
+  }
   // formFilledGrid = (names) => {
   //   var tempGridFill = []
   //   var gridFill = this.state.gridDisplay
@@ -775,11 +794,14 @@ class MyStudents extends React.Component {
           <br />
           {/* <button onClick={this.handleSubmitGroups}>Create Groups</button> */}
           <h1>My Class:</h1>
-          {this.state.gridDisplay}
+
           <ul>{/* {names} */}</ul>
           <button onClick = {this.handleGridSelect}>Grid Selection</button>
-          <button onClick = {() => this.formFilledGrid(names)}>Create Grid Display</button>
-          {/* {this.formFilledGrid(names)} */}
+          <button onClick = {() => this.formFilledGrid(names)}>Create Filled Grid</button>
+          <button onClick = {() => this.formGridDisplay()}>Create Grid Display</button>
+          {this.state.gridDisplay}
+
+{/* {this.formFilledGrid(names)} */}
 
 
 {/* uncomment this for old student list display

@@ -106,3 +106,6 @@ textarea {
 .what {
   width:1000px;
 }
+.grid-row {
+  display:flex;
+}
