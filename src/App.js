@@ -249,7 +249,12 @@ class MyStudents extends React.Component {
     console.log("columns: "+ this.state.userGridSelection[1])
 
   };
-  handleGridSelect =() => {
+  fullGridFormation = (names) => {
+    this.handleGridSelect()
+    setTimeout(this.formFilledGrid(names), 2000)
+    setTimeout(this.formGridDisplay(), 3000)
+  }
+  handleGridSelect =(names) => {
     var arr = [];
     for (let i = 0; i<this.state.userGridSelection[0]; i++) {
       arr.push([])
@@ -263,13 +268,63 @@ class MyStudents extends React.Component {
     })
     console.log(testingForLoop)
     console.log("GridDisplay after GridSelect "+ this.state.gridDisplay)
-    
+    //all this was added to test out stuffs:
+
+    // const formFilledGrid = (names) => {
+    //   var gridFlat = this.state.gridDisplay.flat()
+    //   for (var i=0; i<names.length;i++) {
+    //     gridFlat[i] = names[i]
+  
+    //   }
+    //   var filledGrid = [], size = this.state.gridDisplay[0].length;
+    //   while (gridFlat.length>0) filledGrid.push(gridFlat.splice(0, size));
+    //   console.log(filledGrid)
+    //   this.setState({
+    //     gridDisplay: filledGrid,
+    //   })
+    //   console.log(this.state.gridDisplay)
+
+
+
+
+
+    // }
+    // formFilledGrid(names)
+
+    // const formGridDisplay = () => {
+    //   var newArray = this.state.gridDisplay
+    //   var newGridDisplay = []
+    //     for (var i=0; i<newArray.length;i++) {
+    //       newGridDisplay.push(<div className="grid-row"> {newArray[i]}</div>)
+    //     }
+    //     // el === null ? <div> </div>
+    //   // newArray.map(() => {
+    //   //   for (var i=0; i<newArray.length;i++) {
+    //   //     <div className="grid-row"> {newArray[i]}</div>
+    //   //   }
+    //   //   // el === null ? <div> </div>
+    //   // })
+    //   console.log(newArray)
+    //   this.setState({
+    //     gridDisplay:newGridDisplay
+    //   })
+    // }
+    // formGridDisplay()
+
+
   }
   formFilledGrid = (names) => {
     var gridFlat = this.state.gridDisplay.flat()
     for (var i=0; i<names.length;i++) {
       gridFlat[i] = names[i]
 
+    }
+    for (i=0; i<gridFlat.length;i++){
+      if (gridFlat[i] === null) {
+          gridFlat[i] = <div style={{height:"200px", width:"200px"}}><div className="blank-student"> </div></div>
+      }
+      else {
+      }
     }
     var filledGrid = [], size = this.state.gridDisplay[0].length;
     while (gridFlat.length>0) filledGrid.push(gridFlat.splice(0, size));
@@ -552,7 +607,7 @@ class MyStudents extends React.Component {
     this.setState({ nameList: temp });
   };
   onDragStart = (e, index) => {
-    this.draggedItem = this.state.nameList[index];
+    this.draggedItem = this.state.nameList[index]; //griddisplay changed from nameList
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("text/html", e.target.parentNode);
     e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
@@ -564,7 +619,7 @@ class MyStudents extends React.Component {
       return;
     }
     // filter out the currently dragged item
-    let nameList = this.state.nameList.filter(
+    let nameList = this.state.gridDisplay.filter(
       (item) => item !== this.draggedItem
     );
     // add the dragged item after the dragged over item
@@ -601,6 +656,7 @@ class MyStudents extends React.Component {
     );
     return randName;
   };
+
 
   render() {
     const hideStyle = this.state.hideClass ? { display: "none" } : {};
@@ -797,6 +853,8 @@ class MyStudents extends React.Component {
 
           <ul>{/* {names} */}</ul>
           <button onClick = {this.handleGridSelect}>Grid Selection</button>
+          {/* <button onClick = {this.fullGridFormation(names)}>Full Grid Formation</button> */}
+
           <button onClick = {() => this.formFilledGrid(names)}>Create Filled Grid</button>
           <button onClick = {() => this.formGridDisplay()}>Create Grid Display</button>
           {this.state.gridDisplay}

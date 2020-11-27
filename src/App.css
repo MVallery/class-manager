@@ -98,6 +98,13 @@ textarea {
   position:relative;
   bottom:0;
 }
+.blank-student {
+  width:180px;
+  height:180px;
+  /* padding:0px 10px 0px 10px; */
+  box-shadow: 10px 10px 10px grey;
+  border-radius: 20px;
+}
 .form-row {
   /* width:300px; */
   padding: 0px 20px 0px 20px;
@@ -108,4 +115,5 @@ textarea {
 }
 .grid-row {
   display:flex;
+  justify-content:center;
 }
