@@ -49,3 +49,10 @@
   display:flex;
   justify-content:center;
 }
+.name-display-container {
+  display:flex;
+  flex-direction:column;
+}
+.name-display-row {
+  display:flex;
+}

@@ -38,6 +38,9 @@ class MyStudents extends React.Component {
       checkAll: false,
     };
   }
+  handleState = data => {
+    this.setState(data);
+  }
   handleClassDisplay = (gridDisplay) => {
     console.log('handleclassdisplay')
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
@@ -52,52 +55,7 @@ class MyStudents extends React.Component {
       isLoaded:true
     }, ()=> {console.log('stateisloaded', this.state)})
   }
-  handleSubmit = () => {
-    
-    if ((this.state.nameList.length > 0 && 
-      window.confirm("Are you sure? This will erase your other students! To add new students make sure to click Add Student instead")) || this.state.nameList.length===0) {
 
-        const nameArray = this.state.inputNames.replace(/, /g, ",").split(",");
-        let nameOnlyResult = [];
-        let result = [];
-    
-        for (let x = 0; x < nameArray.length; x++) {
-          const randColor =
-            "#" + Math.floor(Math.random() * 16777215).toString(16);
-          const id =
-            cap(nameArray[x]) +
-            Math.floor(Math.random() * 20);
-          let record = {
-            name: cap(nameArray[x]),
-            count: 0,
-            background: randColor,
-            key: id,
-            isChecked: false,
-            displayColorPicker: false,
-          };
-          result.push(record);
-          nameOnlyResult.push(record.name);
-        }
-        let formattedNameList = []
-        for (let i=0; i<result.length;){
-          let newArray = result.splice(i,this.state.generalSelection.groups)
-          formattedNameList.push(newArray)
-        }
-        result=formattedNameList
-    
-        this.setState({
-          nameList: result,
-          nameOnlyList: nameOnlyResult,
-          inputNames: "",
-        });
-      
-
-    }
-      
-
-      
-     
-  };
   handleNewStu = () => {
     const newNameArray = this.state.inputNames.replace(/ /g, "").split(",");
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
@@ -138,7 +96,7 @@ class MyStudents extends React.Component {
     })
   }
 
-  handleSelection = (key) => {
+  handleSelection = (index, key) => {
     //let isChecked = this.state[key]
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
     // for (let i =0;i<temp.length;i++){
@@ -148,7 +106,7 @@ class MyStudents extends React.Component {
     //     }
     //   }
     // }
-    temp[key].isChecked = !temp[key].isChecked;
+    temp[index].isChecked = !temp[index].isChecked;
     this.setState({ nameList: temp });
   };
 
@@ -173,8 +131,8 @@ class MyStudents extends React.Component {
     }
   };
 
-  handleAdd = (key) => {
-    console.log('handleAdd',key)
+  handleAdd = (index,key) => {
+    console.log('handleAdd',index,key)
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
     // for (let i =0;i<temp.length;i++){
     //   for(let x = 0;x<temp[i].length;x++){
@@ -183,7 +141,8 @@ class MyStudents extends React.Component {
     //     }
     //   }
     // }
-    temp[key].count = temp[key].count + 1;
+    console.log(temp)
+    temp[index].count = temp[index].count + 1;
     // let tempClassDisplay = this.state.classDisplay
     // tempClassDisplay[0][0][index].count = tempClassDisplay[0][0][index].count+1
     this.setState({
@@ -208,7 +167,7 @@ class MyStudents extends React.Component {
     });
   };
 
-  handleSub = (key) => {
+  handleSub = (index,key) => {
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
     // for (let i =0;i<temp.length;i++){
     //   for(let x = 0;x<temp[i].length;x++){
@@ -217,7 +176,7 @@ class MyStudents extends React.Component {
     //     }
     //   }
     // }
-    temp[key].count = temp[key].count - 1;
+    temp[index].count = temp[index].count - 1;
     this.setState({
       nameList: temp,
       count: this.state.count - 1,
@@ -237,7 +196,7 @@ class MyStudents extends React.Component {
       count: count,
     });
   };
-  handleReset = (key) => {
+  handleReset = (index,key) => {
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
     // for (let i =0;i<temp.length;i++){
     //   for(let x = 0;x<temp[i].length;x++){
@@ -246,7 +205,7 @@ class MyStudents extends React.Component {
     //     }
     //   }
     // }
-    temp[key].count = 0;
+    temp[index].count = 0;
     this.setState({
       nameList: temp,
       //count: 0
@@ -265,7 +224,7 @@ class MyStudents extends React.Component {
       count: count,
     });
   };
-  handleDelete = (index) => {
+  handleDelete = (rowIndex,index) => {
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
     if (window.confirm("Are you sure you want to delete this student?")) {
       temp[index].name = 0;
@@ -300,7 +259,7 @@ class MyStudents extends React.Component {
 
   handleBottomNav = () => {};
 
-  handleColorClick = (key) => {
+  handleColorClick = (index,key) => {
     console.log('handlecolorclicked')
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
     // for (let i =0;i<temp.length;i++){
@@ -310,10 +269,10 @@ class MyStudents extends React.Component {
     //     }
     //   }
     // }
-    temp[key].displayColorPicker = !temp[key].displayColorPicker;
+    temp[index].displayColorPicker = !temp[index].displayColorPicker;
     this.setState({ nameList: temp });
   };
-  handleClose = (key) => {
+  handleClose = (index,key) => {
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
     // for (let i =0;i<temp.length;i++){
     //   for(let x = 0;x<temp[i].length;x++){
@@ -322,11 +281,11 @@ class MyStudents extends React.Component {
     //     }
     //   }
     // }
-    temp[key].displayColorPicker = false;
+    temp[index].displayColorPicker = false;
     this.setState({ nameList: temp });
   };
 
-  handleColorSelect = (key, e) => {
+  handleColorSelect = (index,key, e) => {
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
     // for (let i =0;i<temp.length;i++){
     //   for(let x = 0;x<temp[i].length;x++){
@@ -335,7 +294,7 @@ class MyStudents extends React.Component {
     //     }
     //   }
     // }
-    temp[key].background = e.hex;
+    temp[index].background = e.hex;
     this.setState({ nameList: temp });
   };
   onDragStart = (e, key) => {
@@ -379,227 +338,229 @@ class MyStudents extends React.Component {
       left: "0px",
     };
 
-    const names = this.state.nameList.map((array, index)=> {
-      //loops through the nameList array and maps styles & buttons for each name
-      let recordIndex = -1;
-      let recordMap = array.map((record,index) => {
-        recordIndex+=1
-        var key = record.key;
-        let keyString = JSON.parse(JSON.stringify(key));
-        var myStyle = {
-          //changes style on top of card
-          color: "black",
-          fontSize: "20px",
-          height: "180px",
-          width: "180px",
-          borderRadius: "20px",
-          boxShadow: "10px 10px 10px grey",
-          // margin: "0px 20px 20px",
-          backgroundColor: record.background,
+    // const names = this.state.nameList.map((array, rowIndex)=> {
+    //   //loops through the nameList array and maps styles & buttons for each name
+    //   let recordIndex = -1;
+    //   let recordMap = array.map((record,index) => {
+    //     recordIndex+=1
+    //     var key = record.key;
+    //     let keyString = JSON.parse(JSON.stringify(key));
+    //     var myStyle = {
+    //       //changes style on top of card
+    //       color: "black",
+    //       fontSize: "20px",
+    //       height: "180px",
+    //       width: "180px",
+    //       borderRadius: "20px",
+    //       boxShadow: "10px 10px 10px grey",
+    //       // margin: "0px 20px 20px",
+    //       backgroundColor: record.background,
           
-        };
-        return (
-            <div
-              className="student-card-container"
-              key={record.recordIndex}
-              style={hideStyle}
-            >
-              <div
-                style={myStyle}
-                className="drag"
-                draggable="true"
-                onDragStart={(e) => this.onDragStart(e, recordIndex)}
-                onDragEnd={this.onDragEnd}
-                onDragOver={() => this.onDragOver(recordIndex)}
-              >
-                <div className="student-name-points-container">
-                  <div className="student-card-name">
-                    <div className={classes.count}>{record.name}</div>
-                  </div>
-                </div>
-                <div className="student-card-points">
-                  <div className={classes.count}>{record.count}</div>
-                </div>
-                <br />
-                <div className="student-card-popup">
-                  <IconButton
-                    onClick={() => {
-                      this.handleAdd(recordIndex);
-                    }}
-                  >
-                    <ThumbUp />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => {
-                      this.handleSub(recordIndex);
-                    }}
-                  >
-                    <ThumbDown />
-                  </IconButton>
-                  {/* <IconButton
-                    onClick={() => {
-                      this.handleColorClick(key);
-                    }}
-                  >
-                    <ColorLens />
-                  </IconButton> */}
-                  {/* <button onClick={() => {this.handleColorClick(index);}}>Color:</button> */}
+    //     };
+    //     return (
+    //         <div
+    //           className="student-card-container"
+    //           key={record.key}
+    //           style={hideStyle}
+    //         >
+    //           <div
+    //             style={myStyle}
+    //             className="drag"
+    //             draggable="true"
+    //             onDragStart={(e) => this.onDragStart(e, recordIndex)}
+    //             onDragEnd={this.onDragEnd}
+    //             onDragOver={() => this.onDragOver(recordIndex)}
+    //           >
+    //             <div className="student-name-points-container">
+    //               <div className="student-card-name">
+    //                 <div className={classes.count}>{record.name}</div>
+    //               </div>
+    //             </div>
+    //             <div className="student-card-points">
+    //               <div className={classes.count}>{record.count}</div>
+    //             </div>
+    //             <br />
+    //             <div className="student-card-popup">
+    //               <IconButton
+    //                 onClick={() => {
+    //                   this.handleAdd(recordIndex,key);
+    //                 }}
+    //               >
+    //                 <ThumbUp />
+    //               </IconButton>
+    //               <IconButton
+    //                 onClick={() => {
+    //                   this.handleSub(recordIndex,key);
+    //                 }}
+    //               >
+    //                 <ThumbDown />
+    //               </IconButton>
+    //               <IconButton
+    //                 onClick={() => {
+    //                   this.handleColorClick(index,key);
+    //                 }}
+    //               >
+    //                 <ColorLens />
+    //               </IconButton>
+    //               {/* <IconButton>
+    //               <button onClick={() => {this.handleColorClick(index,key);}}>Color:</button>
+    //               </IconButton> */}
+    //               {this.state.nameList[rowIndex][index].displayColorPicker ? (
+    //                 <div style={popover}>
+    //                   <div
+    //                     style={cover}
+    //                     onClick={() => {
+    //                       this.handleClose(index,key);
+    //                     }}
+    //                   />
+    //                   <SketchPicker
+    //                     color={this.state.nameList[rowIndex][index].background}
+    //                     onChange={(e) => {
+    //                       this.handleColorSelect(index,key, e);
+    //                     }}
+    //                   />
+    //                 </div>
+    //               ) : null}
+    //               <div>
+    //                 <FormGroup row>
+    //                   <div key={record.key}>
+    //                     <FormControlLabel
+    //                       control={
+    //                         <Checkbox
+    //                           label={recordIndex}
+    //                           checked={this.state.nameList[rowIndex][index].isChecked}
+    //                           onChange={() => {
+    //                             this.handleSelection(recordIndex,key);
+    //                           }}
+    //                           value={keyString}
+    //                         ></Checkbox>
+    //                       }
+    //                     />
+    //                   </div>
+    //                 </FormGroup>
+    //               </div>
+    //             </div>
+    //           </div>
     
-                  {/* {this.state.nameList.length>0?this.state.nameList[key].displayColorPicker ? (
-                    <div style={popover}>
-                      <div
-                        style={cover}
-                        onClick={() => {
-                          this.handleClose(key);
-                        }}
-                      />
-                      <SketchPicker
-                        color={this.state.nameList[key].background}
-                        onChange={(e) => {
-                          this.handleColorSelect(key, e);
-                        }}
-                      />
-                    </div>
-                  ) : null:null} */}
-                  {/* </div> */}
-                  <div>
-                    <FormGroup row>
-                      <div key={record.key}>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              label={recordIndex}
-                              checked={this.state.nameList.isChecked}
-                              onChange={() => {
-                                this.handleSelection(recordIndex);
-                              }}
-                              value={keyString}
-                            ></Checkbox>
-                          }
-                        />
-                      </div>
-                    </FormGroup>
-                  </div>
-                </div>
-              </div>
-    
-            </div>
-          );
+    //         </div>
+    //       );
         
     
-      })
-      return (
-        recordMap
-      )
-    })
-    // const names = this.state.nameList.map((record, index) => {
-    //   var key = record.key;
-    //   let keyString = JSON.parse(JSON.stringify(key));
-    //   var myStyle = {
-    //     //changes style on top of card
-    //     color: "black",
-    //     fontSize: "20px",
-    //     height: "180px",
-    //     width: "180px",
-    //     borderRadius: "20px",
-    //     boxShadow: "10px 10px 10px grey",
-    //     // margin: "0px 20px 20px",
-    //     backgroundColor: record.background,
-    //   };
-
+    //   })
     //   return (
-    //     <div
-    //       className="student-card-container"
-    //       key={record.key}
-    //       style={hideStyle}
-    //     >
-    //       <div
-    //         style={myStyle}
-    //         className="drag"
-    //         draggable="true"
-    //         onDragStart={(e) => this.onDragStart(e, index)}
-    //         onDragEnd={this.onDragEnd}
-    //         onDragOver={() => this.onDragOver(index)}
-    //       >
-    //         <div className="student-name-points-container">
-    //           <div className="student-card-name">
-    //             <div className={classes.count}>{record.name}</div>
-    //           </div>
-    //         </div>
-    //         <div className="student-card-points">
-    //           <div className={classes.count}>{record.count}</div>
-    //         </div>
-    //         <br />
-    //         <div className="student-card-popup">
-    //           <IconButton
-    //             onClick={() => {
-    //               this.handleAdd(index);
-    //             }}
-    //           >
-    //             <ThumbUp />
-    //           </IconButton>
-    //           <IconButton
-    //             onClick={() => {
-    //               this.handleSub(index);
-    //             }}
-    //           >
-    //             <ThumbDown />
-    //           </IconButton>
-    //           <IconButton
-    //             onClick={() => {
-    //               this.handleColorClick(index);
-    //             }}
-    //           >
-    //             <ColorLens />
-    //           </IconButton>
-    //           {/* <button onClick={() => {this.handleColorClick(index);}}>Color:</button> */}
+    //     // <div className='name-display-row'>{recordMap}</div>
+    //     recordMap
 
-    //           {this.state.nameList[index].displayColorPicker ? (
-    //             <div style={popover}>
-    //               <div
-    //                 style={cover}
-    //                 onClick={() => {
-    //                   this.handleClose(index);
-    //                 }}
-    //               />
-    //               <SketchPicker
-    //                 color={this.state.nameList[index].background}
-    //                 onChange={(e) => {
-    //                   this.handleColorSelect(index, e);
-    //                 }}
-    //               />
-    //             </div>
-    //           ) : null}
-    //           {/* </div> */}
-    //           <div>
-    //             <FormGroup row>
-    //               <div key={record.key}>
-    //                 <FormControlLabel
-    //                   control={
-    //                     <Checkbox
-    //                       label={key}
-    //                       checked={this.state.nameList[index].isChecked}
-    //                       onChange={() => {
-    //                         this.handleSelection(index);
-    //                       }}
-    //                       value={keyString}
-    //                     ></Checkbox>
-    //                   }
-    //                 />
-    //               </div>
-    //             </FormGroup>
-    //           </div>
-    //         </div>
-    //       </div>
+    //   )
+    // })
+    const names = this.state.nameList.map((record, index) => {
+      var key = record.key;
+      let keyString = JSON.parse(JSON.stringify(key));
+      var myStyle = {
+        //changes style on top of card
+        color: "black",
+        fontSize: "20px",
+        height: "180px",
+        width: "180px",
+        borderRadius: "20px",
+        boxShadow: "10px 10px 10px grey",
+        // margin: "0px 20px 20px",
+        backgroundColor: record.background,
+      };
 
-    //     </div>
-    //   );
-    // });
+      return (
+        <div
+          className="student-card-container"
+          key={record.key}
+          style={hideStyle}
+        >
+          <div
+            style={myStyle}
+            className="drag"
+            draggable="true"
+            onDragStart={(e) => this.onDragStart(e, index)}
+            onDragEnd={this.onDragEnd}
+            onDragOver={() => this.onDragOver(index)}
+          >
+            <div className="student-name-points-container">
+              <div className="student-card-name">
+                <div className={classes.count}>{record.name}</div>
+              </div>
+            </div>
+            <div className="student-card-points">
+              <div className={classes.count}>{record.count}</div>
+            </div>
+            <br />
+            <div className="student-card-popup">
+              <IconButton
+                onClick={() => {
+                  this.handleAdd(index);
+                }}
+              >
+                <ThumbUp />
+              </IconButton>
+              <IconButton
+                onClick={() => {
+                  this.handleSub(index);
+                }}
+              >
+                <ThumbDown />
+              </IconButton>
+              <IconButton
+                onClick={() => {
+                  this.handleColorClick(index);
+                }}
+              >
+                <ColorLens />
+              </IconButton>
+              {/* <button onClick={() => {this.handleColorClick(index);}}>Color:</button> */}
+
+              {this.state.nameList[index].displayColorPicker ? (
+                <div style={popover}>
+                  <div
+                    style={cover}
+                    onClick={() => {
+                      this.handleClose(index);
+                    }}
+                  />
+                  <SketchPicker
+                    color={this.state.nameList[index].background}
+                    onChange={(e) => {
+                      this.handleColorSelect(index, e);
+                    }}
+                  />
+                </div>
+              ) : null}
+              {/* </div> */}
+              <div>
+                <FormGroup row>
+                  <div key={record.key}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          label={key}
+                          checked={this.state.nameList[index].isChecked}
+                          onChange={() => {
+                            this.handleSelection(index);
+                          }}
+                          value={keyString}
+                        ></Checkbox>
+                      }
+                    />
+                  </div>
+                </FormGroup>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      );
+    });
     console.log(names)
     return (
       <div>
       {/* {this.state.classDisplay?this.state.classDisplay:null} */}
-      {names}
+      {/* {names} */}
       {/* {this.state.nameList} */}
 
         <Switch>
@@ -615,7 +576,8 @@ class MyStudents extends React.Component {
             {...props}
             inputNames={this.state.inputNames}
             handleChange={this.handleChange}
-            handleSubmit={this.handleSubmit}
+            nameList = {this.state.nameList}
+            handleState={this.handleState}
             names={names}
             handleClassDisplay = {this.handleClassDisplay}
             handleInput = {this.handleInput}
@@ -634,6 +596,7 @@ class MyStudents extends React.Component {
             handleSubMulti={this.handleSubMulti}
             handleDelete = {this.handleDelete}
             handleSelectAll = {this.handleSelectAll}
+            generalSelection = {this.state.generalSelection}
             count= {this.state.count}
             names={names}
             classDisplay = {this.state.classDisplay}

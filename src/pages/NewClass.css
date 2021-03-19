@@ -3,3 +3,11 @@
   height: 50;
   margin: 5;
 };
+.new-name-list-container {
+  display:flex;
+  flex-direction:column;
+}
+.new-name-list {
+  display:flex;
+
+}

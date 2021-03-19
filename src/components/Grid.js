@@ -106,7 +106,6 @@ import './Grid.css'
                       <button onClick = {this.handleGridSelect}>Grid Selection</button>
 
       <button onClick = {() => this.formFilledGrid(this.props.names)}>Create Filled Grid</button>
-    <Link to='/classes'>view class</Link>
     <button onClick = {this.onClick}>Create your class</button>
 
       
