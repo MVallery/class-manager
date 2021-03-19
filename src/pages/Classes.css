@@ -1,0 +1,18 @@
+.multi-select-container {
+  display:flex;
+  position:fixed;
+  bottom:0;
+  width:100vw;
+  justify-content:center;
+  align-items:center;
+  background-color:rgb(118, 195, 209);
+}
+.grid-row {
+  display:flex;
+  justify-content:center;
+}
+.grid-display {
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+}

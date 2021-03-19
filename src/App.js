@@ -1,119 +1,27 @@
 import React, { Component } from "react";
+import { Route, Switch, Link, NavLink } from "react-router-dom";
+
 import "./App.css";
-// import ReactDOM from "react-dom";
-import AppBar from "@material-ui/core/AppBar";
-import Badge from "@material-ui/core/Badge";
-import BottomNavigation from "@material-ui/core/BottomNavigation";
-// import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
+import Classes from "./pages/Classes";
+import NewClass from "./pages/NewClass";
+import Home from './pages/Home'
+import { styles } from "./AppStyles";
+import { cap } from "./app-files/general";
 import Checkbox from "@material-ui/core/Checkbox";
 import ColorLens from "@material-ui/icons/ColorLens";
-import Delete from "@material-ui/icons/Delete";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
-import green from "@material-ui/core/colors/green";
-import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
-// import InputBase from "@material-ui/core/InputBase";
-import MenuIcon from "@material-ui/icons/Menu";
-// import NewComponent from "./NewComponent";
-import PropTypes from "prop-types";
-import Paper from "@material-ui/core/Paper";
-import Sync from "@material-ui/icons/Sync";
 import ThumbDown from "@material-ui/icons/ThumbDown";
 import ThumbUp from "@material-ui/icons/ThumbUp";
-import Typography from "@material-ui/core/Typography";
-// import SearchIcon from "@material-ui/icons/Search";
-import SelectAll from "@material-ui/icons/SelectAll";
-// import Student from "./student";
+import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import { fade } from "@material-ui/core/styles/colorManipulator";
-import Toolbar from "@material-ui/core/Toolbar";
 import { SketchPicker } from "react-color";
 // import { DragDropContext } from "react-beautiful-dnd";
 // import reorder, { reorderQuoteMap } from '../reorder';
 // import { Droppable } from "react-beautiful-dnd";
 
-const styles = (theme) => ({
-  root: {
-    width: "100%",
-    color: green[600],
-    "&$checked": {
-      color: green[500],
-    },
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
-  title: {
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block",
-    },
-  },
-  search: {
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing.unit,
-      width: "auto",
-    },
-  },
-  searchIcon: {
-    width: theme.spacing.unit * 9,
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  inputRoot: {
-    color: "inherit",
-    width: "100%",
-  },
-  main: {
-    paddingLeft: 15,
-  },
-  count: {
-    paddingLeft: 5,
-    alignItems: "center",
-  },
-  checked: {},
-  inputInput: {
-    paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 10,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: 120,
-      "&:focus": {
-        width: 200,
-      },
-    },
-  },
-});
 
-const textAreaStyles = {
-  width: 500,
-  height: 50,
-  margin: 5,
-};
-
-function capitalizeFirstLetter(string) {
-  return string[0].toUpperCase() + string.slice(1);
-}
 
 class MyStudents extends React.Component {
   constructor(props) {
@@ -122,37 +30,45 @@ class MyStudents extends React.Component {
       inputNames: "",
       nameList: [],
       nameOnlyList: [],
-      // { name: blah, count: 0, background: selection: }
+      // classDisplay: [],
+      // isLoaded:false,
+      generalSelection: {groups: '', columns:'', rows:''},
       count: 0,
-      randName: "",
-      searchName: "",
-      searchNameList: [],
       hideClass: false,
       checkAll: false,
-      gridDisplay: [],
-      userGridSelection: [],
     };
   }
-
-
+  handleClassDisplay = (gridDisplay) => {
+    console.log('handleclassdisplay')
+    let temp = JSON.parse(JSON.stringify(this.state.nameList));
+    let slicedTemp = []
+    for (let i=0;i<temp.length;i+this.state.generalSelection.groups) {
+      let newTemp=temp.slice(i,this.state.generalSelection.groups+1)
+      slicedTemp.push(newTemp)
+    }
+    temp.push(gridDisplay)
+    this.setState({
+      classDisplay:temp,
+      isLoaded:true
+    }, ()=> {console.log('stateisloaded', this.state)})
+  }
   handleSubmit = () => {
-    if (this.state.nameList.length > 0) {
-      if (window.confirm(
-          "Are you sure? This will erase your other students! To add new students make sure to click Add Student instead"
-        )
-      ) {
+    
+    if ((this.state.nameList.length > 0 && 
+      window.confirm("Are you sure? This will erase your other students! To add new students make sure to click Add Student instead")) || this.state.nameList.length===0) {
+
         const nameArray = this.state.inputNames.replace(/, /g, ",").split(",");
         let nameOnlyResult = [];
         let result = [];
-
+    
         for (let x = 0; x < nameArray.length; x++) {
           const randColor =
             "#" + Math.floor(Math.random() * 16777215).toString(16);
           const id =
-            capitalizeFirstLetter(nameArray[x]) +
+            cap(nameArray[x]) +
             Math.floor(Math.random() * 20);
           let record = {
-            name: capitalizeFirstLetter(nameArray[x]),
+            name: cap(nameArray[x]),
             count: 0,
             background: randColor,
             key: id,
@@ -162,40 +78,25 @@ class MyStudents extends React.Component {
           result.push(record);
           nameOnlyResult.push(record.name);
         }
+        let formattedNameList = []
+        for (let i=0; i<result.length;){
+          let newArray = result.splice(i,this.state.generalSelection.groups)
+          formattedNameList.push(newArray)
+        }
+        result=formattedNameList
+    
         this.setState({
           nameList: result,
           nameOnlyList: nameOnlyResult,
           inputNames: "",
         });
-      } else {
-      }
-    } else {
-      const nameArray = this.state.inputNames.replace(/, /g, ",").split(",");
-      let nameOnlyResult = [];
-      let result = [];
+      
 
-      for (let x = 0; x < nameArray.length; x++) {
-        const randColor =
-          "#" + Math.floor(Math.random() * 16777215).toString(16);
-        const id =
-          capitalizeFirstLetter(nameArray[x]) + Math.floor(Math.random() * 20);
-        let record = {
-          name: capitalizeFirstLetter(nameArray[x]),
-          count: 0,
-          background: randColor,
-          key: id,
-          isChecked: false,
-          displayColorPicker: false,
-        };
-        result.push(record);
-        nameOnlyResult.push(record.name);
-      }
-      this.setState({
-        nameList: result,
-        nameOnlyList: nameOnlyResult,
-        inputNames: "",
-      });
     }
+      
+
+      
+     
   };
   handleNewStu = () => {
     const newNameArray = this.state.inputNames.replace(/ /g, "").split(",");
@@ -204,9 +105,9 @@ class MyStudents extends React.Component {
     for (let x = 0; x < newNameArray.length; x++) {
       const randColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
       const id =
-        capitalizeFirstLetter(newNameArray[x]) + Math.floor(Math.random() * 20);
+        cap(newNameArray[x]) + Math.floor(Math.random() * 20);
       let record = {
-        name: capitalizeFirstLetter(newNameArray[x]),
+        name: cap(newNameArray[x]),
         count: 0,
         background: randColor,
         key: id,
@@ -229,173 +130,25 @@ class MyStudents extends React.Component {
       inputNames: e.target.value,
     });
   };
-  handleRows = (e) => {
-    var arr = []
-    arr.push(e.target.value)
-
+  handleInput = (e) => {
+    console.log('handleinput', e)
+    const {name, value} = e.target
     this.setState({
-      userGridSelection: arr,
-    });
-    console.log("rows: "+ this.state.userGridSelection)
-  };
-  handleColumns = (e) => {
-    var arr = this.state.userGridSelection;
-    arr.push(e.target.value)
-    this.setState({
-      userGridSelection:arr
-    });
-    console.log("rows: "+ this.state.userGridSelection[0])
-
-    console.log("columns: "+ this.state.userGridSelection[1])
-
-  };
-  fullGridFormation = (names) => {
-    this.handleGridSelect()
-    setTimeout(this.formFilledGrid(names), 2000)
-    setTimeout(this.formGridDisplay(), 3000)
-  }
-  handleGridSelect =(names) => {
-    var arr = [];
-    for (let i = 0; i<this.state.userGridSelection[0]; i++) {
-      arr.push([])
-      for (let i=0; i<this.state.userGridSelection[1]; i++) {
-        arr[arr.length-1].push(null)
-      }
-    }
-    var testingForLoop = arr
-    this.setState({
-      gridDisplay:arr,
-    })
-    console.log(testingForLoop)
-    console.log("GridDisplay after GridSelect "+ this.state.gridDisplay)
-    //all this was added to test out stuffs:
-
-    // const formFilledGrid = (names) => {
-    //   var gridFlat = this.state.gridDisplay.flat()
-    //   for (var i=0; i<names.length;i++) {
-    //     gridFlat[i] = names[i]
-  
-    //   }
-    //   var filledGrid = [], size = this.state.gridDisplay[0].length;
-    //   while (gridFlat.length>0) filledGrid.push(gridFlat.splice(0, size));
-    //   console.log(filledGrid)
-    //   this.setState({
-    //     gridDisplay: filledGrid,
-    //   })
-    //   console.log(this.state.gridDisplay)
-
-
-
-
-
-    // }
-    // formFilledGrid(names)
-
-    // const formGridDisplay = () => {
-    //   var newArray = this.state.gridDisplay
-    //   var newGridDisplay = []
-    //     for (var i=0; i<newArray.length;i++) {
-    //       newGridDisplay.push(<div className="grid-row"> {newArray[i]}</div>)
-    //     }
-    //     // el === null ? <div> </div>
-    //   // newArray.map(() => {
-    //   //   for (var i=0; i<newArray.length;i++) {
-    //   //     <div className="grid-row"> {newArray[i]}</div>
-    //   //   }
-    //   //   // el === null ? <div> </div>
-    //   // })
-    //   console.log(newArray)
-    //   this.setState({
-    //     gridDisplay:newGridDisplay
-    //   })
-    // }
-    // formGridDisplay()
-
-
-  }
-  formFilledGrid = (names) => {
-    var gridFlat = this.state.gridDisplay.flat()
-    for (var i=0; i<names.length;i++) {
-      gridFlat[i] = names[i]
-
-    }
-    for (i=0; i<gridFlat.length;i++){
-      if (gridFlat[i] === null) {
-          gridFlat[i] = <div style={{height:"200px", width:"200px"}}><div className="blank-student"> </div></div>
-      }
-      else {
-      }
-    }
-    var filledGrid = [], size = this.state.gridDisplay[0].length;
-    while (gridFlat.length>0) filledGrid.push(gridFlat.splice(0, size));
-    console.log(filledGrid)
-    this.setState({
-      gridDisplay: filledGrid,
-    })
-    console.log(this.state.gridDisplay)
-  }
-
-  formGridDisplay = () => {
-    var newArray = this.state.gridDisplay
-    var newGridDisplay = []
-      for (var i=0; i<newArray.length;i++) {
-        newGridDisplay.push(<div className="grid-row"> {newArray[i]}</div>)
-      }
-      // el === null ? <div> </div>
-    // newArray.map(() => {
-    //   for (var i=0; i<newArray.length;i++) {
-    //     <div className="grid-row"> {newArray[i]}</div>
-    //   }
-    //   // el === null ? <div> </div>
-    // })
-    console.log(newArray)
-    this.setState({
-      gridDisplay:newGridDisplay
+      generalSelection: {groups:value},
     })
   }
-  // formFilledGrid = (names) => {
-  //   var tempGridFill = []
-  //   var gridFill = this.state.gridDisplay
-  //   for (var x=0; x< names.length; x++){
-  //     for (var r=0; r<this.state.gridDisplay.length; r++){
-  //       for (var i=0; i<this.state.gridDisplay[r].length; i++){
-  //         gridFill[r][i] = names[x]
 
-  //       }
-  //     }
-  //   }  
-  //   tempGridFill = gridFill
-  //   this.setState({ //tried putting in if else, tried setting up extra temparray
-  //     gridDisplay:tempGridFill,
-  //   });
-  //   console.log(this.state.gridDisplay)
-  // }
-  handleChangeGroups = (e) => {
-    this.setState({
-      numGroups: e.target.value,
-    });
-  };
-  handleSubmitGroups = () => {
-    let temp = JSON.parse(JSON.stringify(this.state.numGroups));
-    let tempNum = this.state.numGroups;
-    var groupList = [];
-    for (let x = 0; x < tempNum; x++) {
-      groupList.push(
-        <React.Fragment>
-          <Grid item xs={3}>
-            <Paper></Paper>
-          </Grid>
-        </React.Fragment>
-      );
-    }
-    this.setState({
-      groupList: groupList,
-    });
-  };
-  handleSelection = (index) => {
+  handleSelection = (key) => {
     //let isChecked = this.state[key]
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
-    temp[index].isChecked = !temp[index].isChecked;
+    // for (let i =0;i<temp.length;i++){
+    //   for(let x = 0;x<temp[i].length;x++){
+    //     if (temp[i][x].key === key) {
+    //       temp[i][x].isChecked = !temp[i][x].isChecked
+    //     }
+    //   }
+    // }
+    temp[key].isChecked = !temp[key].isChecked;
     this.setState({ nameList: temp });
   };
 
@@ -420,22 +173,27 @@ class MyStudents extends React.Component {
     }
   };
 
-  handleSearchChange = (e) => {
-    this.setState({
-      searchName: e.target.value,
-    });
-  };
-  handleAdd = (index) => {
+  handleAdd = (key) => {
+    console.log('handleAdd',key)
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
-    temp[index].count = temp[index].count + 1;
-
+    // for (let i =0;i<temp.length;i++){
+    //   for(let x = 0;x<temp[i].length;x++){
+    //     if (temp[i][x].key === key) {
+    //       temp[i][x].count = temp[i][x].count+1
+    //     }
+    //   }
+    // }
+    temp[key].count = temp[key].count + 1;
+    // let tempClassDisplay = this.state.classDisplay
+    // tempClassDisplay[0][0][index].count = tempClassDisplay[0][0][index].count+1
     this.setState({
       nameList: temp,
       count: this.state.count + 1,
+      // classDisplay:tempClassDisplay
     });
   };
 
-  handleAddMulti = (index, key) => {
+  handleAddMulti = (change) => {
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
     let count = JSON.parse(JSON.stringify(this.state.count));
     for (let x = 0; x < temp.length; x++) {
@@ -450,15 +208,22 @@ class MyStudents extends React.Component {
     });
   };
 
-  handleSub = (index) => {
+  handleSub = (key) => {
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
-    temp[index].count = temp[index].count - 1;
+    // for (let i =0;i<temp.length;i++){
+    //   for(let x = 0;x<temp[i].length;x++){
+    //     if (temp[i][x].key === key) {
+    //       temp[i][x].count = temp[i][x].count-1
+    //     }
+    //   }
+    // }
+    temp[key].count = temp[key].count - 1;
     this.setState({
       nameList: temp,
       count: this.state.count - 1,
     });
   };
-  handleSubMulti = (index, key) => {
+  handleSubMulti = (change) => {
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
     let count = JSON.parse(JSON.stringify(this.state.count));
     for (let x = 0; x < temp.length; x++) {
@@ -472,9 +237,16 @@ class MyStudents extends React.Component {
       count: count,
     });
   };
-  handleReset = (index) => {
+  handleReset = (key) => {
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
-    temp[index].count = 0;
+    // for (let i =0;i<temp.length;i++){
+    //   for(let x = 0;x<temp[i].length;x++){
+    //     if (temp[i][x].key === key) {
+    //       temp[i][x].count = 0
+    //     }
+    //   }
+    // }
+    temp[key].count = 0;
     this.setState({
       nameList: temp,
       //count: 0
@@ -510,25 +282,6 @@ class MyStudents extends React.Component {
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
     let count = JSON.parse(JSON.stringify(this.state.count));
     if (window.confirm("Are you sure you want to delete these students?")) {
-      for (let x = 0; x < temp.length; x++) {
-        if (temp[x].isChecked === true) {
-          //temp[x].name = 0;
-          temp.splice(x, 1);
-          console.log(temp);
-        }
-        console.log(temp);
-        //this.setState({nameList:temp})
-      }
-      this.setState({
-        nameList: temp,
-        count: count,
-      });
-    }
-  };
-  handleDeleteMulti = () => {
-    let temp = JSON.parse(JSON.stringify(this.state.nameList));
-    let count = JSON.parse(JSON.stringify(this.state.count));
-    if (window.confirm("Are you sure you want to delete these students?")) {
       for (let x = temp.length - 1; x >= 0; x--) {
         if (temp[x].isChecked === true) {
           //temp[x] = 0;
@@ -544,76 +297,55 @@ class MyStudents extends React.Component {
       });
     }
   };
-  handleRandom = () => {
-    let temp = JSON.parse(JSON.stringify(this.state.nameList));
-    let random = temp[Math.floor(Math.random() * temp.length)];
-    let randomName = random.name;
-    var myStyle = {
-      color: "black",
-      fontSize: "20px",
-      backgroundColor: random.background,
-    };
-    var randomNameList = (
-      <div style={myStyle}>
-        <React.Fragment>
-          <Grid item xs={2}>
-            {randomName}
-          </Grid>
-        </React.Fragment>
-      </div>
-    );
 
-    this.setState({
-      randName: randomNameList,
-      //count: 0
-    });
-  };
-  handleSearch = () => {
-    this.setState({ hideClass: true });
-    const namesOnly = JSON.parse(JSON.stringify(this.state.nameOnlyList));
-    const searchName = JSON.parse(JSON.stringify(this.state.searchName));
-    if (namesOnly.indexOf(searchName) > -1) {
-      //const randColor = '#'+Math.floor(Math.random()*16777215).toString(16);
-      let record = searchName;
-      //result.push(record);
-      this.setState({
-        searchNameList: record,
-        searchName: "",
-      });
-    } else {
-      let record = "no match";
-      this.setState({
-        searchNameList: record,
-        searchName: "",
-      });
-    }
-  };
   handleBottomNav = () => {};
 
-  handleColorClick = (index) => {
+  handleColorClick = (key) => {
+    console.log('handlecolorclicked')
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
-    temp[index].displayColorPicker = !temp[index].displayColorPicker;
+    // for (let i =0;i<temp.length;i++){
+    //   for(let x = 0;x<temp[i].length;x++){
+    //     if (temp[i][x].key === key) {
+    //       temp[i][x].displayColorPicker = !temp[i][x].displayColorPicker
+    //     }
+    //   }
+    // }
+    temp[key].displayColorPicker = !temp[key].displayColorPicker;
     this.setState({ nameList: temp });
   };
-  handleClose = (index) => {
+  handleClose = (key) => {
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
-    temp[index].displayColorPicker = false;
+    // for (let i =0;i<temp.length;i++){
+    //   for(let x = 0;x<temp[i].length;x++){
+    //     if (temp[i][x].key === key) {
+    //       temp[i][x].displayColorPicker = false;
+    //     }
+    //   }
+    // }
+    temp[key].displayColorPicker = false;
     this.setState({ nameList: temp });
   };
 
-  handleColorSelect = (index, e) => {
+  handleColorSelect = (key, e) => {
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
-    temp[index].background = e.hex;
+    // for (let i =0;i<temp.length;i++){
+    //   for(let x = 0;x<temp[i].length;x++){
+    //     if (temp[i][x].key === key) {
+    //       temp[i][x].background = e.hex
+    //     }
+    //   }
+    // }
+    temp[key].background = e.hex;
     this.setState({ nameList: temp });
   };
-  onDragStart = (e, index) => {
-    this.draggedItem = this.state.nameList[index]; //griddisplay changed from nameList
+  onDragStart = (e, key) => {
+    this.draggedItem = this.state.nameList[key]; //griddisplay changed from nameList
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("text/html", e.target.parentNode);
     e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
   };
-  onDragOver = (index) => {
-    const draggedOverItem = this.state.nameList[index];
+  onDragOver = (key) => {
+    const draggedOverItem = this.state.nameList[key];
     // if the item is dragged over itself, ignore
     if (this.draggedItem === draggedOverItem) {
       return;
@@ -623,7 +355,7 @@ class MyStudents extends React.Component {
       (item) => item !== this.draggedItem
     );
     // add the dragged item after the dragged over item
-    nameList.splice(index, 0, this.draggedItem);
+    nameList.splice(key, 0, this.draggedItem); //fix
 
     this.setState({ nameList });
   };
@@ -631,34 +363,8 @@ class MyStudents extends React.Component {
     this.draggedIdx = null;
   };
 
-  FormRow = (names) => {
-    var i;
-    var nameList = []; // item xs={3} changes the number that appear on each row but squishes them together
-    for (i = 0; i < names.length; i++) {
-      nameList.push(
-        <React.Fragment >
-          <Grid  item xs={3}> 
-            <Paper >{names[i]}</Paper>
-          </Grid>
-        </React.Fragment>
-      );
-    }
-    return nameList;
-  };
-  FormRowRandStudent = (name) => {
-    var randName = [];
-    randName.push(
-      <React.Fragment>
-        <Grid item xs={3}>
-          <Paper>{name}</Paper>
-        </Grid>
-      </React.Fragment>
-    );
-    return randName;
-  };
-
-
   render() {
+    console.log(this.state.nameList)
     const hideStyle = this.state.hideClass ? { display: "none" } : {};
     const { classes } = this.props;
     const popover = {
@@ -672,254 +378,268 @@ class MyStudents extends React.Component {
       bottom: "0px",
       left: "0px",
     };
-    const names = this.state.nameList.map((record, index) => {
-      var key = record.key;
-      let keyString = JSON.parse(JSON.stringify(key));
-      var myStyle = {//changes style on top of card
-        color: "black",
-        fontSize: "20px",
-        height:"180px",
-        width:"180px",
-        borderRadius: "20px",
-        boxShadow: "10px 10px 10px grey",
-        // margin: "0px 20px 20px",
-        backgroundColor: record.background,
-      };
 
+    const names = this.state.nameList.map((array, index)=> {
+      //loops through the nameList array and maps styles & buttons for each name
+      let recordIndex = -1;
+      let recordMap = array.map((record,index) => {
+        recordIndex+=1
+        var key = record.key;
+        let keyString = JSON.parse(JSON.stringify(key));
+        var myStyle = {
+          //changes style on top of card
+          color: "black",
+          fontSize: "20px",
+          height: "180px",
+          width: "180px",
+          borderRadius: "20px",
+          boxShadow: "10px 10px 10px grey",
+          // margin: "0px 20px 20px",
+          backgroundColor: record.background,
+          
+        };
+        return (
+            <div
+              className="student-card-container"
+              key={record.recordIndex}
+              style={hideStyle}
+            >
+              <div
+                style={myStyle}
+                className="drag"
+                draggable="true"
+                onDragStart={(e) => this.onDragStart(e, recordIndex)}
+                onDragEnd={this.onDragEnd}
+                onDragOver={() => this.onDragOver(recordIndex)}
+              >
+                <div className="student-name-points-container">
+                  <div className="student-card-name">
+                    <div className={classes.count}>{record.name}</div>
+                  </div>
+                </div>
+                <div className="student-card-points">
+                  <div className={classes.count}>{record.count}</div>
+                </div>
+                <br />
+                <div className="student-card-popup">
+                  <IconButton
+                    onClick={() => {
+                      this.handleAdd(recordIndex);
+                    }}
+                  >
+                    <ThumbUp />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => {
+                      this.handleSub(recordIndex);
+                    }}
+                  >
+                    <ThumbDown />
+                  </IconButton>
+                  {/* <IconButton
+                    onClick={() => {
+                      this.handleColorClick(key);
+                    }}
+                  >
+                    <ColorLens />
+                  </IconButton> */}
+                  {/* <button onClick={() => {this.handleColorClick(index);}}>Color:</button> */}
+    
+                  {/* {this.state.nameList.length>0?this.state.nameList[key].displayColorPicker ? (
+                    <div style={popover}>
+                      <div
+                        style={cover}
+                        onClick={() => {
+                          this.handleClose(key);
+                        }}
+                      />
+                      <SketchPicker
+                        color={this.state.nameList[key].background}
+                        onChange={(e) => {
+                          this.handleColorSelect(key, e);
+                        }}
+                      />
+                    </div>
+                  ) : null:null} */}
+                  {/* </div> */}
+                  <div>
+                    <FormGroup row>
+                      <div key={record.key}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              label={recordIndex}
+                              checked={this.state.nameList.isChecked}
+                              onChange={() => {
+                                this.handleSelection(recordIndex);
+                              }}
+                              value={keyString}
+                            ></Checkbox>
+                          }
+                        />
+                      </div>
+                    </FormGroup>
+                  </div>
+                </div>
+              </div>
+    
+            </div>
+          );
+        
+    
+      })
       return (
-        <div className="student-card-container"key={record.key} style={hideStyle}>
-          <div
-            style={myStyle}
-            className="drag"
-            draggable="true"
-            onDragStart={(e) => this.onDragStart(e, index)}
-            onDragEnd={this.onDragEnd}
-            onDragOver={() => this.onDragOver(index)}
-          ><div className="student-name-points-container">
-            <div className="student-card-name">
-            <div className={classes.count}>{record.name}</div>
-            </div>
+        recordMap
+      )
+    })
+    // const names = this.state.nameList.map((record, index) => {
+    //   var key = record.key;
+    //   let keyString = JSON.parse(JSON.stringify(key));
+    //   var myStyle = {
+    //     //changes style on top of card
+    //     color: "black",
+    //     fontSize: "20px",
+    //     height: "180px",
+    //     width: "180px",
+    //     borderRadius: "20px",
+    //     boxShadow: "10px 10px 10px grey",
+    //     // margin: "0px 20px 20px",
+    //     backgroundColor: record.background,
+    //   };
 
-            </div>
-            <div className="student-card-points">
-            <div className={classes.count}>{record.count}</div>
-            </div>
-            <br />
-            <div className="student-card-popup">
-            <IconButton
-              onClick={() => {
-                this.handleAdd(index);
-              }}
-            >
-              <ThumbUp />
-            </IconButton>
-            <IconButton
-              onClick={() => {
-                this.handleSub(index);
-              }}
-            >
-              <ThumbDown />
-            </IconButton>
-            {/* <div> */}
-            <IconButton
-              onClick={() => {
-                this.handleColorClick(index);
-              }}
-            >
-              <ColorLens />
-            </IconButton>
-            {/* <button onClick={() => {this.handleColorClick(index);}}>Color:</button> */}
+    //   return (
+    //     <div
+    //       className="student-card-container"
+    //       key={record.key}
+    //       style={hideStyle}
+    //     >
+    //       <div
+    //         style={myStyle}
+    //         className="drag"
+    //         draggable="true"
+    //         onDragStart={(e) => this.onDragStart(e, index)}
+    //         onDragEnd={this.onDragEnd}
+    //         onDragOver={() => this.onDragOver(index)}
+    //       >
+    //         <div className="student-name-points-container">
+    //           <div className="student-card-name">
+    //             <div className={classes.count}>{record.name}</div>
+    //           </div>
+    //         </div>
+    //         <div className="student-card-points">
+    //           <div className={classes.count}>{record.count}</div>
+    //         </div>
+    //         <br />
+    //         <div className="student-card-popup">
+    //           <IconButton
+    //             onClick={() => {
+    //               this.handleAdd(index);
+    //             }}
+    //           >
+    //             <ThumbUp />
+    //           </IconButton>
+    //           <IconButton
+    //             onClick={() => {
+    //               this.handleSub(index);
+    //             }}
+    //           >
+    //             <ThumbDown />
+    //           </IconButton>
+    //           <IconButton
+    //             onClick={() => {
+    //               this.handleColorClick(index);
+    //             }}
+    //           >
+    //             <ColorLens />
+    //           </IconButton>
+    //           {/* <button onClick={() => {this.handleColorClick(index);}}>Color:</button> */}
 
-            {this.state.nameList[index].displayColorPicker ? (
-              <div style={popover}>
-                <div
-                  style={cover}
-                  onClick={() => {
-                    this.handleClose(index);
-                  }}
-                />
-                <SketchPicker
-                  color={this.state.nameList[index].background}
-                  onChange={(e) => {
-                    this.handleColorSelect(index, e);
-                  }}
-                />
-              </div>
-            ) : null}
-            {/* </div> */}
-            <div>
-            <FormGroup row>
-              <div key={record.key}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      label={key}
-                      checked={this.state.nameList[index].isChecked}
-                      onChange={() => {
-                        this.handleSelection(index);
-                      }}
-                      value={keyString}
-                    ></Checkbox>
-                  }
-                />
-              </div>
-            </FormGroup>
-            </div>
-            </div>
-            
-          </div>
-        </div>
-      );
-    });
+    //           {this.state.nameList[index].displayColorPicker ? (
+    //             <div style={popover}>
+    //               <div
+    //                 style={cover}
+    //                 onClick={() => {
+    //                   this.handleClose(index);
+    //                 }}
+    //               />
+    //               <SketchPicker
+    //                 color={this.state.nameList[index].background}
+    //                 onChange={(e) => {
+    //                   this.handleColorSelect(index, e);
+    //                 }}
+    //               />
+    //             </div>
+    //           ) : null}
+    //           {/* </div> */}
+    //           <div>
+    //             <FormGroup row>
+    //               <div key={record.key}>
+    //                 <FormControlLabel
+    //                   control={
+    //                     <Checkbox
+    //                       label={key}
+    //                       checked={this.state.nameList[index].isChecked}
+    //                       onChange={() => {
+    //                         this.handleSelection(index);
+    //                       }}
+    //                       value={keyString}
+    //                     ></Checkbox>
+    //                   }
+    //                 />
+    //               </div>
+    //             </FormGroup>
+    //           </div>
+    //         </div>
+    //       </div>
 
+    //     </div>
+    //   );
+    // });
+    console.log(names)
     return (
       <div>
-        <div className={classes.root}>
-          <AppBar position="static">
-            <Toolbar>
-              <IconButton
-                className={classes.menuButton}
-                color="inherit"
-                aria-label="Open drawer"
-              >
-                <MenuIcon />
-              </IconButton>
+      {/* {this.state.classDisplay?this.state.classDisplay:null} */}
+      {names}
+      {/* {this.state.nameList} */}
 
-              <Typography
-                className={classes.title}
-                variant="h6"
-                color="inherit"
-                noWrap
-              >
-                <h3>My Class List</h3>
-                {/* <NewComponent randomProp={this.state.count} randomFunction={() => {
-                    console.log('random function');
-                  }} />
-                  <Student randomProp={this.state.count}/> */}
-              </Typography>
-
-              {/* <IconButton onClick={this.handleSearch}>
-                <SearchIcon />
-              </IconButton> */}
-              <div className={classes.grow} />
-              <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                  {/* <IconButton onClick={this.handleSearch}>
-                    <SearchIcon />
-                  </IconButton> */}
-                </div>
-                {/* <InputBase
-                  onSubmit={this.handleSearch}
-                  onChange={this.handleSearchChange}
-                  value={this.state.searchName}
-                  placeholder="Search…"
-                  classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput,
-                  }}
-                /> */}
-              </div>
-            </Toolbar>
-          </AppBar>
-        </div>
-        <div className= "main-container">
-        <div className={classes.main}>
-          <textarea
-            onChange={this.handleChange}
-            value={this.state.inputNames}
-            style={textAreaStyles}
-            placeholder="Separate names with Commas"
+        <Switch>
+        <Route path="/" exact>
+          <Home />
+        </Route>
+        <Route path="/signup" exact>
+          {/* <Authenticate /> */}
+        </Route>
+        <Route path="/newclass" exact
+        render={(props) => (
+          <NewClass
+            {...props}
+            inputNames={this.state.inputNames}
+            handleChange={this.handleChange}
+            handleSubmit={this.handleSubmit}
+            names={names}
+            handleClassDisplay = {this.handleClassDisplay}
+            handleInput = {this.handleInput}
+            generalSelection = {this.state.generalSelection}
           />
-          <br />
+            )}/>  
 
-          <button onClick={this.handleSubmit}>Create List</button>
-          <button onClick={this.handleNewStu}>Add Student</button>
-          <input onChange={this.handleRows}
-                value={this.state.userGridSelection[0]}
-                placeholder="rows"></input>
-          <input onChange={this.handleColumns}
-                value={this.state.userGridSelection[1]}
-                placeholder="columns"></input>
-          {/* <button onClick= {this.formFilledGrid}>Create Grid Display</button>  */}
-          {/* <textarea
-            onChange={this.handleChangeGroups}
-            value={this.state.numGroups}
-            style={textAreaStyles}
-            placeholder="Enter number of Groups"
-          /> */}
-          <br />
-          {/* <button onClick={this.handleSubmitGroups}>Create Groups</button> */}
-          <h1>My Class:</h1>
+        <Route path="/classes" exact
+        render={(props) => (
+          <Classes
+            {...props}
+            handleNewStu={this.handleNewStu}
+            handleAddMulti={this.handleAddMulti}
+            handleAdd={this.handleAdd}
+            handleSub={this.handleSub}
+            handleSubMulti={this.handleSubMulti}
+            handleDelete = {this.handleDelete}
+            handleSelectAll = {this.handleSelectAll}
+            count= {this.state.count}
+            names={names}
+            classDisplay = {this.state.classDisplay}
+          />)}/>
 
-          <ul>{/* {names} */}</ul>
-          <button onClick = {this.handleGridSelect}>Grid Selection</button>
-          {/* <button onClick = {this.fullGridFormation(names)}>Full Grid Formation</button> */}
-
-          <button onClick = {() => this.formFilledGrid(names)}>Create Filled Grid</button>
-          <button onClick = {() => this.formGridDisplay()}>Create Grid Display</button>
-          {this.state.gridDisplay}
-
-{/* {this.formFilledGrid(names)} */}
-
-
-{/* uncomment this for old student list display
-          <div className="form-row">
-          <Grid container spacing={4}>
-            <Grid container item md={12} spacing={12}>
-              {this.FormRow(names)}
-            </Grid>
-          </Grid>
-          </div>
-
-          <div className= "what">
-          <Grid container spacing={20}>
-            <Grid container item md={12} spacing={12}>
-              {this.FormRowRandStudent(this.state.randName)}
-            </Grid>
-          </Grid>
-          </div> */}
-
-
-
-          {/* <button onClick={this.handleRandom}>Select Random Student:</button> */}
-          {/* <ul>{this.state.randName}</ul> */}
-
-
-
-
-          <h3>{this.state.searchNameList}</h3>
-        </div>
-        </div>
-        <div className="multi-select-container">
-          <div className="multi-select">
-          <IconButton className="iconbutton" onClick={this.handleAddMulti}>
-            <ThumbUp />
-          </IconButton>
-          <IconButton className="iconbutton" onClick={this.handleSubMulti}>
-            <ThumbDown />
-          </IconButton>
-          <IconButton className="iconbutton" onClick={this.handleResetMulti}>
-            <Sync />
-          </IconButton>
-          <IconButton className="iconbutton" onClick={this.handleDeleteMulti}>
-            <Delete />
-          </IconButton>
-          <IconButton className="iconbutton" onClick={this.handleSelectAll}>
-            <SelectAll />
-          </IconButton>
-          </div>
-          <h1>Total Class Points: {this.state.count}</h1>
-
-          </div>
-        <BottomNavigation
-          onChange={this.handleBottomNav}
-          showLabels
-          className={classes.root}
-        >
-          {" "}
-          {/*took away value = {value} caused error */}
-          {/* <BottomNavigationAction label="Reset" icon={<Sync />} /> */}
-        </BottomNavigation>
+            </Switch>    
       </div>
     );
   }

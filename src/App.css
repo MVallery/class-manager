@@ -1,66 +1,8 @@
-.App {
-  text-align: center;
-}
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-textarea {
-  border-radius:10px;
-  border: 7px solid teal;
-  font-style:arial;
-  font-size:15px;
-
-}
 .main-container {
   height:100vh;
 }
-.multi-select-container {
-  display:flex;
-  position:fixed;
-  bottom:0;
-  width:100vw;
-  justify-content:center;
-  align-items:center;
-  background-color:rgb(118, 195, 209);
-}
-.multi-select {
-}
-.iconbutton {
-  /* padding:0px 20px 0px 20px; */
-}
+
 .student-card-container { /* changes style under card */
   width:200px;
   height:200px;
@@ -77,9 +19,6 @@ textarea {
   justify-content:center;
   background-color: black;
 
-}
-.student-card-name {
-  /* flex-grow:2 */
 }
 .student-card-points {
   /* flex-grow:1; */
@@ -105,14 +44,7 @@ textarea {
   box-shadow: 10px 10px 10px grey;
   border-radius: 20px;
 }
-.form-row {
-  /* width:300px; */
-  padding: 0px 20px 0px 20px;
-  /* margin: 0px 20px 0px 20px; */
-}
-.what {
-  width:1000px;
-}
+
 .grid-row {
   display:flex;
   justify-content:center;
