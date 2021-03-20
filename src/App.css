@@ -4,8 +4,8 @@
 }
 
 .student-card-container { /* changes style under card */
-  width:200px;
-  height:200px;
+  width:180px;
+  height:180px;
   padding: 0px;
   display: flex;
   flex-direction:column;
@@ -55,4 +55,7 @@
 }
 .name-display-row {
   display:flex;
+}
+.icon {
+  padding:5px;
 }

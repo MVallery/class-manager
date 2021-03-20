@@ -92,7 +92,7 @@ class MyStudents extends React.Component {
     console.log('handleinput', e)
     const {name, value} = e.target
     this.setState({
-      generalSelection: {groups:value},
+      generalSelection: {groups:Number(value)},
     })
   }
 
@@ -460,8 +460,8 @@ class MyStudents extends React.Component {
         //changes style on top of card
         color: "black",
         fontSize: "20px",
-        height: "180px",
-        width: "180px",
+        height: "160px",
+        width: "160px",
         borderRadius: "20px",
         boxShadow: "10px 10px 10px grey",
         // margin: "0px 20px 20px",
@@ -490,7 +490,6 @@ class MyStudents extends React.Component {
             <div className="student-card-points">
               <div className={classes.count}>{record.count}</div>
             </div>
-            <br />
             <div className="student-card-popup">
               <IconButton
                 onClick={() => {
@@ -499,7 +498,7 @@ class MyStudents extends React.Component {
               >
                 <ThumbUp />
               </IconButton>
-              <IconButton
+              <IconButton className="icon"
                 onClick={() => {
                   this.handleSub(index);
                 }}
@@ -597,6 +596,7 @@ class MyStudents extends React.Component {
             handleDelete = {this.handleDelete}
             handleSelectAll = {this.handleSelectAll}
             generalSelection = {this.state.generalSelection}
+            handleInput = {this.handleInput}
             count= {this.state.count}
             names={names}
             classDisplay = {this.state.classDisplay}
