@@ -57,14 +57,14 @@ const NewClass = (props) => {
         value={props.generalSelection.groups}
         placeholder="groups"
       ></input>
-      <button
+
+    <Link to='/classes'>      <button
         onClick={() => {
           handleSubmit(props);
         }}
       >
         Create List
-      </button>
-    <Link to='/classes'>view class</Link>
+      </button></Link>
 
       {props.names}
       {/* {newNameList} */}

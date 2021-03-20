@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import IconButton from "@material-ui/core/IconButton";
-import Delete from "@material-ui/icons/Delete";
-import ThumbDown from "@material-ui/icons/ThumbDown";
-import ThumbUp from "@material-ui/icons/ThumbUp";
-import Sync from "@material-ui/icons/Sync";
-import SelectAll from "@material-ui/icons/SelectAll";
+
 import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
@@ -14,7 +9,8 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import InputLabel from "@material-ui/core/InputLabel";
-
+import {cap} from '../app-files/general'
+import ClassButtons from '../components/ClassButtons'
 import "./Classes.css";
 const Classes = (props) => {
   const [newNameListState, setNewNameListState] = useState([]);
@@ -53,7 +49,29 @@ const Classes = (props) => {
       }
     }
   };
+  const handleNewStu = () => {
+    const newNameArray = this.state.inputNames.replace(/ /g, "").split(",");
+    let temp = JSON.parse(JSON.stringify(this.state.nameList));
 
+    for (let x = 0; x < newNameArray.length; x++) {
+      const randColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+      const id =
+        cap(newNameArray[x]) + Math.floor(Math.random() * 20);
+      let record = {
+        name: cap(newNameArray[x]),
+        count: 0,
+        background: randColor,
+        key: id,
+        isChecked: false,
+        displayColorPicker: false,
+      };
+      temp.push(record);
+    }
+    this.setState({
+      nameList: temp,
+      inputNames: "",
+    });
+  };
   const handleFormatting = () => {
     console.log(format);
     console.log(props.names);
@@ -81,18 +99,10 @@ const Classes = (props) => {
     handleGroup();
     handleFormatting();
   }, [props.names, format, props.generalSelection.groups]);
-  // let newName= props.names.map(array=>{
-  //   return <div className='red'>{array}</div>
-  // })
+
   return (
     <React.Fragment>
-      {/* {props.classDisplay > 0 ? props.classDisplay[0] : null} */}
-      {/* {props.classDisplay[0]} */}
-      {/* {newGridDisplay} */}
-
-      {/* {props.names} */}
       <FormControl component="fieldset">
-        {/* <FormLabel component="legend">Gender</FormLabel> */}
         <RadioGroup
           aria-label="format"
           name="format"
@@ -123,21 +133,7 @@ const Classes = (props) => {
       <div className={container}>{newNameListState}</div>
       <div className="multi-select-container">
         <div className="multi-select">
-          <IconButton className="iconbutton" onClick={props.handleAddMulti}>
-            <ThumbUp />
-          </IconButton>
-          <IconButton className="iconbutton" onClick={props.handleSubMulti}>
-            <ThumbDown />
-          </IconButton>
-          <IconButton className="iconbutton" onClick={props.handleResetMulti}>
-            <Sync />
-          </IconButton>
-          <IconButton className="iconbutton" onClick={props.handleDeleteMulti}>
-            <Delete />
-          </IconButton>
-          <IconButton className="iconbutton" onClick={props.handleSelectAll}>
-            <SelectAll />
-          </IconButton>
+          <ClassButtons count={props.count} nameList = {props.nameList} handleState={props.handleState} />
         </div>
         <h1>Total Class Points: {props.count}</h1>
       </div>
