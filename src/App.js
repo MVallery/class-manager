@@ -146,6 +146,7 @@ class MyStudents extends React.Component {
   };
   onDragStart = (e, index) => {
     this.draggedItem = this.state.nameList[index]; //griddisplay changed from nameList
+    this.dragIndex = index
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("text/html", e.target.parentNode);
     e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
@@ -157,15 +158,29 @@ class MyStudents extends React.Component {
       return;
     }
     // filter out the currently dragged item
-    let nameList = this.state.nameList.filter(
-      (item) => item !== this.draggedItem
+    let swap = this.state.nameList[index]
+    this.nameList = this.state.nameList.filter(
+      (item) => item !== this.draggedItem && item !== swap
     );
+    // nameList = nameList.filter(
+    //   item => item !== nameList[index]
+    // )
+    console.log(index)
+    if (this.dragIndex>index) {
+      this.nameList.splice(index, 0, this.draggedItem); //fix
+      this.nameList.splice(this.dragIndex, 0, swap)
+    } else {
+      this.nameList.splice(this.dragIndex, 0, swap)
+      this.nameList.splice(index, 0, this.draggedItem); //fix
+    }
     // add the dragged item after the dragged over item
-    nameList.splice(index, 0, this.draggedItem); //fix
 
-    this.setState({ nameList });
+
+    // this.setState({ nameList });
   };
-  onDragEnd = () => {
+  onDragEnd = (index) => {
+    this.setState({ nameList:this.nameList });
+
     this.draggedIdx = null;
   };
 
