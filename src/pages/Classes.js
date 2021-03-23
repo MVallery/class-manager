@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import {Link} from 'react-router-dom'
 
-import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
+import MenuItem from "@material-ui/core/MenuItem";
+import ClassButtonList from '../components/ClassButtonList'
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Radio from "@material-ui/core/Radio";
@@ -10,9 +12,10 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import InputLabel from "@material-ui/core/InputLabel";
 import {cap} from '../app-files/general'
-import ClassButtons from '../components/ClassButtons'
+import GeneralClassButtons from '../components/GeneralClassButtons'
 import "./Classes.css";
 const Classes = (props) => {
+  console.log(props.classList)
   const [newNameListState, setNewNameListState] = useState([]);
   const [format, setFormat] = useState("");
   const [container, setContainer] = useState('row-container')
@@ -76,7 +79,7 @@ const Classes = (props) => {
     console.log(format);
     console.log(props.names);
     console.log(props.generalSelection.groups);
-    let formattedNameList = []; //this being there messes up the class showing? even if i'm not calling any of these variables
+    let formattedNameList = []; 
     for (let i = 0; i < props.names.length;i+=props.generalSelection.groups) {
       let newArray = props.names.slice(i, i+props.generalSelection.groups)
       // let newArray = props.names.splice(i, props.generalSelection.groups);
@@ -98,7 +101,7 @@ const Classes = (props) => {
   useEffect(() => {
     handleGroup();
     handleFormatting();
-  }, [props.names, format, props.generalSelection.groups]);
+  }, [props.names, format, props.nameList, props.generalSelection.groups]);
 
   return (
     <React.Fragment>
@@ -129,11 +132,15 @@ const Classes = (props) => {
         </Select>
         {/* <FormHelperText>Without label</FormHelperText> */}
       </FormControl>
+      <Link to='/new-class'>Add Class</Link>
+
       <button onClick={props.handleNewStu}>Add Student</button>
+      <ClassButtonList handleState= {props.handleState} nameList = {props.nameList} classList= {props.classList} />
+
       <div className={container}>{newNameListState}</div>
       <div className="multi-select-container">
         <div className="multi-select">
-          <ClassButtons count={props.count} nameList = {props.nameList} handleState={props.handleState} />
+          <GeneralClassButtons count={props.count} nameList = {props.nameList} handleState={props.handleState} />
         </div>
         <h1>Total Class Points: {props.count}</h1>
       </div>

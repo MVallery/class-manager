@@ -17,9 +17,7 @@ import ThumbUp from "@material-ui/icons/ThumbUp";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { SketchPicker } from "react-color";
-// import { DragDropContext } from "react-beautiful-dnd";
-// import reorder, { reorderQuoteMap } from '../reorder';
-// import { Droppable } from "react-beautiful-dnd";
+
 
 
 class MyStudents extends React.Component {
@@ -28,9 +26,10 @@ class MyStudents extends React.Component {
     this.state = {
       inputNames: "",
       nameList: [],
+      inputClassName:'',
+      classList: [],
       nameOnlyList: [],
-      // classDisplay: [],
-      // isLoaded:false,
+
       generalSelection: {groups: '', columns:'', rows:''},
       count: 0,
       hideClass: false,
@@ -45,12 +44,16 @@ class MyStudents extends React.Component {
     this.setState({ hideClass: true });
   };
   handleChange = (e) => {
+    console.log(e)
+    const {name, value} = e.target
+    console.log(name, value)
+    console.log(this.state.inputClassName)
     this.setState({
-      inputNames: e.target.value,
+      [name]: value,
     });
   };
   handleInput = (e) => {
-    console.log('handleinput', e)
+    // console.log('handleinput', e)
     const {name, value} = e.target
     this.setState({
       generalSelection: {groups:Number(value)},
@@ -63,12 +66,10 @@ class MyStudents extends React.Component {
     this.setState({ nameList: temp });
   };
 
-
-
   handleAdd = (index,key) => {
-    console.log('handleAdd',index,key)
+    // console.log('handleAdd',index,key)
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
-    console.log(temp)
+    // console.log(temp)
     temp[index].count = temp[index].count + 1;
     this.setState({
       nameList: temp,
@@ -76,8 +77,6 @@ class MyStudents extends React.Component {
       // classDisplay:tempClassDisplay
     });
   };
-
-
 
   handleSub = (index,key) => {
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
@@ -127,7 +126,7 @@ class MyStudents extends React.Component {
   handleBottomNav = () => {};
 
   handleColorClick = (index,key) => {
-    console.log('handlecolorclicked')
+    // console.log('handlecolorclicked')
     let temp = JSON.parse(JSON.stringify(this.state.nameList));
     temp[index].displayColorPicker = !temp[index].displayColorPicker;
     this.setState({ nameList: temp });
@@ -162,21 +161,17 @@ class MyStudents extends React.Component {
     this.nameList = this.state.nameList.filter(
       (item) => item !== this.draggedItem && item !== swap
     );
-    // nameList = nameList.filter(
-    //   item => item !== nameList[index]
-    // )
-    console.log(index)
+
+    // console.log(index)
     if (this.dragIndex>index) {
-      this.nameList.splice(index, 0, this.draggedItem); //fix
+      this.nameList.splice(index, 0, this.draggedItem); 
       this.nameList.splice(this.dragIndex, 0, swap)
     } else {
       this.nameList.splice(this.dragIndex, 0, swap)
-      this.nameList.splice(index, 0, this.draggedItem); //fix
+      this.nameList.splice(index, 0, this.draggedItem); 
     }
     // add the dragged item after the dragged over item
 
-
-    // this.setState({ nameList });
   };
   onDragEnd = (index) => {
     this.setState({ nameList:this.nameList });
@@ -185,7 +180,7 @@ class MyStudents extends React.Component {
   };
 
   render() {
-    console.log(this.state.nameList)
+    // console.log(this.state.nameList)
     const hideStyle = this.state.hideClass ? { display: "none" } : {};
     const { classes } = this.props;
     const popover = {
@@ -302,7 +297,7 @@ class MyStudents extends React.Component {
         </div>
       );
     });
-    console.log(names)
+    // console.log(names)
     return (
       <div>
       {/* {this.state.classDisplay?this.state.classDisplay:null} */}
@@ -312,11 +307,23 @@ class MyStudents extends React.Component {
         <Switch>
         <Route path="/" exact>
           <Home />
+          <NewClass
+            inputNames={this.state.inputNames}
+            handleChange={this.handleChange}
+            nameList = {this.state.nameList}
+            handleState={this.handleState}
+            names={names}
+            handleClassDisplay = {this.handleClassDisplay}
+            handleInput = {this.handleInput}
+            inputClassName={this.state.inputClassName}
+            generalSelection = {this.state.generalSelection}
+            classList={this.state.classList}
+          />
         </Route>
         <Route path="/signup" exact>
           {/* <Authenticate /> */}
         </Route>
-        <Route path="/newclass" exact
+        <Route path="/new-class" exact
         render={(props) => (
           <NewClass
             {...props}
@@ -326,6 +333,9 @@ class MyStudents extends React.Component {
             handleState={this.handleState}
             names={names}
             handleClassDisplay = {this.handleClassDisplay}
+            inputClassName={this.state.inputClassName}
+            classList={this.state.classList}
+
             handleInput = {this.handleInput}
             generalSelection = {this.state.generalSelection}
           />
@@ -335,10 +345,6 @@ class MyStudents extends React.Component {
         render={(props) => (
           <Classes
             {...props}
-            handleNewStu={this.handleNewStu}
-            handleAddMulti={this.handleAddMulti}
-            handleSubMulti={this.handleSubMulti}
-            handleSelectAll = {this.handleSelectAll}
             generalSelection = {this.state.generalSelection}
             handleInput = {this.handleInput}
             count= {this.state.count}
@@ -347,6 +353,7 @@ class MyStudents extends React.Component {
             names={names}
             handleState = {this.handleState}
             classDisplay = {this.state.classDisplay}
+            classList = {this.state.classList}
           />)}/>
 
             </Switch>    

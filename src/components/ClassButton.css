@@ -1,0 +1,9 @@
+.class-button-container {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.class-button button {
+  Width:100px;
+}

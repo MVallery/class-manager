@@ -1,7 +1,7 @@
-.textAreaStyles {
-  width: 500;
-  height: 50;
-  margin: 5;
+.text-area-styles {
+  width: 500px;
+  height: 50px;
+  margin: 5px;
 };
 .new-name-list-container {
   display:flex;
@@ -10,4 +10,30 @@
 .new-name-list {
   display:flex;
 
+}
+.create-class-button {
+  background-color:rgb(113, 197, 169);
+  padding:20px;
+  box-shadow: 5px 5px 7px rgb(71, 110, 71);
+  border-radius:20px;
+  text-decoration:none;
+  margin:20px;
+}
+.create-class-button :hover {
+  cursor:pointer;
+  background-color:rgb(190, 250, 230);
+}
+.create-class-button button {
+  /* display:none; */
+}
+.names-rows-container {
+  display:flex;
+}
+.new-class-container {
+  display:flex;
+  flex-direction:column;
+  justify-content: center;
+  align-items: center;
+  min-height:100vh;
+  box-sizing:border-box;
 }
