@@ -17,7 +17,7 @@ import './Grid.css'
       this.setState({
         userGridSelection: arr,
       });
-      console.log("rows: "+ this.state.userGridSelection)
+      console.log("rows: ", this.state.userGridSelection)
     };
     handleColumns = (e) => {
       var arr = this.state.userGridSelection;
@@ -25,9 +25,9 @@ import './Grid.css'
       this.setState({
         userGridSelection:arr
       });
-      console.log("rows: "+ this.state.userGridSelection[0])
+      console.log("rows: ", this.state.userGridSelection[0])
   
-      console.log("columns: "+ this.state.userGridSelection[1])
+      console.log("columns: ", this.state.userGridSelection[1])
   
     };
     fullGridFormation = (names) => {
@@ -48,7 +48,7 @@ import './Grid.css'
         gridDisplay:arr,
       })
       console.log(testingForLoop)
-      console.log("GridDisplay after GridSelect "+ this.state.gridDisplay)
+      console.log("GridDisplay after GridSelect ", this.state.gridDisplay)
     }
     formFilledGrid = (names) => {
       var gridFlat = this.state.gridDisplay.flat()

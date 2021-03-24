@@ -8,69 +8,64 @@ import SelectAll from "@material-ui/icons/SelectAll";
 
 const ClassButtons = (props) => {
   const handleSelectAll = () => {
-    let temp = JSON.parse(JSON.stringify(props.nameList));
+    let temp = JSON.parse(JSON.stringify(props.activeClass));
     if (props.checkAll === false) {
-      for (let x = 0; x < temp.length; x++) {
-        temp[x].isChecked = true;
+      for (let x = 0; x < temp.students.length; x++) {
+        temp.students[x].isChecked = true;
       }
       props.handleState({
-        nameList: temp,
+        activeClass: temp,
         checkAll: true,
       })
     } else {
-      for (let x = 0; x < temp.length; x++) {
-        temp[x].isChecked = false;
+      for (let x = 0; x < temp.students.length; x++) {
+        temp.students[x].isChecked = false;
       }
       props.handleState({
-        nameList: temp,
+        activeClass: temp,
         checkAll: false,
       })
     }
   };
   const handleAddMulti = (change) => {
-    let temp = JSON.parse(JSON.stringify(props.nameList));
-    let count = JSON.parse(JSON.stringify(props.count));
-    for (let x = 0; x < temp.length; x++) {
-      if (temp[x].isChecked === true) {
-        temp[x].count = temp[x].count + 1;
-        count = count + 1;
+    let temp = JSON.parse(JSON.stringify(props.activeClass));
+    for (let x = 0; x < temp.students.length; x++) {
+      if (temp.students[x].isChecked === true) {
+        temp.students[x].count = temp.students[x].count + 1;
+        temp.count = temp.count + 1;
       }
     }
     props.handleState({
-      nameList: temp,
-      count: count,
+      activeClass: temp,
     })
   };
   const handleSubMulti = (change) => {
-    let temp = JSON.parse(JSON.stringify(props.nameList));
-    let count = JSON.parse(JSON.stringify(props.count));
-    for (let x = 0; x < temp.length; x++) {
-      if (temp[x].isChecked === true) {
-        temp[x].count = temp[x].count - 1;
-        count = count - 1;
+    let temp = JSON.parse(JSON.stringify(props.activeClass));
+    for (let x = 0; x < temp.students.length; x++) {
+      if (temp.students[x].isChecked === true) {
+        temp.students[x].count = temp.students[x].count - 1;
+        temp.count = temp.count - 1;
       }
     }
     props.handleState({
-      nameList: temp,
-      count: count,
+      activeClass: temp,
     })
   };
   const handleDeleteMulti = () => {
-    let temp = JSON.parse(JSON.stringify(props.nameList));
-    let count = JSON.parse(JSON.stringify(props.count));
+    let temp = JSON.parse(JSON.stringify(props.activeClass));
     if (window.confirm("Are you sure you want to delete these students?")) {
-      for (let x = temp.length - 1; x >= 0; x--) {
-        if (temp[x].isChecked === true) {
+      for (let x = temp.students.length - 1; x >= 0; x--) {
+        if (temp.students[x].isChecked === true) {
+          temp.count = temp.count- temp.students[x].count
           //temp[x] = 0;
-          temp.splice(x, 1);
-          console.log(temp);
+          temp.students.splice(x, 1);
+          // console.log(temp);
         }
-        console.log(temp);
+        // console.log(temp);
         //this.setState({nameList:temp})
       }
       props.handleState({
-        nameList: temp,
-        count: count,
+        activeClass: temp,
       })
     }
   };

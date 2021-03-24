@@ -2,18 +2,18 @@ import React from 'react'
 
 const ClassButton = (props) => {
   const handleSwitchClass = () => {
-    console.log(props.classList.students)
+    console.log(props.classList)
 
-    let temp = JSON.parse(JSON.stringify(props.classList.students))
+    let temp = JSON.parse(JSON.stringify(props.classList))
     // temp = props.classList.students
     props.handleState({
-      nameList:temp
+      activeClass:temp
     })
   }
 return (
   <div className='class-button-container'>
-    <button onClick={handleSwitchClass}>{props.classList.name}</button>
-    {/* <p>{props.class.pts}</p> */}
+    <button onClick={handleSwitchClass}>{props.classList.title}</button>
+    <p>{props.classList.count}</p>
   </div>
 )
 }
