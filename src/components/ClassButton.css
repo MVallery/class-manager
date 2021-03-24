@@ -1,9 +1,36 @@
-.class-button-container {
+.cb-container {
   display:flex;
   justify-content: center;
   align-items: center;
+  position:relative;
 }
 
-.class-button button {
-  Width:100px;
+.cb-container-button {
+  width: 200px;
+  height: auto;
+  margin: 20px 10px 10px 0px;
+  outline:none;
+  border:none;
+  padding: 15px;
+  font-size: 18px;
+  background-color: #f2f3f3;
+  border-radius: 3px;
+  box-shadow: 5px 5px 10px 2px grey;
+}
+.cb-container-button:hover {
+  cursor:pointer;
+  background-color: #b8f2f7;
+}
+.cb-count {
+  border-radius:50%;
+  width:30px;
+  height:30px;
+  border: 5px solid rgb(65, 53, 78);
+  background-color:rgb(101, 89, 114);
+  color:white;
+  position:absolute;
+  text-align:center;
+  right:0px;
+  top:3px;
+  font-size:15px;
 }

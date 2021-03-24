@@ -1,3 +1,9 @@
+.classes-container {
+
+}
+.classes-container h1{
+  text-align:center;
+}
 .multi-select-container {
   display:flex;
   position:fixed;
@@ -19,9 +25,15 @@
 .row-container {
   display:flex;
   flex-direction:column;
+  
+}
+.row-main-container {
+  display:flex;
+  justify-content: center;
 }
 .row {
   display:flex;
+  justify-content:flex-start;
 
 }
 .group7 {
@@ -77,4 +89,53 @@
 }
 .select-form{
   width:50px;
+}
+
+
+.student-card-container { /* changes style under card */
+  width:180px;
+  height:180px;
+  padding: 0px;
+  display: flex;
+  flex-direction:column;
+}
+.student-name-points-container {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  display:flex;
+  color: white;
+  font-size: 30px;
+  justify-content:center;
+  background-color: black;
+
+}
+.student-card-points {
+  /* flex-grow:1; */
+  text-align:center;
+  font-size:55px;
+  font-weight:bold;
+  /* justify-content:center; */
+  align-self:center;
+
+}
+
+.student-card-popup {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+  bottom:0;
+}
+.classes-cb-list-container{
+  display:flex;
+  justify-content:center;
+  width:1500px;
+  overflow-y:visible;
+}
+.classes-title-menu-container{
+  display:flex;
+  justify-content:center;
+}
+.temp-container {
+  margin-bottom:100px
 }

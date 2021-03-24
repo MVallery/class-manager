@@ -1,4 +1,5 @@
 import React from 'react'
+import './ClassButton.css'
 
 const ClassButton = (props) => {
   const handleSwitchClass = () => {
@@ -11,9 +12,9 @@ const ClassButton = (props) => {
     })
   }
 return (
-  <div className='class-button-container'>
-    <button onClick={handleSwitchClass}>{props.classList.title}</button>
-    <p>{props.classList.count}</p>
+  <div className='cb-container'>
+    <button className="cb-container-button" onClick={handleSwitchClass}>{props.classList.title}</button><div className="cb-count">{props.classList.count}</div>
+    
   </div>
 )
 }

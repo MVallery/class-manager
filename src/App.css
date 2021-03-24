@@ -3,40 +3,7 @@
   height:100vh;
 }
 
-.student-card-container { /* changes style under card */
-  width:180px;
-  height:180px;
-  padding: 0px;
-  display: flex;
-  flex-direction:column;
-}
-.student-name-points-container {
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  display:flex;
-  color: white;
-  font-size: 30px;
-  justify-content:center;
-  background-color: black;
 
-}
-.student-card-points {
-  /* flex-grow:1; */
-  text-align:center;
-  font-size:55px;
-  font-weight:bold;
-  /* justify-content:center; */
-  align-self:center;
-
-}
-
-.student-card-popup {
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  position:relative;
-  bottom:0;
-}
 .blank-student {
   width:180px;
   height:180px;

@@ -3,9 +3,12 @@ import ClassButton from './ClassButton'
 const ClassButtonList = (props) => {
   const classList = []
   for (let i in props.classList) {
-    classList.push(
-      <ClassButton handleState={props.handleState} classList={props.classList[i]} />
-    )
+    // if (props.classList[i] !== props.activeClass) {
+      classList.push(
+        <ClassButton handleState={props.handleState} activeClass={props.activeClass} classList={props.classList[i]} />
+      )
+    // }
+
   }
   return classList
 }
