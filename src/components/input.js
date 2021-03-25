@@ -97,6 +97,7 @@ const Input = (props) => {
             style={textAreaStyles}
             placeholder="Separate names with Commas"
         />
+        
         <br />
         <input
             type='quantity'

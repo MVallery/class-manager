@@ -432,6 +432,7 @@ const Classes = (props) => {
         </div>
       <div className="classes-title-menu-container">
       <h1>{props.activeClass.title}</h1>
+      <div className="classes-count">{props.activeClass.count}</div>
       <Menu
               id="simple-menu"
               anchorEl={dropdownDisplay}
@@ -485,7 +486,7 @@ const Classes = (props) => {
         <div className="multi-select">
           <GeneralClassButtons activeClass = {props.activeClass} handleState={props.handleState} />
         </div>
-        <h1>Total Class Points: {props.activeClass.count}</h1>
+        {/* <h1>Total Class Points: {props.activeClass.count}</h1> */}
       </div>
       </div>
     </React.Fragment>

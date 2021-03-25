@@ -24,7 +24,7 @@ class MyStudents extends React.Component {
       classList: [],
       nameOnlyList: [],
 
-      generalSelection: {groups: '', columns:'', rows:''},
+      generalSelection: {groups:4, columns:'', rows:''},
       count: 0,
       hideClass: false,
       checkAll: false,

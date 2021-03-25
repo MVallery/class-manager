@@ -3,6 +3,7 @@ import Grid from "../components/Grid";
 import { cap } from "../app-files/general";
 import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -43,11 +44,15 @@ const NewClass = (props) => {
       let result = [];
 
       for (let x = 0; x < nameArray.length; x++) {
+        let [first, last] = nameArray[x].split(' ')
         const randColor =
           "#" + Math.floor(Math.random() * 16777215).toString(16);
         const id = cap(nameArray[x]) + Math.floor(Math.random() * 20);
+        let initial = last ? ' '+ cap(last[0]) : ''
         let record = {
-          name: cap(nameArray[x]),
+          name: cap(first) + initial,
+          first:first,
+          last:last?last:'',
           count: 0,
           background: randColor,
           key: id,
@@ -80,22 +85,51 @@ const NewClass = (props) => {
   return (
     <React.Fragment>
       <div className="new-class-container">
-        <div className='names-rows-container'>
-      <textarea
+        
+      {/* <textarea
         onChange={props.handleChange}
         value={props.inputNames}
         name='inputNames'
         className="text-area-styles"
         placeholder="Separate names with Commas"
-      />
-      <input 
+      /> */}
+      <TextField 
+        variant='filled'
+        id = 'filled-basic'
+        label={<span className= ''>Class Name:</span>}
+        name="inputClassName"
+        value={props.inputClassName}
+        // onChange={props.handleInputQuantity}
+        onChange={props.handleChange}
+        // placeholder="Class Name"
+        required
+        className=""
+        />
+        <div className='names-input-container'>
+      <TextField 
+        variant='filled'
+        id = 'filled-basic'
+        label={<span className= ''>Student Names:</span>}
+        name="inputNames"
+        // type="number"
+        value={props.inputNames}
+        onChange={props.handleChange}
+        className='text-area-styles'
+        placeholder="Input student names, separated by a comma"
+        required
+        multiline
+        rows={4}
+        rowsMax={6}
+        />                   
+
+      {/* <input 
         onChange={props.handleChange}
         value={props.inputClassName}
         name='inputClassName'
         
-      />
+      /> */}
       <br />
-      <FormControl className={classes.formControl}>
+      {/* <FormControl className={classes.formControl}>
         <InputLabel>Rows:</InputLabel>
 
         <Select className={classes.formControl}
@@ -108,8 +142,7 @@ const NewClass = (props) => {
           <MenuItem value={6}>6</MenuItem>
           <MenuItem value={7}>7</MenuItem>
         </Select>
-        {/* <FormHelperText>Without label</FormHelperText> */}
-      </FormControl>
+      </FormControl> */}
       {/* <input
         type="quantity"
         name="groups"
@@ -118,7 +151,8 @@ const NewClass = (props) => {
         placeholder="groups"
       ></input> */}
 </div>
-    <Link className="create-class-button" to='/classes'>      <button
+    <Link className="new-class-link" to='/classes'>      
+    <button
         onClick={() => {
           handleSubmit(props);
         }}
