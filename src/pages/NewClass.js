@@ -1,6 +1,7 @@
 import React from "react";
 import Grid from "../components/Grid";
-import { cap } from "../app-files/general";
+import { cap, shuffleArray } from "../app-files/general";
+
 import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -11,6 +12,13 @@ import InputLabel from "@material-ui/core/InputLabel";
 
 import {Link} from 'react-router-dom'
 import './NewClass.css'
+const colorPallet = {
+  softPurpleGreen:['#c1f7dc', '#C2EBDA', '#C2DED7', '#C3D8D6', '#C3D2D5', '#C2C6CF', '#C0B9C9', '#C0B3C6','#BFADC3', '#BDA0BC' ],
+  softPurplePink: ['#FF6979','#FF7C89', '#FF8E99', '#FFA1A9', '#FFB3B9', '#E5B7BE', '#D8B9C0', '#C4A8B2', '#BAA0AB', '#AF97A3'],
+  brightRainbow: ['#f065dd','#df1f5f','#a91fdf','#406be2', '#40e27e', '#ddf363','#f87a40']
+
+}
+
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
@@ -42,11 +50,12 @@ const NewClass = (props) => {
       console.log('nameArray',nameArray)
       let nameOnlyResult = [];
       let result = [];
-
       for (let x = 0; x < nameArray.length; x++) {
+      let randColor = shuffleArray(colorPallet.brightRainbow)
+
         let [first, last] = nameArray[x].split(' ')
-        const randColor =
-          "#" + Math.floor(Math.random() * 16777215).toString(16);
+        // const randColor =
+        //   "#" + Math.floor(Math.random() * 16777215).toString(16);
         const id = cap(nameArray[x]) + Math.floor(Math.random() * 20);
         let initial = last ? ' '+ cap(last[0]) : ''
         let record = {
@@ -54,7 +63,7 @@ const NewClass = (props) => {
           first:first,
           last:last?last:'',
           count: 0,
-          background: randColor,
+          background: randColor[0],
           key: id,
           isChecked: false,
           displayColorPicker: false,

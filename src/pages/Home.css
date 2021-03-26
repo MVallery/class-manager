@@ -5,3 +5,55 @@
   background-color:rgb(157, 202, 146);
   padding:10px;
 }
+
+
+.student-card-container {
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+}
+.student-icon-container {
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+.student-head {
+  background-color:black;
+  height:40px;
+  width:40px;
+  border-radius:50%;
+  margin-bottom:2px;
+}
+.student-body {
+  background-color: black;
+  height: 20px;
+  width: 75px;
+  border-radius: 50px 50px 0% 0%
+}
+.desk-top {
+  height:16px;
+  color:rgb(0, 0, 0);
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
+
+  width:150px;
+  border-radius:5px;
+  background-color:rgb(77, 63, 63)
+}
+.desk {
+  height:60px;
+  width:130px;
+  background-color:rgb(149, 181, 223);
+  color:black;
+  text-align:center;
+  font-weight:bold;
+  font-size:20px;
+  border-bottom-left-radius:3px;
+  border-bottom-right-radius:3px;
+  box-shadow:5px 3px 7px 2px grey;
+}
+.students-all-container {
+  display:flex;
+}
