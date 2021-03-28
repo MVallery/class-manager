@@ -12,7 +12,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 
 import {Link} from 'react-router-dom'
 import './NewClass.css'
-const colorPallet = {
+const colorPalette = {
   softPurpleGreen:['#c1f7dc', '#C2EBDA', '#C2DED7', '#C3D8D6', '#C3D2D5', '#C2C6CF', '#C0B9C9', '#C0B3C6','#BFADC3', '#BDA0BC' ],
   softPurplePink: ['#FF6979','#FF7C89', '#FF8E99', '#FFA1A9', '#FFB3B9', '#E5B7BE', '#D8B9C0', '#C4A8B2', '#BAA0AB', '#AF97A3'],
   brightRainbow: ['#f065dd','#df1f5f','#a91fdf','#406be2', '#40e27e', '#ddf363','#f87a40']
@@ -51,7 +51,7 @@ const NewClass = (props) => {
       let nameOnlyResult = [];
       let result = [];
       for (let x = 0; x < nameArray.length; x++) {
-      let randColor = shuffleArray(colorPallet.brightRainbow)
+      let randColor = shuffleArray(colorPalette.softPurplePink)
 
         let [first, last] = nameArray[x].split(' ')
         // const randColor =
@@ -70,13 +70,13 @@ const NewClass = (props) => {
         };
         result.push(record);
         nameOnlyResult.push(record.name);
-      }
+      };
       // console.log('result:'+result)
       // console.log('inputClassName:'+props.inputClassName)
-      let tempClassList = JSON.parse(JSON.stringify(props.classList))
-      let tempClass = {title:props.inputClassName, students:result, count:0, generalSelection:{}, classSnapShot: []}
+      let tempClassList = JSON.parse(JSON.stringify(props.classList));
+      let tempClass = {title:props.inputClassName, students:result, count:0, generalSelection:{}, classSnapShot: []};
 
-      tempClassList.push(tempClass)
+      tempClassList.push(tempClass);
       
       props.handleState({
         activeClass: tempClass,
@@ -90,7 +90,7 @@ const NewClass = (props) => {
   const handleClassChange = (e) => {
     const {value}=e
     props.handleState({inputClassName:value})
-  }
+  };
   return (
     <React.Fragment>
       <div className="new-class-container">

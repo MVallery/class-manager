@@ -13,10 +13,10 @@
 }
 .new-class-link{
   background-color:rgb(113, 197, 169);
-  padding:20px;
+  /* padding:20px; */
   box-shadow: 5px 5px 7px rgb(71, 110, 71);
   border-radius:20px;
-  width:100px;
+  width:200px;
   text-decoration:none;
   margin:150px;
 }
@@ -26,7 +26,8 @@
 }
 .new-class-container button {
   outline:none;
-  width:100px;
+  width:200px;
+  padding:20px;
   background-color:transparent;
   border:none;
 }

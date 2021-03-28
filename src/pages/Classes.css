@@ -165,26 +165,7 @@
   flex-direction:column;
   align-items:center;
  }
- .icon-buttons {
-   display:none;
-   max-height:20px;
-   height:20px;
- }
- .color-select-buttons {
-  display:none;
-  max-height:20px;
-  height:20px;
 
-  width:6px;
-  flex-grow:1
-  
- }
- .student-card-container:hover .icon-buttons{
-   display:inline;
- }
- .student-card-container:hover .color-select-buttons{
-  display:inline;
-}
  .student-icon-container {
    display:flex;
    flex-direction:column;
@@ -207,6 +188,18 @@
    width: 75px;
    border-radius: 50px 50px 0% 0%
  }
+ .pts-buttons {
+  display:none;
+  max-height:20px;
+  height:20px;
+}
+
+.student-card-container:hover .pts-buttons{
+  display:inline;
+}
+
+
+/* Desk & Desk Buttons */
  .desk-top {
    height:16px;
    color:rgb(0, 0, 0);
@@ -221,7 +214,7 @@
  .desk {
    height:60px;
    width:130px;
-   opacity:80%;
+   /* opacity:80%; */
    background-color:rgb(149, 181, 223);
    color:black;
    text-align:center;
@@ -232,14 +225,44 @@
    border-bottom-right-radius:3px;
    box-shadow:5px 3px 7px 2px grey;
  }
- .students-all-container {
-   display:flex;
- }
 
- .desk-button-container {
+
+ .desk-button-main-container {
   display:flex;
-  justify-content:center;
+  /* justify-content:center; */
+  position:relative;
+  /* width: 160px; */
+  justify-content: center;
+  align-items: end;
 }
+
+.desk-button-container {
+  /* display:none; */
+  max-height:20px;
+  height:20px;
+  position:absolute;
+  width: 150px;
+  /* margin-left: -10px; */
+  display: flex;
+  justify-content: flex-end;
+  align-items: end
+  
+ }
+ .student-card-container:hover .desk-button-container{
+  justify-content: 'space-between'
+ 
+ }
+.desk-button {
+  display:none;
+  margin-left: 76px;
+  margin-right:-12px
+}
+
+.student-card-container:hover .desk-button{
+ display:inline;
+}
+
 .student-card-count{
-  flex-grow:4;
+  flex-grow:1;
+  position:absolute;
 }

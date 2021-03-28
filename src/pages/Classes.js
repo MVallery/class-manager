@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 import FormHelperText from "@material-ui/core/FormHelperText";
 import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+
 import ClassButtonList from "../components/ClassButtonList";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -22,9 +24,9 @@ import StudentCard from "../components/StudentCard";
 import { cap } from "../app-files/general";
 import GeneralClassButtons from "../components/GeneralClassButtons";
 import AddIcon from "@material-ui/icons/Add";
-import Menu from "@material-ui/core/Menu";
 
 import "./Classes.css";
+import { NoEncryption } from "@material-ui/icons";
 const Classes = (props) => {
   const { activeClass, classList } = props;
   console.log("classList inside Classes:", props.classList);
@@ -40,6 +42,7 @@ const Classes = (props) => {
     }
     return array;
   };
+  let selectedShowCheck 
   const handleSelection = (index, key) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
@@ -86,7 +89,7 @@ const Classes = (props) => {
     temp.students[index].count = 0;
     let newTempList = checkActiveClass(tempClassList, temp);
 
-    props.handleStatee({
+    props.handleState({
       activeClass: temp,
       classList: newTempList,
       //count: 0
@@ -173,7 +176,7 @@ const Classes = (props) => {
   let newActiveClass = activeClass;
   const onDragStart = (e, index) => {
     draggedItem = activeClass.students[index]; //griddisplay changed from nameList
-
+    console.log('ondragstart', activeClass.students)
     dragIndex = index;
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("text/html", e.target.parentNode);
@@ -202,9 +205,11 @@ const Classes = (props) => {
     // add the dragged item after the dragged over item
   };
   const onDragEnd = (index) => {
+    console.log('onDragEnd',newActiveClass.students)
     let tempClassList = JSON.parse(JSON.stringify(classList));
-    let newTempList = checkActiveClass(tempClassList, activeClass);
-    props.handleState({ activeClass: activeClass, classList: newTempList });
+
+    let newTempList = checkActiveClass(tempClassList, newActiveClass);
+    props.handleState({ activeClass: newActiveClass, classList: newTempList });
 
     draggedIdx = null;
   };
@@ -222,6 +227,7 @@ const Classes = (props) => {
   };
 
   const studentCards = props.activeClass.students.map((record, index) => {
+    console.log('record:',record)
     var key = record.key;
     let keyString = JSON.parse(JSON.stringify(key));
     var myStyle = {
@@ -235,6 +241,10 @@ const Classes = (props) => {
       // margin: "0px 20px 20px",
       backgroundColor: record.background,
     };
+    var selectStyle = {
+      display: record.isChecked && 'inline'
+    };
+
     return (
       <div className="student-card-container">
         <div
@@ -247,7 +257,7 @@ const Classes = (props) => {
         >
           <div className="student-icon-container">
             <div className="student-head-button-container">
-              <div className="icon-buttons">
+              <div className="pts-buttons">
                 <IconButton
                   className="icon"
                   onClick={() => {
@@ -259,7 +269,7 @@ const Classes = (props) => {
               </div>
               <div className="student-head"></div>
 
-              <div className="icon-buttons">
+              <div className="pts-buttons">
                 <IconButton
                   onClick={() => {
                     handleAdd(index);
@@ -276,8 +286,10 @@ const Classes = (props) => {
             {record.name}
             <br />
 
-            <div className="desk-button-container">
-              <div className="color-select-buttons">
+            <div className="desk-button-main-container">
+              <div className="desk-button-container">
+
+                <div className="desk-button">
                 <IconButton
                   onClick={() => {
                     handleColorClick(index);
@@ -285,6 +297,7 @@ const Classes = (props) => {
                 >
                   <ColorLens />
                 </IconButton>
+                
               </div>
               {activeClass.students[index].displayColorPicker ? (
                 <div style={popover}>
@@ -302,10 +315,7 @@ const Classes = (props) => {
                   />
                 </div>
               ) : null}
-              <div className="student-card-count">
-              {record.count}
-              </div>
-              <div className="color-select-buttons">
+              <div className="desk-button" style={selectStyle}>
                 <FormGroup row>
                   <div key={record.key}>
                     <FormControlLabel
@@ -323,6 +333,11 @@ const Classes = (props) => {
                   </div>
                 </FormGroup>
               </div>
+              </div>
+              {/* <div className="student-card-count"> */}
+              {record.count}
+              {/* </div> */}
+              
             </div>
           </div>
         </div>
@@ -338,6 +353,7 @@ const Classes = (props) => {
   let groupContainer;
   let mainGroupContainer;
   const handleGroup = () => {
+    console.log('handleGroup',activeClass)
     mainGroupContainer = "group-main-container";
 
     if (format === "rows") {
@@ -421,7 +437,7 @@ const Classes = (props) => {
   useEffect(() => {
     handleGroup();
     handleFormatting();
-  }, [format, props.activeClass, props.generalSelection.groups]);
+  }, [format, props.activeClass, props.generalSelection.groups,]);
 
   return (
     <React.Fragment>
@@ -443,6 +459,7 @@ const Classes = (props) => {
         <div className="classes-title-menu-container">
           <h1>{props.activeClass.title}</h1>
           <div className="classes-count">{props.activeClass.count}</div>
+
           <Menu
             id="simple-menu"
             anchorEl={dropdownDisplay}
@@ -457,6 +474,7 @@ const Classes = (props) => {
 
             <MenuItem onClick={handleCloseMenu}>Delete</MenuItem>
           </Menu>
+
         </div>
 
         <div>{newNameListState}</div>
@@ -493,7 +511,7 @@ const Classes = (props) => {
             </Select>
             {/* <FormHelperText>Without label</FormHelperText> */}
           </FormControl>
-          <button onClick={props.handleNewStu}>Add Student</button>
+          <button onClick={handleNewStu}>Add Student</button>
         </div>
         <div className="multi-select-container">
           <div className="multi-select">
