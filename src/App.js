@@ -6,7 +6,7 @@ import Classes from "./pages/Classes";
 import NewClass from "./pages/NewClass";
 import Home from './pages/Home'
 import { styles } from "./AppStyles";
-import { cap } from "./app-files/general";
+import { cap, colorPallet, checkActiveClass } from "./app-files/general";
 
 
 import PropTypes from "prop-types";
@@ -19,12 +19,12 @@ class MyStudents extends React.Component {
     super(props);
     this.state = {
       inputNames: "",
-      activeClass: {title:'', students:[], generalSelection:{}, classSnapshot:{}},
+      activeClass: {title:'', students:[], styling:{groups:4, format:'groups', theme:''}, classSnapshot:{}, count:0},
       inputClassName:'',
       classList: [],
       nameOnlyList: [],
 
-      generalSelection: {groups:4, columns:'', rows:''},
+      // generalSelection: {groups:4, columns:'', rows:''},
       count: 0,
       hideClass: false,
       checkAll: false,
@@ -49,11 +49,35 @@ class MyStudents extends React.Component {
   handleInput = (e) => {
     // console.log('handleinput', e)
     const {name, value} = e.target
-    this.setState({
-      generalSelection: {groups:Number(value)},
-    })
-  };
+    let temp=JSON.parse(JSON.stringify(this.state.activeClass))
+    let tempClassList =JSON.parse(JSON.stringify(this.state.classList))
 
+    temp.styling.groups = Number(value)
+    let newTempList = checkActiveClass(tempClassList, temp);
+    
+    this.setState({
+      activeClass:temp,
+      classList:newTempList
+    })
+    // this.setState({
+    //   generalSelection: {groups:Number(value)},
+    // })
+  };
+  handleThemeInput = (e) => {
+    const {name, value} = e.target
+    let temp=JSON.parse(JSON.stringify(this.state.activeClass))
+    let tempClassList =JSON.parse(JSON.stringify(this.state.classList))
+    temp.styling.theme = value
+    for (let x in temp.students) {
+      temp.students[x].background = colorPallet(value)
+    }
+    let newTempList = checkActiveClass(tempClassList, temp);
+    
+    this.setState({
+      activeClass:temp,
+      classList:newTempList
+    })
+  }
 
   render() {
     // console.log(this.state.nameList)
@@ -86,11 +110,8 @@ class MyStudents extends React.Component {
             handleChange={this.handleChange}
             activeClass = {this.state.activeClass}
             handleState={this.handleState}
-            // names={names}
-            handleClassDisplay = {this.handleClassDisplay}
             handleInput = {this.handleInput}
             inputClassName={this.state.inputClassName}
-            generalSelection = {this.state.generalSelection}
             classList={this.state.classList}
           />
         </Route>
@@ -105,13 +126,9 @@ class MyStudents extends React.Component {
             handleChange={this.handleChange}
             activeClass = {this.state.activeClass}
             handleState={this.handleState}
-            // names={names}
-            handleClassDisplay = {this.handleClassDisplay}
             inputClassName={this.state.inputClassName}
             classList={this.state.classList}
-
             handleInput = {this.handleInput}
-            generalSelection = {this.state.generalSelection}
           />
             )}/>  
 
@@ -119,14 +136,13 @@ class MyStudents extends React.Component {
         render={(props) => (
           <Classes
             {...props}
-            generalSelection = {this.state.generalSelection}
             handleInput = {this.handleInput}
-            count= {this.state.count}
+            handleThemeInput = {this.handleThemeInput}
             activeClass = {this.state.activeClass}
-            checkAll = {this.state.checkAll}
-            // names={names}
+            inputNames = {this.state.inputNames}
+            inputClassName={this.state.inputClassName}
+            handleChange = {this.handleChange}
             handleState = {this.handleState}
-            classDisplay = {this.state.classDisplay}
             classList = {this.state.classList}
           />)}/>
 

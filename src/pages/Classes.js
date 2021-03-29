@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { SketchPicker } from "react-color";
 
-import FormHelperText from "@material-ui/core/FormHelperText";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-
+import MenuIcon from '@material-ui/icons/Menu';
 import ClassButtonList from "../components/ClassButtonList";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -18,30 +17,57 @@ import FormGroup from "@material-ui/core/FormGroup";
 import IconButton from "@material-ui/core/IconButton";
 import ThumbDown from "@material-ui/icons/ThumbDown";
 import ThumbUp from "@material-ui/icons/ThumbUp";
-import { SketchPicker } from "react-color";
 import FormLabel from "@material-ui/core/FormLabel";
-import StudentCard from "../components/StudentCard";
-import { cap } from "../app-files/general";
-import GeneralClassButtons from "../components/GeneralClassButtons";
-import AddIcon from "@material-ui/icons/Add";
+import TextField from '@material-ui/core/TextField';
 
+import { cap, checkActiveClass, colorPallet, shuffleArray } from "../app-files/general";
+import Modal from "../components/Modal";
+import NewClass from "./NewClass"
+import GeneralClassButtons from "../components/GeneralClassButtons";
 import "./Classes.css";
-import { NoEncryption } from "@material-ui/icons";
+
+
 const Classes = (props) => {
   const { activeClass, classList } = props;
   console.log("classList inside Classes:", props.classList);
   const [newNameListState, setNewNameListState] = useState([]);
+  const [showAddStudentModal, setAddStudentModal] = useState(false);
+  const [formatModal, setFormatModal] = useState(false);
+  const [showAddNewClassModal, setAddNewClassModal] = useState(false);
   const [format, setFormat] = useState("");
   // const [container, setContainer] = useState('row-container')
-  const checkActiveClass = (array, obj) => {
-    // let newArray
-    for (let i in array) {
-      if (array[i].title === obj.title) {
-        array[i] = obj;
-      }
-    }
-    return array;
-  };
+  const showAddStudentHandler = () => {
+    setAddStudentModal(true);
+    handleCloseMenu();
+  }
+  const cancelAddStudentHandler = () => {
+    setAddStudentModal(false);    
+  }
+
+  const showAddNewClassHandler = () => {
+    setAddNewClassModal(true);
+    handleCloseMainMenu();
+  }
+  const cancelAddNewClassHandler = () => {
+    setAddNewClassModal(false)
+  }
+
+  const showFormatModalHandler = () => {
+    setFormatModal(true);
+    handleCloseMenu();
+  }
+  const submitFormatModalHandler = () => setFormatModal(false);
+
+  const handleShuffleClass = () => {
+    handleCloseMenu();
+    let temp = JSON.parse(JSON.stringify(activeClass))
+    let tempClassList = JSON.parse(JSON.stringify(classList));
+    let shuffledTemp = shuffleArray(temp.students);
+    temp.students = shuffledTemp
+    let newTempList = checkActiveClass(tempClassList, temp);
+
+    props.handleState({ activeClass:temp, classList:newTempList});
+  }
   let selectedShowCheck 
   const handleSelection = (index, key) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
@@ -82,55 +108,6 @@ const Classes = (props) => {
     });
   };
 
-  const handleReset = (index, key) => {
-    let temp = JSON.parse(JSON.stringify(activeClass));
-    let tempClassList = JSON.parse(JSON.stringify(classList));
-
-    temp.students[index].count = 0;
-    let newTempList = checkActiveClass(tempClassList, temp);
-
-    props.handleState({
-      activeClass: temp,
-      classList: newTempList,
-      //count: 0
-    });
-  };
-  const handleResetMulti = (index, key) => {
-    let temp = JSON.parse(JSON.stringify(activeClass));
-    let tempClassList = JSON.parse(JSON.stringify(classList));
-
-    for (let x in temp.students) {
-      if (temp.students[x].isChecked === true) {
-        temp.count = temp.count - temp.students[x].count;
-        temp.students[x].count = 0;
-      }
-    }
-    let newTempList = checkActiveClass(tempClassList, temp);
-
-    props.handleState({
-      activeClass: temp,
-      classList: newTempList,
-    });
-  };
-  const handleDelete = (rowIndex, index) => {
-    let temp = JSON.parse(JSON.stringify(activeClass));
-    let tempClassList = JSON.parse(JSON.stringify(classList));
-
-    if (window.confirm("Are you sure you want to delete this student?")) {
-      temp.students[index].name = 0;
-      temp.students.splice(index, 1);
-      let newTempList = checkActiveClass(tempClassList, temp);
-
-      props.handleState({
-        activeClass: temp,
-        classList: newTempList,
-      });
-    } else {
-    }
-  };
-
-  const handleBottomNav = () => {};
-
   const handleColorClick = (index, key) => {
     // console.log('handlecolorclicked')
     let tempClassList = JSON.parse(JSON.stringify(classList));
@@ -153,7 +130,7 @@ const Classes = (props) => {
     props.handleState({ activeClass: temp, classList: newTempList });
   };
 
-  const handleColorSelect = (index, key, e) => {
+  const handleColorSelect = (index, e) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
 
@@ -163,12 +140,19 @@ const Classes = (props) => {
     props.handleState({ activeClass: temp, classList: newTempList });
   };
   const [dropdownDisplay, setDropdownDisplay] = React.useState(null);
+  const [mainDropdownDisplay, setMainDropdownDisplay] = React.useState(null);
 
   const handleClick = (e) => {
     setDropdownDisplay(e.currentTarget);
   };
+  const handleMainMenuClick = (e) => {
+    setMainDropdownDisplay(e.currentTarget);
+  };
   const handleCloseMenu = () => {
     setDropdownDisplay(null);
+  };
+  const handleCloseMainMenu = () => {
+    setMainDropdownDisplay(null);
   };
   let draggedItem;
   let draggedIdx;
@@ -210,7 +194,8 @@ const Classes = (props) => {
 
     let newTempList = checkActiveClass(tempClassList, newActiveClass);
     props.handleState({ activeClass: newActiveClass, classList: newTempList });
-
+    handleGroup();
+    handleFormatting();
     draggedIdx = null;
   };
   const { classes } = props;
@@ -227,18 +212,10 @@ const Classes = (props) => {
   };
 
   const studentCards = props.activeClass.students.map((record, index) => {
-    console.log('record:',record)
+    // console.log('record:',record)
     var key = record.key;
     let keyString = JSON.parse(JSON.stringify(key));
     var myStyle = {
-      //changes style on top of card
-      // color: "black",
-      // fontSize: "20px",
-      // height: "160px",
-      // width: "160px",
-      // borderRadius: "20px",
-      // boxShadow: "10px 10px 10px grey",
-      // margin: "0px 20px 20px",
       backgroundColor: record.background,
     };
     var selectStyle = {
@@ -334,10 +311,7 @@ const Classes = (props) => {
                 </FormGroup>
               </div>
               </div>
-              {/* <div className="student-card-count"> */}
-              {record.count}
-              {/* </div> */}
-              
+              {record.count}           
             </div>
           </div>
         </div>
@@ -346,7 +320,7 @@ const Classes = (props) => {
     );
   });
 
-  console.log("generalSelection:", props.generalSelection);
+  // console.log("generalSelection:", props.generalSelection);
 
 
   let group;
@@ -362,18 +336,18 @@ const Classes = (props) => {
       mainGroupContainer = "row-main-container";
       // setContainer('row-container')
     } else {
-      if (props.generalSelection.groups === 4) {
+      if (activeClass.styling.groups === 4) {
         group = "group4";
         groupContainer = "group-container4";
         // setContainer('group-container4')
       } else if (
-        props.generalSelection.groups === 5 ||
-        props.generalSelection.groups === 6
+        activeClass.styling.groups === 5 ||
+        activeClass.styling.groups === 6
       ) {
         group = "group56";
         groupContainer = "group-container56";
         // setContainer('group-container56')
-      } else if (props.generalSelection.groups === 7) {
+      } else if (activeClass.styling.groups === 7) {
         group = "group7";
         groupContainer = "group-container7";
         // setContainer('group-container7')
@@ -385,18 +359,19 @@ const Classes = (props) => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
 
     for (let x = 0; x < newNameArray.length; x++) {
-      const randColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+      // const randColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
       const id = cap(newNameArray[x]) + Math.floor(Math.random() * 20);
       let record = {
         name: cap(newNameArray[x]),
         count: 0,
-        background: randColor,
+        background: colorPallet(activeClass.styling.theme),
         key: id,
         isChecked: false,
         displayColorPicker: false,
       };
       temp.students.push(record);
     }
+    setAddStudentModal(false)
     props.handleState({
       activeClass: temp,
       inputNames: "",
@@ -409,9 +384,9 @@ const Classes = (props) => {
     for (
       let i = 0;
       i < studentCards.length;
-      i += props.generalSelection.groups
+      i += activeClass.styling.groups
     ) {
-      let newArray = studentCards.slice(i, i + props.generalSelection.groups);
+      let newArray = studentCards.slice(i, i + activeClass.styling.groups);
       // let newArray = props.studentCards.splice(i, props.generalSelection.groups);
       formattedNameList.push(newArray);
     }
@@ -435,51 +410,58 @@ const Classes = (props) => {
     // handleFormatting()
   };
   useEffect(() => {
+    console.log('useEffect')
     handleGroup();
     handleFormatting();
-  }, [format, props.activeClass, props.generalSelection.groups,]);
+  }, [format, props.activeClass,]); //props.generalSelection.groups
 
   return (
     <React.Fragment>
-      <div className="classes-container">
-        <div className="classes-cb-list-container">
-          <ClassButtonList
-            handleState={props.handleState}
-            activeClass={props.activeClass}
-            classList={props.classList}
-          />
-          <IconButton>
-            <Link to="/new-class">
-              <AddIcon style={{ fontSize: 40 }} />
-            </Link>
-
-            {/* <AddIcon/> */}
-          </IconButton>
-        </div>
-        <div className="classes-title-menu-container">
-          <h1>{props.activeClass.title}</h1>
-          <div className="classes-count">{props.activeClass.count}</div>
-
-          <Menu
-            id="simple-menu"
-            anchorEl={dropdownDisplay}
-            keepMounted
-            open={Boolean(dropdownDisplay)}
-            onClose={handleCloseMenu}
-            getContentAnchorEl={null}
-          >
-            <MenuItem onClick={handleCloseMenu}>Add Student</MenuItem>
-            <MenuItem onClick={handleCloseMenu}>Change Layout</MenuItem>
-            <MenuItem onClick={handleCloseMenu}>New Version</MenuItem>
-
-            <MenuItem onClick={handleCloseMenu}>Delete</MenuItem>
-          </Menu>
-
-        </div>
-
-        <div>{newNameListState}</div>
-        <div className="temp-container">
+      <Modal
+        show={showAddStudentModal}
+        onCancel={cancelAddStudentHandler}
+        header= {<div>Add students to {activeClass.title} </div>}
+        footerClass="worksheet-item__modal-actions"
+        footer={
+          <React.Fragment>
+            <button onClick={handleNewStu}>
+              ADD STUDENT(S)
+            </button>
+          </React.Fragment>
+        }
+      >
+      <TextField 
+        variant='filled'
+        id = 'filled-basic'
+        label={<span className= ''>Student Names:</span>}
+        name="inputNames"
+        // type="number"
+        value={props.inputNames}
+        onChange={props.handleChange}
+        className='text-area-styles'
+        placeholder="Input student names, separated by a comma"
+        required
+        multiline
+        rows={2}
+        rowsMax={3}
+        /> 
+      </Modal>
+      <Modal
+        show={formatModal}
+        onCancel={submitFormatModalHandler}
+        header= {<div>Change the class layout of {activeClass.title} </div>}
+        footerClass="worksheet-item__modal-actions"
+        footer={
+          <React.Fragment>
+            <button onClick={submitFormatModalHandler}>
+              SUBMIT
+            </button>
+          </React.Fragment>
+        }
+      >
           <FormControl component="fieldset">
+          <FormLabel>Layout</FormLabel>
+
             <RadioGroup
               aria-label="format"
               name="format"
@@ -496,11 +478,11 @@ const Classes = (props) => {
           </FormControl>
 
           <FormControl>
-            <InputLabel></InputLabel>
+            <InputLabel>Amount in each group/row</InputLabel>
 
             <Select
               className="select-form"
-              value={props.generalSelection.groups}
+              value={activeClass.styling.groups}
               onChange={props.handleInput}
               displayEmpty
             >
@@ -511,16 +493,99 @@ const Classes = (props) => {
             </Select>
             {/* <FormHelperText>Without label</FormHelperText> */}
           </FormControl>
-          <button onClick={handleNewStu}>Add Student</button>
+          <FormControl>
+            <InputLabel>Color Theme</InputLabel>
+
+            <Select
+              className="select-form"
+              style={{width:'200px'}}
+              value={activeClass.styling.theme}
+              onChange={props.handleThemeInput}
+              width={10}
+              displayEmpty
+            >
+              <MenuItem value='lightBlueGreen'>Light Blue Green</MenuItem>
+              <MenuItem value='lightBluePurple'>Light Blue Purple</MenuItem>
+              <MenuItem value='darkBluePurple'>Dark Blue Purple</MenuItem>
+            </Select>
+            {/* <FormHelperText>Color Theme</FormHelperText> */}
+          </FormControl>
+      </Modal>
+      <Modal
+        show={showAddNewClassModal}
+        onCancel={cancelAddNewClassHandler}
+        header= {<div>Create a new class: </div>}
+        footerClass="worksheet-item__modal-actions"
+        // footer={}
+      >
+        <NewClass
+                    inputNames={props.inputNames}
+                    handleChange={props.handleChange}
+                    activeClass = {activeClass}
+                    handleState={props.handleState}
+                    handleInput = {props.handleInput}
+                    inputClassName={props.inputClassName}
+                    classList={props.classList}
+                    cancelAddNewClassHandler = {cancelAddNewClassHandler}
+                    
+        />
+      </Modal>
+      <div className="classes-container">
+        <div className="classes-title-menu-container">
+          <h1>{props.activeClass.title}</h1>
+          <div className="classes-count">{props.activeClass.count}</div>
+          <IconButton
+              onClick={handleClick}>
+            <MenuIcon/>
+          </IconButton>
+          <Menu
+            id="simple-menu"
+            anchorEl={dropdownDisplay}
+            keepMounted
+            open={Boolean(dropdownDisplay)}
+            onClose={handleCloseMenu}
+            getContentAnchorEl={null}
+          >
+            <MenuItem onClick={showAddStudentHandler}>Add Student</MenuItem>
+            <MenuItem onClick={showFormatModalHandler}>Change Layout</MenuItem>
+            <MenuItem onClick={handleShuffleClass}>Shuffle Class</MenuItem>
+
+            <MenuItem onClick={handleCloseMenu}>Delete</MenuItem>
+          </Menu>
+          <IconButton
+              onClick={handleMainMenuClick}>
+            Classes
+          </IconButton>
+          <Menu
+            id="simple-menu"
+            anchorEl={mainDropdownDisplay}
+            keepMounted
+            open={Boolean(mainDropdownDisplay)}
+            onClose={handleCloseMainMenu}
+            getContentAnchorEl={null}
+          >
+            <ClassButtonList
+                        handleState={props.handleState}
+                        activeClass={props.activeClass}
+                        classList={props.classList}
+                        handleCloseMainMenu={handleCloseMainMenu}
+            />
+            <MenuItem onClick={showAddNewClassHandler}>Add New Class</MenuItem>
+
+
+          </Menu>
         </div>
+
+        <div>{newNameListState}</div>
+
         <div className="multi-select-container">
           <div className="multi-select">
             <GeneralClassButtons
               activeClass={props.activeClass}
+              classList={props.classList}
               handleState={props.handleState}
             />
           </div>
-          {/* <h1>Total Class Points: {props.activeClass.count}</h1> */}
         </div>
       </div>
     </React.Fragment>

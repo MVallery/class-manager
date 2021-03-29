@@ -5,28 +5,30 @@ import ThumbDown from "@material-ui/icons/ThumbDown";
 import ThumbUp from "@material-ui/icons/ThumbUp";
 import Sync from "@material-ui/icons/Sync";
 import SelectAll from "@material-ui/icons/SelectAll";
-
+import LibraryAddCheckIcon from '@material-ui/icons/LibraryAddCheck';
+import {checkActiveClass} from '../app-files/general'
 const ClassButtons = (props) => {
   const handleSelectAll = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
-    if (props.checkAll === false) {
+    // if (props.checkAll === false) {
       for (let x = 0; x < temp.students.length; x++) {
         temp.students[x].isChecked = true;
       }
       props.handleState({
         activeClass: temp,
-        checkAll: true,
+        // checkAll: true,
       })
-    } else {
-      for (let x = 0; x < temp.students.length; x++) {
-        temp.students[x].isChecked = false;
-      }
-      props.handleState({
-        activeClass: temp,
-        checkAll: false,
-      })
-    }
   };
+  const handleDeselectAll = () => {
+    let temp = JSON.parse(JSON.stringify(props.activeClass));
+    for (let x = 0; x < temp.students.length; x++) {
+      temp.students[x].isChecked = false;
+    }
+    props.handleState({
+      activeClass: temp,
+      // checkAll: false,
+    })
+  }
   const handleAddMulti = (change) => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
     for (let x = 0; x < temp.students.length; x++) {
@@ -53,6 +55,8 @@ const ClassButtons = (props) => {
   };
   const handleDeleteMulti = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
+    let tempClassList = JSON.parse(JSON.stringify(props.classList));
+
     if (window.confirm("Are you sure you want to delete these students?")) {
       for (let x = temp.students.length - 1; x >= 0; x--) {
         if (temp.students[x].isChecked === true) {
@@ -64,10 +68,31 @@ const ClassButtons = (props) => {
         // console.log(temp);
         //this.setState({nameList:temp})
       }
+    let newTempList = checkActiveClass(tempClassList, temp);
+
       props.handleState({
         activeClass: temp,
+      classList: newTempList,
+
       })
     }
+  };
+  const handleResetMulti = (index, key) => {
+    let temp = JSON.parse(JSON.stringify(props.activeClass));
+    let tempClassList = JSON.parse(JSON.stringify(props.classList));
+
+    for (let x in temp.students) {
+      if (temp.students[x].isChecked === true) {
+        temp.count = temp.count - temp.students[x].count;
+        temp.students[x].count = 0;
+      }
+    }
+    let newTempList = checkActiveClass(tempClassList, temp);
+
+    props.handleState({
+      activeClass: temp,
+      classList: newTempList,
+    });
   };
 return (
   <React.Fragment>
@@ -77,14 +102,17 @@ return (
           <IconButton className="iconbutton" onClick={handleSubMulti}>
             <ThumbDown />
           </IconButton>
-          <IconButton className="iconbutton" onClick={props.handleResetMulti}>
+          <IconButton className="iconbutton" onClick={handleResetMulti}>
             <Sync />
           </IconButton>
           <IconButton className="iconbutton" onClick={handleDeleteMulti}>
             <Delete />
           </IconButton>
-          <IconButton className="iconbutton" onClick={handleSelectAll}>
+          <IconButton className="iconbutton" onClick={handleDeselectAll}>
             <SelectAll />
+          </IconButton>
+          <IconButton className="iconbutton" onClick={handleSelectAll}>
+            <LibraryAddCheckIcon/>
           </IconButton>
   </React.Fragment>
 )
