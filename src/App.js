@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { Route, Switch, Link, NavLink } from "react-router-dom";
+import React from "react";
+import { Route, Switch } from "react-router-dom";
 
 import "./App.css";
 import Classes from "./pages/Classes";
 import NewClass from "./pages/NewClass";
 import Home from './pages/Home'
 import { styles } from "./AppStyles";
-import { cap, colorPallet, checkActiveClass } from "./app-files/general";
+import { colorPallet, checkActiveClass } from "./app-files/general";
 
 
 import PropTypes from "prop-types";
@@ -48,7 +48,7 @@ class MyStudents extends React.Component {
   };
   handleInput = (e) => {
     // console.log('handleinput', e)
-    const {name, value} = e.target
+    const {value} = e.target
     let temp=JSON.parse(JSON.stringify(this.state.activeClass))
     let tempClassList =JSON.parse(JSON.stringify(this.state.classList))
 
@@ -80,28 +80,8 @@ class MyStudents extends React.Component {
   }
 
   render() {
-    // console.log(this.state.nameList)
-    const hideStyle = this.state.hideClass ? { display: "none" } : {};
-    const { classes } = this.props;
-    const popover = {
-      position: "absolute",
-      zIndex: "2",
-    };
-    const cover = {
-      position: "fixed",
-      top: "0px",
-      right: "0px",
-      bottom: "0px",
-      left: "0px",
-    };
-
- 
     return (
       <div>
-      {/* {this.state.classDisplay?this.state.classDisplay:null} */}
-      {/* {names} */}
-      {/* {this.state.nameList} */}
-
         <Switch>
         <Route path="/" exact>
           <Home />

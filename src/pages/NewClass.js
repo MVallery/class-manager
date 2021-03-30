@@ -1,7 +1,7 @@
 import React from "react";
 import {useLocation} from 'react-router-dom';
 
-import { cap, shuffleArray, randWhole, colorPallet } from "../app-files/general";
+import { cap, colorPallet } from "../app-files/general";
 
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -49,6 +49,7 @@ const NewClass = (props) => {
           first:first,
           last:last?last:'',
           count: 0,
+          pointStyle:null,
           // background: randColor[0],
           background: colorPallet('lightBlueGreen'),
           key: id,

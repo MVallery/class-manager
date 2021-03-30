@@ -174,6 +174,7 @@
  }
  .student-head {
    background-color:black;
+   background-image: radial-gradient(circle at top left, rgb(95, 94, 94) 10%, black );
    height:40px;
    width:40px;
    border-radius:50%;
@@ -184,6 +185,8 @@
  }
  .student-body {
    background-color: black;
+   background-image: radial-gradient(circle at top left, rgb(95, 94, 94) 10%, black );
+
    height: 20px;
    width: 75px;
    border-radius: 50px 50px 0% 0%
@@ -261,8 +264,17 @@
 .student-card-container:hover .desk-button{
  display:inline;
 }
+.pts-buttons:active{
+  background-image: radial-gradient(circle, yellow, transparent)
+}
+
+
 
 .student-card-count{
   flex-grow:1;
   position:absolute;
+}
+
+.testing {
+  background-color:rgb(117, 117, 117)
 }

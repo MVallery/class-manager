@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import ClassButton from './ClassButton'
 const ClassButtonList = (props) => {
 

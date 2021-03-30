@@ -25,6 +25,7 @@ import Modal from "../components/Modal";
 import NewClass from "./NewClass"
 import GeneralClassButtons from "../components/GeneralClassButtons";
 import "./Classes.css";
+import { Brightness1 } from "@material-ui/icons";
 
 
 const Classes = (props) => {
@@ -35,6 +36,8 @@ const Classes = (props) => {
   const [formatModal, setFormatModal] = useState(false);
   const [showAddNewClassModal, setAddNewClassModal] = useState(false);
   const [format, setFormat] = useState("");
+  const [changePointsStyle, setChangePointStyle] = useState({})
+
   // const [container, setContainer] = useState('row-container')
   const showAddStudentHandler = () => {
     setAddStudentModal(true);
@@ -68,7 +71,6 @@ const Classes = (props) => {
 
     props.handleState({ activeClass:temp, classList:newTempList});
   }
-  let selectedShowCheck 
   const handleSelection = (index, key) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
@@ -85,7 +87,18 @@ const Classes = (props) => {
     // console.log(temp)
     temp.students[index].count = temp.students[index].count + 1;
     temp.count = temp.count + 1;
+    temp.students[index].pointStyle = 'positive'
     let newTempList = checkActiveClass(tempClassList, temp);
+    
+
+    // setChangePointStyle({
+    //   backgroundImage:'radial-gradient(circle, yellow,transparent)',
+    // })
+    // setTimeout(()=>{
+    //   setChangePointStyle({
+    //     backgroundImage:null,
+    //   })
+    // },2000)
 
     props.handleState({
       activeClass: temp,
@@ -93,6 +106,19 @@ const Classes = (props) => {
       // classDisplay:tempClassDisplay
     });
   };
+  const handleClearPointStyle = (index) => {
+    let temp = JSON.parse(JSON.stringify(activeClass));
+    let tempClassList = JSON.parse(JSON.stringify(classList));
+    temp.students[index].pointStyle = null
+    let newTempList = checkActiveClass(tempClassList, temp);
+
+
+    props.handleState({
+      activeClass: temp,
+      classList: newTempList,
+      // classDisplay:tempClassDisplay
+    });
+  }
 
   const handleSub = (index, key) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
@@ -100,6 +126,8 @@ const Classes = (props) => {
 
     temp.students[index].count = temp.students[index].count - 1;
     temp.count = temp.count - 1;
+    temp.students[index].pointStyle = 'negative'
+
     let newTempList = checkActiveClass(tempClassList, temp);
 
     props.handleState({
@@ -155,7 +183,6 @@ const Classes = (props) => {
     setMainDropdownDisplay(null);
   };
   let draggedItem;
-  let draggedIdx;
   let dragIndex;
   let newActiveClass = activeClass;
   const onDragStart = (e, index) => {
@@ -196,9 +223,9 @@ const Classes = (props) => {
     props.handleState({ activeClass: newActiveClass, classList: newTempList });
     handleGroup();
     handleFormatting();
-    draggedIdx = null;
+    // draggedIdx = null;
   };
-  const { classes } = props;
+  // const { classes } = props;
   const popover = {
     position: "absolute",
     zIndex: "2",
@@ -210,20 +237,36 @@ const Classes = (props) => {
     bottom: "0px",
     left: "0px",
   };
-
+      
+  
   const studentCards = props.activeClass.students.map((record, index) => {
     // console.log('record:',record)
+    console.log(record.pointStyle)
     var key = record.key;
     let keyString = JSON.parse(JSON.stringify(key));
-    var myStyle = {
+    var backgroundStyle = {
       backgroundColor: record.background,
+      filter:'brightness(90%)'
+
     };
+    var backgroundLightStyle = {
+      backgroundColor: record.background,
+      backgroundImage: `linear-gradient(181deg, rgb(117, 117, 117), ${record.background} 10%, ${record.background})`,
+      // backgroundImage: `radial-gradient(
+      //   circle at right, rgb(117, 117, 117), ${record.background} 40%)`,
+      // filter:'brightness(105%)', //causing flicker on select
+    }
     var selectStyle = {
       display: record.isChecked && 'inline'
     };
+    var pointStyle = record.pointStyle === 'positive' ? {
+      
+      backgroundImage: 'radial-gradient(circle, yellow, transparent)',
+    }:record.pointStyle==='negative'? {backgroundImage:'radial-gradient(circle, red, transparent)'} :null
 
     return (
-      <div className="student-card-container">
+      
+      <div className="student-card-container" style={pointStyle}>
         <div
           key={record.key}
           className="drag"
@@ -239,6 +282,9 @@ const Classes = (props) => {
                   className="icon"
                   onClick={() => {
                     handleSub(index);
+                    setTimeout(()=>{
+                      handleClearPointStyle(index)
+                    },[1000])
                   }}
                 >
                   <ThumbDown />
@@ -250,6 +296,9 @@ const Classes = (props) => {
                 <IconButton
                   onClick={() => {
                     handleAdd(index);
+                    setTimeout(()=>{
+                      handleClearPointStyle(index)
+                    },[1000])
                   }}
                 >
                   <ThumbUp />
@@ -258,8 +307,8 @@ const Classes = (props) => {
             </div>
             <div className="student-body"></div>
           </div>
-          <div className="desk-top" style={myStyle}></div>
-          <div className="desk" style={myStyle}>
+          <div className="desk-top" style={backgroundStyle}></div>
+          <div className="desk" style={backgroundLightStyle}>
             {record.name}
             <br />
 
