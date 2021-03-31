@@ -90,16 +90,6 @@ const Classes = (props) => {
     temp.students[index].pointStyle = 'positive'
     let newTempList = checkActiveClass(tempClassList, temp);
     
-
-    // setChangePointStyle({
-    //   backgroundImage:'radial-gradient(circle, yellow,transparent)',
-    // })
-    // setTimeout(()=>{
-    //   setChangePointStyle({
-    //     backgroundImage:null,
-    //   })
-    // },2000)
-
     props.handleState({
       activeClass: temp,
       classList: newTempList,
@@ -110,8 +100,8 @@ const Classes = (props) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
     temp.students[index].pointStyle = null
-    let newTempList = checkActiveClass(tempClassList, temp);
-
+    var newTempList = checkActiveClass(tempClassList, temp);
+    // }
 
     props.handleState({
       activeClass: temp,
@@ -282,9 +272,9 @@ const Classes = (props) => {
                   className="icon"
                   onClick={() => {
                     handleSub(index);
-                    setTimeout(()=>{
-                      handleClearPointStyle(index)
-                    },[1000])
+                    // setTimeout(()=>{
+                    //   handleClearPointStyle(index)
+                    // },[2000])
                   }}
                 >
                   <ThumbDown />
@@ -296,9 +286,9 @@ const Classes = (props) => {
                 <IconButton
                   onClick={() => {
                     handleAdd(index);
-                    setTimeout(()=>{
-                      handleClearPointStyle(index)
-                    },[1000])
+                    // setTimeout(()=>{
+                    //   handleClearPointStyle(index)
+                    // },[2000])
                   }}
                 >
                   <ThumbUp />

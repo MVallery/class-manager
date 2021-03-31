@@ -30,8 +30,12 @@ class MyStudents extends React.Component {
       checkAll: false,
     };
   }
-  handleState = data => {
-    this.setState(data);
+  handleState = (data, callback) => {
+    this.setState(data, () => {
+      if(callback) {
+        callback();
+      }
+    });
   }
 
   handleHideClass = (e) => {

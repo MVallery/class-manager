@@ -264,9 +264,9 @@
 .student-card-container:hover .desk-button{
  display:inline;
 }
-.pts-buttons:active{
+/* .pts-buttons:active{
   background-image: radial-gradient(circle, yellow, transparent)
-}
+} */
 
 
 

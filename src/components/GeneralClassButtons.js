@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import IconButton from "@material-ui/core/IconButton";
 import Delete from "@material-ui/icons/Delete";
 import ThumbDown from "@material-ui/icons/ThumbDown";
@@ -8,6 +8,25 @@ import SelectAll from "@material-ui/icons/SelectAll";
 import LibraryAddCheckIcon from '@material-ui/icons/LibraryAddCheck';
 import {checkActiveClass} from '../app-files/general'
 const ClassButtons = (props) => {
+  
+  const handleClearPointStyle = () => {
+    let temp = JSON.parse(JSON.stringify(props.activeClass));
+    let tempClassList = JSON.parse(JSON.stringify(props.classList));
+      for (let i in temp.students){
+        // if (temp.students[i].pointStyle === 'checked') {
+          temp.students[i].pointStyle = null
+        // }
+      }
+
+      var newTempList = checkActiveClass(tempClassList, temp);
+
+    props.handleState({
+      activeClass: temp,
+      classList: newTempList,
+      // classDisplay:tempClassDisplay
+    });
+  }
+
   const handleSelectAll = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
     // if (props.checkAll === false) {
@@ -26,31 +45,48 @@ const ClassButtons = (props) => {
     }
     props.handleState({
       activeClass: temp,
+
       // checkAll: false,
     })
   }
   const handleAddMulti = (change) => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
+    let tempClassList = JSON.parse(JSON.stringify(props.classList));
+
     for (let x = 0; x < temp.students.length; x++) {
       if (temp.students[x].isChecked === true) {
         temp.students[x].count = temp.students[x].count + 1;
         temp.count = temp.count + 1;
+        temp.students[x].pointStyle = 'positive'
+
       }
     }
+    let newTempList = checkActiveClass(tempClassList, temp);
+
     props.handleState({
       activeClass: temp,
+      classList: newTempList,
+
     })
   };
   const handleSubMulti = (change) => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
+    let tempClassList = JSON.parse(JSON.stringify(props.classList));
+
     for (let x = 0; x < temp.students.length; x++) {
       if (temp.students[x].isChecked === true) {
         temp.students[x].count = temp.students[x].count - 1;
         temp.count = temp.count - 1;
+        temp.students[x].pointStyle = 'negative'
+
       }
     }
+    let newTempList = checkActiveClass(tempClassList, temp);
+
     props.handleState({
       activeClass: temp,
+      classList: newTempList,
+
     })
   };
   const handleDeleteMulti = () => {
@@ -94,12 +130,32 @@ const ClassButtons = (props) => {
       classList: newTempList,
     });
   };
+  useEffect(()=> {
+    for (let i in props.activeClass.students){
+      if (props.activeClass.students[i].pointStyle === 'positive' || props.activeClass.students[i].pointStyle === 'negative'){
+        setTimeout(()=>{
+          handleClearPointStyle();
+        },[1000])
+        break;
+      }
+    }
+  },[props.activeClass.students])
 return (
   <React.Fragment>
-              <IconButton className="iconbutton" onClick={handleAddMulti}>
+              <IconButton className="iconbutton" onClick={() => {
+                handleAddMulti();
+                // setTimeout(()=>{
+                // handleClearPointStyle();
+                // },[2000])
+                }}>
             <ThumbUp />
           </IconButton>
-          <IconButton className="iconbutton" onClick={handleSubMulti}>
+          <IconButton className="iconbutton" onClick={() => {
+            handleSubMulti();
+            // setTimeout(()=>{
+            //   handleClearPointStyle();
+            //   },[2000])
+            }}>
             <ThumbDown />
           </IconButton>
           <IconButton className="iconbutton" onClick={handleResetMulti}>
