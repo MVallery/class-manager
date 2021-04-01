@@ -26,6 +26,7 @@ import NewClass from "./NewClass"
 import GeneralClassButtons from "../components/GeneralClassButtons";
 import "./Classes.css";
 import { Brightness1 } from "@material-ui/icons";
+import { yellow } from "@material-ui/core/colors";
 
 
 const Classes = (props) => {
@@ -96,19 +97,19 @@ const Classes = (props) => {
       // classDisplay:tempClassDisplay
     });
   };
-  const handleClearPointStyle = (index) => {
-    let temp = JSON.parse(JSON.stringify(activeClass));
-    let tempClassList = JSON.parse(JSON.stringify(classList));
-    temp.students[index].pointStyle = null
-    var newTempList = checkActiveClass(tempClassList, temp);
-    // }
+  // const handleClearPointStyle = (index) => {
+  //   let temp = JSON.parse(JSON.stringify(activeClass));
+  //   let tempClassList = JSON.parse(JSON.stringify(classList));
+  //   temp.students[index].pointStyle = null
+  //   var newTempList = checkActiveClass(tempClassList, temp);
+  //   // }
 
-    props.handleState({
-      activeClass: temp,
-      classList: newTempList,
-      // classDisplay:tempClassDisplay
-    });
-  }
+  //   props.handleState({
+  //     activeClass: temp,
+  //     classList: newTempList,
+  //     // classDisplay:tempClassDisplay
+  //   });
+  // }
 
   const handleSub = (index, key) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
@@ -250,9 +251,28 @@ const Classes = (props) => {
       display: record.isChecked && 'inline'
     };
     var pointStyle = record.pointStyle === 'positive' ? {
+      backgroundColor:'yellow',
       
-      backgroundImage: 'radial-gradient(circle, yellow, transparent)',
-    }:record.pointStyle==='negative'? {backgroundImage:'radial-gradient(circle, red, transparent)'} :null
+      backgroundImage: 'radial-gradient(circle, transparent 40%, #fffac4, #fffde6, white)',
+      transition:'background 1s',
+      transitionTimingFunction: 'ease-in',
+      borderRadius:'45%'
+    }:record.pointStyle==='negative'? { 
+      backgroundColor: 'red',
+
+        backgroundImage:'radial-gradient(circle, transparent 40%, #ffc8c4, #ffe6e6, white)',
+        transition:'background 0.5s',
+        transitionTimingFunction: 'ease-out',
+        borderRadius:'45%'
+      } : null;
+      // {
+      // // backgroundImage: 'radial-gradient(circle, transparent 40%,white)',
+      // borderRadius:'45%',
+
+      //   backgroundColor:'transparent',
+      //   transition:'background 1s',
+      //   transitionTimingFunction: 'ease',
+      // }
 
     return (
       

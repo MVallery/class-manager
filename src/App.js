@@ -8,6 +8,7 @@ import Home from './pages/Home'
 import { styles } from "./AppStyles";
 import { colorPallet, checkActiveClass } from "./app-files/general";
 
+import Modal from "./components/Modal";
 
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
@@ -27,8 +28,15 @@ class MyStudents extends React.Component {
       // generalSelection: {groups:4, columns:'', rows:''},
       count: 0,
       hideClass: false,
-      checkAll: false,
+      showAddNewClassModal: false,
     };
+  }
+
+  showAddNewClassHandler = () => {
+    this.setState({showAddNewClassModal:true});
+  }
+  cancelAddNewClassHandler = () => {
+    this.setState({showAddNewClassModal:false})
   }
   handleState = (data, callback) => {
     this.setState(data, () => {
@@ -85,11 +93,34 @@ class MyStudents extends React.Component {
 
   render() {
     return (
+      
       <div>
+      <Modal
+        show={this.state.showAddNewClassModal}
+        onCancel={this.cancelAddNewClassHandler}
+        header= {<div>Create a new class: </div>}
+        footerClass="worksheet-item__modal-actions"
+        // footer={}
+      >
+        <NewClass
+            // {...props}
+            inputNames={this.state.inputNames}
+            handleChange={this.handleChange}
+            activeClass = {this.state.activeClass}
+            handleState={this.handleState}
+            inputClassName={this.state.inputClassName}
+            classList={this.state.classList}
+            handleInput = {this.handleInput}
+            // cancelAddNewClassHandler = {cancelAddNewClassHandler}
+                    
+        />
+      </Modal>
         <Switch>
         <Route path="/" exact>
-          <Home />
-          <NewClass
+          <Home 
+          showAddNewClassHandler= {this.showAddNewClassHandler}
+          />
+          {/* <NewClass
             inputNames={this.state.inputNames}
             handleChange={this.handleChange}
             activeClass = {this.state.activeClass}
@@ -97,7 +128,7 @@ class MyStudents extends React.Component {
             handleInput = {this.handleInput}
             inputClassName={this.state.inputClassName}
             classList={this.state.classList}
-          />
+          /> */}
         </Route>
         <Route path="/signup" exact>
           {/* <Authenticate /> */}

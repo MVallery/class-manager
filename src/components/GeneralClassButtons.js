@@ -135,7 +135,7 @@ const ClassButtons = (props) => {
       if (props.activeClass.students[i].pointStyle === 'positive' || props.activeClass.students[i].pointStyle === 'negative'){
         setTimeout(()=>{
           handleClearPointStyle();
-        },[1000])
+        },[2000])
         break;
       }
     }
