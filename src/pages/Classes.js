@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { SketchPicker } from "react-color";
-
+import NavBar from '../components/NavBar'
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import MenuIcon from '@material-ui/icons/Menu';
+import MenuIcon from "@material-ui/icons/Menu";
 import ClassButtonList from "../components/ClassButtonList";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -18,16 +18,20 @@ import IconButton from "@material-ui/core/IconButton";
 import ThumbDown from "@material-ui/icons/ThumbDown";
 import ThumbUp from "@material-ui/icons/ThumbUp";
 import FormLabel from "@material-ui/core/FormLabel";
-import TextField from '@material-ui/core/TextField';
+import TextField from "@material-ui/core/TextField";
 
-import { cap, checkActiveClass, colorPallet, shuffleArray } from "../app-files/general";
+import {
+  cap,
+  checkActiveClass,
+  colorPallet,
+  shuffleArray,
+} from "../app-files/general";
 import Modal from "../components/Modal";
-import NewClass from "./NewClass"
+import NewClass from "./NewClass";
 import GeneralClassButtons from "../components/GeneralClassButtons";
 import "./Classes.css";
 import { Brightness1 } from "@material-ui/icons";
 import { yellow } from "@material-ui/core/colors";
-
 
 const Classes = (props) => {
   const { activeClass, classList } = props;
@@ -37,41 +41,40 @@ const Classes = (props) => {
   const [formatModal, setFormatModal] = useState(false);
   const [showAddNewClassModal, setAddNewClassModal] = useState(false);
   const [format, setFormat] = useState("");
-  const [changePointsStyle, setChangePointStyle] = useState({})
+  const [changePointsStyle, setChangePointStyle] = useState({});
 
   // const [container, setContainer] = useState('row-container')
   const showAddStudentHandler = () => {
     setAddStudentModal(true);
     handleCloseMenu();
-  }
+  };
   const cancelAddStudentHandler = () => {
-    setAddStudentModal(false);    
-  }
+    setAddStudentModal(false);
+  };
 
   const showAddNewClassHandler = () => {
     setAddNewClassModal(true);
-    handleCloseMainMenu();
-  }
+  };
   const cancelAddNewClassHandler = () => {
-    setAddNewClassModal(false)
-  }
+    setAddNewClassModal(false);
+  };
 
   const showFormatModalHandler = () => {
     setFormatModal(true);
     handleCloseMenu();
-  }
+  };
   const submitFormatModalHandler = () => setFormatModal(false);
 
   const handleShuffleClass = () => {
     handleCloseMenu();
-    let temp = JSON.parse(JSON.stringify(activeClass))
+    let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
     let shuffledTemp = shuffleArray(temp.students);
-    temp.students = shuffledTemp
+    temp.students = shuffledTemp;
     let newTempList = checkActiveClass(tempClassList, temp);
 
-    props.handleState({ activeClass:temp, classList:newTempList});
-  }
+    props.handleState({ activeClass: temp, classList: newTempList });
+  };
   const handleSelection = (index, key) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
@@ -88,9 +91,9 @@ const Classes = (props) => {
     // console.log(temp)
     temp.students[index].count = temp.students[index].count + 1;
     temp.count = temp.count + 1;
-    temp.students[index].pointStyle = 'positive'
+    temp.students[index].pointStyle = "positive";
     let newTempList = checkActiveClass(tempClassList, temp);
-    
+
     props.handleState({
       activeClass: temp,
       classList: newTempList,
@@ -117,7 +120,7 @@ const Classes = (props) => {
 
     temp.students[index].count = temp.students[index].count - 1;
     temp.count = temp.count - 1;
-    temp.students[index].pointStyle = 'negative'
+    temp.students[index].pointStyle = "negative";
 
     let newTempList = checkActiveClass(tempClassList, temp);
 
@@ -128,7 +131,6 @@ const Classes = (props) => {
   };
 
   const handleColorClick = (index, key) => {
-    // console.log('handlecolorclicked')
     let tempClassList = JSON.parse(JSON.stringify(classList));
 
     let temp = JSON.parse(JSON.stringify(activeClass));
@@ -159,26 +161,21 @@ const Classes = (props) => {
     props.handleState({ activeClass: temp, classList: newTempList });
   };
   const [dropdownDisplay, setDropdownDisplay] = React.useState(null);
-  const [mainDropdownDisplay, setMainDropdownDisplay] = React.useState(null);
 
   const handleClick = (e) => {
     setDropdownDisplay(e.currentTarget);
   };
-  const handleMainMenuClick = (e) => {
-    setMainDropdownDisplay(e.currentTarget);
-  };
+
   const handleCloseMenu = () => {
     setDropdownDisplay(null);
   };
-  const handleCloseMainMenu = () => {
-    setMainDropdownDisplay(null);
-  };
+
   let draggedItem;
   let dragIndex;
   let newActiveClass = activeClass;
   const onDragStart = (e, index) => {
     draggedItem = activeClass.students[index]; //griddisplay changed from nameList
-    console.log('ondragstart', activeClass.students)
+    console.log("ondragstart", activeClass.students);
     dragIndex = index;
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("text/html", e.target.parentNode);
@@ -207,7 +204,7 @@ const Classes = (props) => {
     // add the dragged item after the dragged over item
   };
   const onDragEnd = (index) => {
-    console.log('onDragEnd',newActiveClass.students)
+    console.log("onDragEnd", newActiveClass.students);
     let tempClassList = JSON.parse(JSON.stringify(classList));
 
     let newTempList = checkActiveClass(tempClassList, newActiveClass);
@@ -228,17 +225,15 @@ const Classes = (props) => {
     bottom: "0px",
     left: "0px",
   };
-      
-  
+
   const studentCards = props.activeClass.students.map((record, index) => {
     // console.log('record:',record)
-    console.log(record.pointStyle)
+    console.log(record.pointStyle);
     var key = record.key;
     let keyString = JSON.parse(JSON.stringify(key));
     var backgroundStyle = {
       backgroundColor: record.background,
-      filter:'brightness(90%)'
-
+      filter: "brightness(90%)",
     };
     var backgroundLightStyle = {
       backgroundColor: record.background,
@@ -246,36 +241,42 @@ const Classes = (props) => {
       // backgroundImage: `radial-gradient(
       //   circle at right, rgb(117, 117, 117), ${record.background} 40%)`,
       // filter:'brightness(105%)', //causing flicker on select
-    }
-    var selectStyle = {
-      display: record.isChecked && 'inline'
     };
-    var pointStyle = record.pointStyle === 'positive' ? {
-      backgroundColor:'yellow',
-      
-      backgroundImage: 'radial-gradient(circle, transparent 40%, #fffac4, #fffde6, white)',
-      transition:'background 1s',
-      transitionTimingFunction: 'ease-in',
-      borderRadius:'45%'
-    }:record.pointStyle==='negative'? { 
-      backgroundColor: 'red',
+    var selectStyle = {
+      display: record.isChecked && "inline",
+    };
+    var pointStyle =
+      record.pointStyle === "positive"
+        ? {
+            backgroundColor: "yellow",
 
-        backgroundImage:'radial-gradient(circle, transparent 40%, #ffc8c4, #ffe6e6, white)',
-        transition:'background 0.5s',
-        transitionTimingFunction: 'ease-out',
-        borderRadius:'45%'
-      } : null;
-      // {
-      // // backgroundImage: 'radial-gradient(circle, transparent 40%,white)',
-      // borderRadius:'45%',
+            backgroundImage:
+              "radial-gradient(circle, transparent 40%, #fffac4, #fffde6, white)",
+            transition: "background 1s",
+            transitionTimingFunction: "ease-in",
+            borderRadius: "45%",
+          }
+        : record.pointStyle === "negative"
+        ? {
+            backgroundColor: "red",
 
-      //   backgroundColor:'transparent',
-      //   transition:'background 1s',
-      //   transitionTimingFunction: 'ease',
-      // }
+            backgroundImage:
+              "radial-gradient(circle, transparent 40%, #ffc8c4, #ffe6e6, white)",
+            transition: "background 0.5s",
+            transitionTimingFunction: "ease-out",
+            borderRadius: "45%",
+          }
+        : null;
+    // {
+    // // backgroundImage: 'radial-gradient(circle, transparent 40%,white)',
+    // borderRadius:'45%',
+
+    //   backgroundColor:'transparent',
+    //   transition:'background 1s',
+    //   transitionTimingFunction: 'ease',
+    // }
 
     return (
-      
       <div className="student-card-container" style={pointStyle}>
         <div
           key={record.key}
@@ -324,69 +325,65 @@ const Classes = (props) => {
 
             <div className="desk-button-main-container">
               <div className="desk-button-container">
-
                 <div className="desk-button">
-                <IconButton
-                  onClick={() => {
-                    handleColorClick(index);
-                  }}
-                >
-                  <ColorLens />
-                </IconButton>
-                
-              </div>
-              {activeClass.students[index].displayColorPicker ? (
-                <div style={popover}>
-                  <div
-                    style={cover}
+                  <IconButton
                     onClick={() => {
-                      handleClose(index);
+                      handleColorClick(index);
                     }}
-                  />
-                  <SketchPicker
-                    color={activeClass.students[index].background}
-                    onChange={(e) => {
-                      handleColorSelect(index, e);
-                    }}
-                  />
+                  >
+                    <ColorLens />
+                  </IconButton>
                 </div>
-              ) : null}
-              <div className="desk-button" style={selectStyle}>
-                <FormGroup row>
-                  <div key={record.key}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          label={key}
-                          checked={activeClass.students[index].isChecked}
-                          onChange={() => {
-                            handleSelection(index);
-                          }}
-                          value={keyString}
-                        ></Checkbox>
-                      }
+                {activeClass.students[index].displayColorPicker ? (
+                  <div style={popover}>
+                    <div
+                      style={cover}
+                      onClick={() => {
+                        handleClose(index);
+                      }}
+                    />
+                    <SketchPicker
+                      color={activeClass.students[index].background}
+                      onChange={(e) => {
+                        handleColorSelect(index, e);
+                      }}
                     />
                   </div>
-                </FormGroup>
+                ) : null}
+                <div className="desk-button" style={selectStyle}>
+                  <FormGroup row>
+                    <div key={record.key}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            label={key}
+                            checked={activeClass.students[index].isChecked}
+                            onChange={() => {
+                              handleSelection(index);
+                            }}
+                            value={keyString}
+                          ></Checkbox>
+                        }
+                      />
+                    </div>
+                  </FormGroup>
+                </div>
               </div>
-              </div>
-              {record.count}           
+              {record.count}
             </div>
           </div>
         </div>
       </div>
-      
     );
   });
 
   // console.log("generalSelection:", props.generalSelection);
 
-
   let group;
   let groupContainer;
   let mainGroupContainer;
   const handleGroup = () => {
-    console.log('handleGroup',activeClass)
+    console.log("handleGroup", activeClass);
     mainGroupContainer = "group-main-container";
 
     if (format === "rows") {
@@ -430,7 +427,7 @@ const Classes = (props) => {
       };
       temp.students.push(record);
     }
-    setAddStudentModal(false)
+    setAddStudentModal(false);
     props.handleState({
       activeClass: temp,
       inputNames: "",
@@ -440,11 +437,7 @@ const Classes = (props) => {
     console.log(format);
     // console.log(props.generalSelection.groups);
     let formattedNameList = [];
-    for (
-      let i = 0;
-      i < studentCards.length;
-      i += activeClass.styling.groups
-    ) {
+    for (let i = 0; i < studentCards.length; i += activeClass.styling.groups) {
       let newArray = studentCards.slice(i, i + activeClass.styling.groups);
       // let newArray = props.studentCards.splice(i, props.generalSelection.groups);
       formattedNameList.push(newArray);
@@ -469,133 +462,133 @@ const Classes = (props) => {
     // handleFormatting()
   };
   useEffect(() => {
-    console.log('useEffect')
+    console.log("useEffect");
     handleGroup();
     handleFormatting();
-  }, [format, props.activeClass,]); //props.generalSelection.groups
+  }, [format, props.activeClass]); //props.generalSelection.groups
 
   return (
     <React.Fragment>
+      <NavBar
+        handleState={props.handleState}
+        activeClass={props.activeClass}
+        classList={props.classList}
+        showAddNewClassHandler={showAddNewClassHandler}
+      />
       <Modal
         show={showAddStudentModal}
         onCancel={cancelAddStudentHandler}
-        header= {<div>Add students to {activeClass.title} </div>}
+        header={<div>Add students to {activeClass.title} </div>}
         footerClass="worksheet-item__modal-actions"
         footer={
           <React.Fragment>
-            <button onClick={handleNewStu}>
-              ADD STUDENT(S)
-            </button>
+            <button onClick={handleNewStu}>ADD STUDENT(S)</button>
           </React.Fragment>
         }
       >
-      <TextField 
-        variant='filled'
-        id = 'filled-basic'
-        label={<span className= ''>Student Names:</span>}
-        name="inputNames"
-        // type="number"
-        value={props.inputNames}
-        onChange={props.handleChange}
-        className='text-area-styles'
-        placeholder="Input student names, separated by a comma"
-        required
-        multiline
-        rows={2}
-        rowsMax={3}
-        /> 
+        <TextField
+          variant="filled"
+          id="filled-basic"
+          label={<span className="">Student Names:</span>}
+          name="inputNames"
+          // type="number"
+          value={props.inputNames}
+          onChange={props.handleChange}
+          className="text-area-styles"
+          placeholder="Input student names, separated by a comma"
+          required
+          multiline
+          rows={2}
+          rowsMax={3}
+        />
       </Modal>
       <Modal
         show={formatModal}
         onCancel={submitFormatModalHandler}
-        header= {<div>Change the class layout of {activeClass.title} </div>}
+        header={<div>Change the class layout of {activeClass.title} </div>}
         footerClass="worksheet-item__modal-actions"
         footer={
           <React.Fragment>
-            <button onClick={submitFormatModalHandler}>
-              SUBMIT
-            </button>
+            <button onClick={submitFormatModalHandler}>SUBMIT</button>
           </React.Fragment>
         }
       >
-          <FormControl component="fieldset">
+        <FormControl component="fieldset">
           <FormLabel>Layout</FormLabel>
 
-            <RadioGroup
-              aria-label="format"
-              name="format"
-              value={props.value}
-              onChange={handleChange}
-            >
-              <FormControlLabel
-                value="groups"
-                control={<Radio />}
-                label="Groups"
-              />
-              <FormControlLabel value="rows" control={<Radio />} label="Rows" />
-            </RadioGroup>
-          </FormControl>
+          <RadioGroup
+            aria-label="format"
+            name="format"
+            value={props.value}
+            onChange={handleChange}
+          >
+            <FormControlLabel
+              value="groups"
+              control={<Radio />}
+              label="Groups"
+            />
+            <FormControlLabel value="rows" control={<Radio />} label="Rows" />
+          </RadioGroup>
+        </FormControl>
 
-          <FormControl>
-            <InputLabel>Amount in each group/row</InputLabel>
+        <FormControl>
+          <InputLabel>Amount in each group/row</InputLabel>
 
-            <Select
-              className="select-form"
-              value={activeClass.styling.groups}
-              onChange={props.handleInput}
-              displayEmpty
-            >
-              <MenuItem value={4}>4</MenuItem>
-              <MenuItem value={5}>5</MenuItem>
-              <MenuItem value={6}>6</MenuItem>
-              <MenuItem value={7}>7</MenuItem>
-            </Select>
-            {/* <FormHelperText>Without label</FormHelperText> */}
-          </FormControl>
-          <FormControl>
-            <InputLabel>Color Theme</InputLabel>
+          <Select
+            className="select-form"
+            value={activeClass.styling.groups}
+            onChange={props.handleInput}
+            displayEmpty
+          >
+            <MenuItem value={4}>4</MenuItem>
+            <MenuItem value={5}>5</MenuItem>
+            <MenuItem value={6}>6</MenuItem>
+            <MenuItem value={7}>7</MenuItem>
+          </Select>
+          {/* <FormHelperText>Without label</FormHelperText> */}
+        </FormControl>
+        <FormControl>
+          <InputLabel>Color Theme</InputLabel>
 
-            <Select
-              className="select-form"
-              style={{width:'200px'}}
-              value={activeClass.styling.theme}
-              onChange={props.handleThemeInput}
-              width={10}
-              displayEmpty
-            >
-              <MenuItem value='lightBlueGreen'>Light Blue Green</MenuItem>
-              <MenuItem value='lightBluePurple'>Light Blue Purple</MenuItem>
-              <MenuItem value='darkBluePurple'>Dark Blue Purple</MenuItem>
-            </Select>
-            {/* <FormHelperText>Color Theme</FormHelperText> */}
-          </FormControl>
+          <Select
+            className="select-form"
+            style={{ width: "200px" }}
+            value={activeClass.styling.theme}
+            onChange={props.handleThemeInput}
+            width={10}
+            displayEmpty
+          >
+            <MenuItem value="lightBlueGreen">Light Blue Green</MenuItem>
+            <MenuItem value="lightBluePurple">Light Blue Purple</MenuItem>
+            <MenuItem value="darkBluePurple">Dark Blue Purple</MenuItem>
+          </Select>
+          {/* <FormHelperText>Color Theme</FormHelperText> */}
+        </FormControl>
       </Modal>
       <Modal
         show={showAddNewClassModal}
         onCancel={cancelAddNewClassHandler}
-        header= {<div>Create a new class: </div>}
+        header={<div>Create a new class: </div>}
         footerClass="worksheet-item__modal-actions"
         // footer={}
       >
         <NewClass
-                    inputNames={props.inputNames}
-                    handleChange={props.handleChange}
-                    activeClass = {activeClass}
-                    handleState={props.handleState}
-                    handleInput = {props.handleInput}
-                    inputClassName={props.inputClassName}
-                    classList={props.classList}
-                    cancelAddNewClassHandler = {cancelAddNewClassHandler}
-                    
+          inputNames={props.inputNames}
+          handleChange={props.handleChange}
+          activeClass={activeClass}
+          handleState={props.handleState}
+          handleInput={props.handleInput}
+          inputClassName={props.inputClassName}
+          classList={props.classList}
+          cancelAddNewClassHandler={cancelAddNewClassHandler}
         />
       </Modal>
       <div className="classes-container">
         <div className="classes-title-menu-container">
           <h1>{props.activeClass.title}</h1>
           <div className="classes-count">{props.activeClass.count}</div>
-          <IconButton
-              onClick={handleClick}>
-            <MenuIcon/>
+          <IconButton onClick={handleClick}>
+            <MenuIcon />
           </IconButton>
           <Menu
             id="simple-menu"
@@ -610,28 +603,6 @@ const Classes = (props) => {
             <MenuItem onClick={handleShuffleClass}>Shuffle Class</MenuItem>
 
             <MenuItem onClick={handleCloseMenu}>Delete</MenuItem>
-          </Menu>
-          <IconButton
-              onClick={handleMainMenuClick}>
-            Classes
-          </IconButton>
-          <Menu
-            id="simple-menu"
-            anchorEl={mainDropdownDisplay}
-            keepMounted
-            open={Boolean(mainDropdownDisplay)}
-            onClose={handleCloseMainMenu}
-            getContentAnchorEl={null}
-          >
-            <ClassButtonList
-                        handleState={props.handleState}
-                        activeClass={props.activeClass}
-                        classList={props.classList}
-                        handleCloseMainMenu={handleCloseMainMenu}
-            />
-            <MenuItem onClick={showAddNewClassHandler}>Add New Class</MenuItem>
-
-
           </Menu>
         </div>
 

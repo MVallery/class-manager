@@ -6,7 +6,7 @@ import Students from "../app-files/images/students2.jpg";
 import Teacher from "../app-files/images/teacher2.jpg";
 import Desks from "../app-files/images/desks.jpg";
 import Clock from "../app-files/images/clock2.jpg";
-
+import Logo from '../components/Logo'
 import "./Home.css";
 
 // import "./Classes.css";
@@ -16,21 +16,7 @@ const Home = (props) => {
       <div className="home-main-container">
         <div className="home-container">
           <div className="home-container-gradient">
-          <div className="logo-heading">
-            <div className="logo-container">
-              <div className="logo-student-card-container">
-                <div className="logo-student-icon-container">
-                  <div className="logo-student-head"></div>
-                  <div className="logo-student-body"></div>
-                </div>
-                <div className="logo-desk-top"></div>
-                <div className="logo-desk">
-                  <span className="logo-c"></span>
-                </div>
-              </div>
-            </div>
-            <div className="logo-end">Class Manager</div>
-          </div>
+          <Logo style='main-logo'/>
           <h3>
             Create new seating charts and track student behavior data with ease.
           </h3>

@@ -39,11 +39,8 @@ class MyStudents extends React.Component {
     this.setState({showAddNewClassModal:false})
   }
   handleState = (data, callback) => {
-    this.setState(data, () => {
-      if(callback) {
-        callback();
-      }
-    });
+    this.setState(data)
+    // this.setState(prevState => data);
   }
 
   handleHideClass = (e) => {
@@ -111,7 +108,7 @@ class MyStudents extends React.Component {
             inputClassName={this.state.inputClassName}
             classList={this.state.classList}
             handleInput = {this.handleInput}
-            // cancelAddNewClassHandler = {cancelAddNewClassHandler}
+            cancelAddNewClassHandler = {this.cancelAddNewClassHandler}
                     
         />
       </Modal>

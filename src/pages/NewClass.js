@@ -25,10 +25,11 @@ const NewClass = (props) => {
 
   // console.log(props.names);
   const handleSubmit = (props) => {
-    if (location.pathname==='/classes'){
-      props.cancelAddNewClassHandler()
-    }
+    // if (location.pathname==='/classes'){
+    //   props.cancelAddNewClassHandler()
+    // }
     // location.pathname==='/classes'? props.cancelAddNewClassHandler():null;
+    props.cancelAddNewClassHandler();
 
     console.log('inputNames:',props.inputNames)
     console.log('classList:',props.classList)
@@ -37,6 +38,9 @@ const NewClass = (props) => {
       let nameOnlyResult = [];
       let result = [];
       for (let x = 0; x < nameArray.length; x++) {
+        if (!nameArray[x].length>0){
+          continue;
+        }
       // let randColor = shuffleArray(colorPalette.softPurplePink)
 
         let [first, last] = nameArray[x].split(' ')
@@ -65,13 +69,13 @@ const NewClass = (props) => {
       let tempClass = {title:props.inputClassName, students:result, count:0, styling:{groups:4, format:'', theme:'lightBlueGreen'}, classSnapShot: []};
 
       tempClassList.push(tempClass);
-      
       props.handleState({
         activeClass: tempClass,
         classList: tempClassList,
         nameOnlyList: nameOnlyResult,
         inputClassName: '',
         inputNames: "",
+        
       });
     // }
   };
