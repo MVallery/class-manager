@@ -16,6 +16,6 @@
 .navlinks-container-links:hover{
   cursor:pointer;
 }
-.navlinks-container-links:active{
-  border:none;
+.navlinks-container-links:focus{
+  outline:none;
 }

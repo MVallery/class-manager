@@ -133,9 +133,9 @@ const ClassButtons = (props) => {
   useEffect(()=> {
     for (let i in props.activeClass.students){
       if (props.activeClass.students[i].pointStyle === 'positive' || props.activeClass.students[i].pointStyle === 'negative'){
-        setTimeout(()=>{
-          handleClearPointStyle();
-        },[2000])
+        // setTimeout(()=>{
+        //   handleClearPointStyle();
+        // },[2000])
         break;
       }
     }

@@ -41,6 +41,7 @@ const Classes = (props) => {
   const [formatModal, setFormatModal] = useState(false);
   const [showAddNewClassModal, setAddNewClassModal] = useState(false);
   const [format, setFormat] = useState("");
+  const [smallStyle, setSmallStyle] = useState({smallGroup:null, smallIcon:null, smallButtons:null, smallFont:null})
   const [changePointsStyle, setChangePointStyle] = useState({});
 
   // const [container, setContainer] = useState('row-container')
@@ -93,6 +94,7 @@ const Classes = (props) => {
     temp.count = temp.count + 1;
     temp.students[index].pointStyle = "positive";
     let newTempList = checkActiveClass(tempClassList, temp);
+
 
     props.handleState({
       activeClass: temp,
@@ -243,7 +245,9 @@ const Classes = (props) => {
       // filter:'brightness(105%)', //causing flicker on select
     };
     var selectStyle = {
-      display: record.isChecked && "inline",
+      display: record.isChecked && "flex",
+      justifyContent: record.isChecked && 'end'
+
     };
     var pointStyle =
       record.pointStyle === "positive"
@@ -277,7 +281,7 @@ const Classes = (props) => {
     // }
 
     return (
-      <div className="student-card-container" style={pointStyle}>
+      <div className={`student-card-container ${smallStyle.smallIcon}`}style={pointStyle}>
         <div
           key={record.key}
           className="drag"
@@ -288,6 +292,9 @@ const Classes = (props) => {
         >
           <div className="student-icon-container">
             <div className="student-head-button-container">
+              
+            <div className="student-head"></div>
+            <div className="pts-button-container">
               <div className="pts-buttons">
                 <IconButton
                   className="icon"
@@ -301,7 +308,6 @@ const Classes = (props) => {
                   <ThumbDown />
                 </IconButton>
               </div>
-              <div className="student-head"></div>
 
               <div className="pts-buttons">
                 <IconButton
@@ -315,17 +321,18 @@ const Classes = (props) => {
                   <ThumbUp />
                 </IconButton>
               </div>
+              </div>
             </div>
             <div className="student-body"></div>
           </div>
           <div className="desk-top" style={backgroundStyle}></div>
-          <div className="desk" style={backgroundLightStyle}>
+          <div className={`desk ${smallStyle.smallFont}`} style={backgroundLightStyle}>
             {record.name}
             <br />
 
             <div className="desk-button-main-container">
               <div className="desk-button-container">
-                <div className="desk-button">
+                <div className={`desk-button ${smallStyle.smallButtons}`}>
                   <IconButton
                     onClick={() => {
                       handleColorClick(index);
@@ -350,7 +357,7 @@ const Classes = (props) => {
                     />
                   </div>
                 ) : null}
-                <div className="desk-button" style={selectStyle}>
+                <div className={`desk-button ${smallStyle.smallButtons}`} style={selectStyle}>
                   <FormGroup row>
                     <div key={record.key}>
                       <FormControlLabel
@@ -382,30 +389,48 @@ const Classes = (props) => {
   let group;
   let groupContainer;
   let mainGroupContainer;
+  let smallGroup;
   const handleGroup = () => {
+    console.log(activeClass.styling.size)
     console.log("handleGroup", activeClass);
     mainGroupContainer = "group-main-container";
 
     if (format === "rows") {
       group = "row";
+      
       groupContainer = "row-container";
       mainGroupContainer = "row-main-container";
+      
       // setContainer('row-container')
     } else {
       if (activeClass.styling.groups === 4) {
         group = "group4";
         groupContainer = "group-container4";
+        if (activeClass.styling.size==='small'){
+          // setSmallStyle({...smallStyle, smallGroup:'small-group4'})
+          smallGroup = 'small-group4'
+        }
         // setContainer('group-container4')
       } else if (
         activeClass.styling.groups === 5 ||
         activeClass.styling.groups === 6
+        
       ) {
         group = "group56";
         groupContainer = "group-container56";
+        if (activeClass.styling.size==='small'){
+          // setSmallStyle({...smallStyle, smallGroup:'small-group56'})
+          smallGroup = 'small-group56'
+
+        }
         // setContainer('group-container56')
       } else if (activeClass.styling.groups === 7) {
         group = "group7";
         groupContainer = "group-container7";
+        if (activeClass.styling.size==='small'){
+          // setSmallStyle({...smallStyle, smallGroup:'small-group7'})
+          smallGroup= 'small-group7'
+        }
         // setContainer('group-container7')
       }
     }
@@ -434,7 +459,20 @@ const Classes = (props) => {
     });
   };
   const handleFormatting = () => {
-    console.log(format);
+//     if (activeClass.styling.size==='regular'){
+//       setSmallStyle({smallGroup:null, smallIcon:null, smallButtons:null, smallFont:null})
+//     }
+
+//     console.log(format);
+//     if (activeClass.styling.size==='small'){
+//       setSmallStyle({
+//         ...smallStyle,
+//         smallIcon:'small-icon',
+//         smallButtons:'small-buttons',
+//         smallFont:'small-font'
+//       })
+
+// }
     // console.log(props.generalSelection.groups);
     let formattedNameList = [];
     for (let i = 0; i < studentCards.length; i += activeClass.styling.groups) {
@@ -445,7 +483,7 @@ const Classes = (props) => {
     console.log("studentCards:", studentCards);
     console.log("formattedNameList:", formattedNameList);
     let newNameList = formattedNameList.map((array) => {
-      return <div className={group}>{array}</div>;
+      return <div className={`${group} ${smallGroup}`} >{array}</div>;
     });
     newNameList = (
       <div className={mainGroupContainer}>
@@ -456,9 +494,37 @@ const Classes = (props) => {
     setNewNameListState(newNameList);
   };
   const handleChange = (e) => {
-    console.log("insidehandlechange");
-    const { value } = e.target;
-    setFormat(value);
+    const { name, value } = e.target;
+
+    let temp = JSON.parse(JSON.stringify(activeClass))
+    let tempClassList = JSON.parse(JSON.stringify(classList));
+    temp.styling[name] = value;
+    if (name==='format') {
+      // temp.styling.format === value;
+      setFormat(value);
+    }
+    // } else if (name==='size') {
+    //   temp.styling.size === value;
+    // }
+    if (name==='size'){
+      if (value==='regular'){
+        setSmallStyle({smallGroup:null, smallIcon:null, smallButtons:null, smallFont:null})
+      }
+        if (value==='small'){
+        setSmallStyle({
+          ...smallStyle,
+          smallIcon:'small-icon',
+          smallButtons:'small-buttons',
+          smallFont:'small-font'
+        })
+  
+  }
+    }
+    let newTempList = checkActiveClass(tempClassList, temp);
+    props.handleState({
+      activeClass: temp,
+      classList:newTempList
+    })
     // handleFormatting()
   };
   useEffect(() => {
@@ -513,7 +579,22 @@ const Classes = (props) => {
           </React.Fragment>
         }
       >
-        <FormControl component="fieldset">
+              
+        <FormControl>
+          <FormLabel>Icon Size</FormLabel>
+
+          <RadioGroup
+            aria-label="size"
+            name="size"
+            value={props.value}
+            onChange={handleChange}
+          >
+            <FormControlLabel value="small" control={<Radio />} label="Small" />
+            <FormControlLabel value="regular" control={<Radio />} label="Regular" />
+
+          </RadioGroup>
+        </FormControl>
+        <FormControl>
           <FormLabel>Layout</FormLabel>
 
           <RadioGroup
