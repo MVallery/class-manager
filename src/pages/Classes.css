@@ -39,7 +39,7 @@
 .group7 {
   display:flex;
   flex-direction:column;
-  height:650px;
+  height:550px;
   margin:20px 30px 10px 30px;
   width:300px;
   flex-wrap:wrap;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import IconButton from "@material-ui/core/IconButton";
 import Delete from "@material-ui/icons/Delete";
 import ThumbDown from "@material-ui/icons/ThumbDown";
@@ -8,12 +8,16 @@ import SelectAll from "@material-ui/icons/SelectAll";
 import LibraryAddCheckIcon from '@material-ui/icons/LibraryAddCheck';
 import {checkActiveClass} from '../app-files/general'
 const ClassButtons = (props) => {
-  
+  const activeClassRef = useRef(props.activeClass);
+  activeClassRef.current = props.activeClass;
+  const classListRef = useRef(props.classList);
+  classListRef.current= props.classList;
+
   const handleClearPointStyle = () => {
-    let temp = JSON.parse(JSON.stringify(props.activeClass));
-    let tempClassList = JSON.parse(JSON.stringify(props.classList));
+    let temp = JSON.parse(JSON.stringify(activeClassRef.current));
+    let tempClassList = JSON.parse(JSON.stringify(classListRef.current));
       for (let i in temp.students){
-        // if (temp.students[i].pointStyle === 'checked') {
+        // if (temp.students[i].isChcked) {
           temp.students[i].pointStyle = null
         // }
       }
@@ -144,17 +148,17 @@ return (
   <React.Fragment>
               <IconButton className="iconbutton" onClick={() => {
                 handleAddMulti();
-                // setTimeout(()=>{
-                // handleClearPointStyle();
-                // },[2000])
+                setTimeout(()=>{
+                handleClearPointStyle();
+                },[2000])
                 }}>
             <ThumbUp />
           </IconButton>
           <IconButton className="iconbutton" onClick={() => {
             handleSubMulti();
-            // setTimeout(()=>{
-            //   handleClearPointStyle();
-            //   },[2000])
+            setTimeout(()=>{
+              handleClearPointStyle();
+              },[2000])
             }}>
             <ThumbDown />
           </IconButton>

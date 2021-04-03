@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { SketchPicker } from "react-color";
 import NavBar from '../components/NavBar'
 import MenuItem from "@material-ui/core/MenuItem";
@@ -102,20 +102,27 @@ const Classes = (props) => {
       // classDisplay:tempClassDisplay
     });
   };
-  // const handleClearPointStyle = (index) => {
-  //   let temp = JSON.parse(JSON.stringify(activeClass));
-  //   let tempClassList = JSON.parse(JSON.stringify(classList));
-  //   temp.students[index].pointStyle = null
-  //   var newTempList = checkActiveClass(tempClassList, temp);
-  //   // }
+  const activeClassRef = useRef(activeClass);
+  activeClassRef.current = activeClass;
+  const classListRef = useRef(classList);
+  classListRef.current=classList;
+  const handleClearPointStyle = (index) => {
 
-  //   props.handleState({
-  //     activeClass: temp,
-  //     classList: newTempList,
-  //     // classDisplay:tempClassDisplay
-  //   });
-  // }
-
+    let temp = JSON.parse(JSON.stringify(activeClassRef.current));
+    let tempClassList = JSON.parse(JSON.stringify(classListRef.current));
+    temp.students[index].pointStyle = null
+    var newTempList = checkActiveClass(tempClassList, temp);
+    // }
+    props.handleState({
+      activeClass:temp,
+      classList:newTempList
+    })
+    // updateKeyInState({
+    //   key:'pointStyle', value:null
+    //   // classDisplay:tempClassDisplay
+    // }, index);
+  }
+  
   const handleSub = (index, key) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
@@ -230,7 +237,6 @@ const Classes = (props) => {
 
   const studentCards = props.activeClass.students.map((record, index) => {
     // console.log('record:',record)
-    console.log(record.pointStyle);
     var key = record.key;
     let keyString = JSON.parse(JSON.stringify(key));
     var backgroundStyle = {
@@ -300,9 +306,11 @@ const Classes = (props) => {
                   className="icon"
                   onClick={() => {
                     handleSub(index);
-                    // setTimeout(()=>{
-                    //   handleClearPointStyle(index)
-                    // },[2000])
+                    // handleClearPointStyle(index)
+                    
+                    setTimeout(()=>{
+                      handleClearPointStyle(index)
+                    },[2000])
                   }}
                 >
                   <ThumbDown />
@@ -313,9 +321,11 @@ const Classes = (props) => {
                 <IconButton
                   onClick={() => {
                     handleAdd(index);
-                    // setTimeout(()=>{
-                    //   handleClearPointStyle(index)
-                    // },[2000])
+                    // handleClearPointStyle(index)
+
+                    setTimeout(()=>{
+                      handleClearPointStyle(index)
+                    },[2000])
                   }}
                 >
                   <ThumbUp />
@@ -385,7 +395,18 @@ const Classes = (props) => {
   });
 
   // console.log("generalSelection:", props.generalSelection);
+  const updateKeyInState = (data, index) => {
+    let temp = JSON.parse(JSON.stringify(activeClass));
+    let tempClassList = JSON.parse(JSON.stringify(classList));
+    temp.students[index][data.key] = data.value
+    let newTempList = checkActiveClass(tempClassList, temp);
+    props.handleState({
+      activeClass:temp,
+      classList:newTempList
+    })
 
+
+  }
   let group;
   let groupContainer;
   let mainGroupContainer;
