@@ -66,7 +66,7 @@ const NewClass = (props) => {
       // console.log('result:'+result)
       // console.log('inputClassName:'+props.inputClassName)
       let tempClassList = JSON.parse(JSON.stringify(props.classList));
-      let tempClass = {title:props.inputClassName, students:result, count:0, styling:{groups:4, format:'', theme:'lightBlueGreen'}, classSnapShot: []};
+      let tempClass = {title:props.inputClassName, students:result, count:0, styling:{groups:4, format:'groups', theme:'lightBlueGreen'}, classSnapShot: []};
 
       tempClassList.push(tempClass);
       props.handleState({
