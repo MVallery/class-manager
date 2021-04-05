@@ -231,14 +231,27 @@ const Classes = (props) => {
   // }
   // const getContent = () => resetDisplayPositions()
   const handleOnDragEnd = result => {
+    console.log(result)
     if (!result.destination){
       return;
     }
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
     let draggedItem = activeClass.students[result.source.index];
-
     let swap = activeClass.students[result.destination.index];
+    let a = 0;
+    console.log(draggedItem, swap)
+    console.log(result.destination.index % 2 !==0)
+    console.log(result.destination.index-1 !== result.source.index)
+    
+    // if ((result.destination.index % 2 !==0) && (result.destination.index-1 !== result.source.index)){
+    //   swap = activeClass.students[result.destination.index+1];
+    //   a = 1
+    //   console.log('not divisible')
+    //   console.log(result.destination.index+a)
+    // }
+    console.log(result.source.index, result.destination.index)
+    // console.log(draggedItem,swap)
     if (draggedItem === swap) {
       return;
     }
@@ -246,11 +259,11 @@ const Classes = (props) => {
       (item) => item !== draggedItem && item !== swap
     );
     if (result.source.index > result.destination.index) {
-      temp.students.splice(result.destination.index, 0, draggedItem);
+      temp.students.splice(result.destination.index+a, 0, draggedItem);
       temp.students.splice(result.source.index, 0, swap);
     } else {
       temp.students.splice(result.source.index, 0, swap);
-      temp.students.splice(result.destination.index, 0, draggedItem);
+      temp.students.splice(result.destination.index+a, 0, draggedItem);
     }
     let newTempList = checkActiveClass(tempClassList, temp);
 
@@ -261,12 +274,12 @@ const Classes = (props) => {
 
   }
   const handleOnDragStart = result => {
-    let temp = JSON.parse(JSON.stringify(activeClass))
-    let draggedItem = activeClass.students[result.source.index];
-    temp.students[result.source.index] = draggedItem
-    props.handleState({
-      activeClass:temp
-    })
+    // let temp = JSON.parse(JSON.stringify(activeClass))
+    // let draggedItem = activeClass.students[result.source.index];
+    // temp.students[result.source.index] = draggedItem
+    // props.handleState({
+    //   activeClass:temp
+    // })
   }
   // const { classes } = props;
   const popover = {
@@ -555,28 +568,22 @@ const Classes = (props) => {
     let newNameList = formattedNameList.map((array, index) => {
       return(
         <div style={{display:'flex', width:'300px', margin:'20px'}}>
-      <Droppable droppableId={`group-${index}`} index={index}>
+      <Droppable droppableId={`group-${index}`} index={index} direction={activeClass.styling.format==='rows'?'horizontal':'vertical'}>
         {(provided)=> (
-          // <div >
-            <div {...provided.droppableProps} ref={provided.innerRef} className={`${group} ${smallGroup}`} >{array[0]}
+            <div {...provided.droppableProps} ref={provided.innerRef} className={`${group} ${smallGroup}`} >
 
-          {/* {provided.placeholder} */}
-            
-            </div>
-          // </div>
+              {array[0]}
 
+              </div>
         )}
 
     </Droppable>
-      <Droppable droppableId={`group-${index}-a`} index={index}>
+      <Droppable droppableId={`group-${index}-a`} index={index*20} direction={activeClass.styling.format==='rows'?'horizontal':'vertical'}>
       {(provided)=> (
-        // <div >
           <div {...provided.droppableProps} ref={provided.innerRef} className={`${group} ${smallGroup}`} >{array[1]}
 
-        {/* {provided.placeholder} */}
           
           </div>
-        // </div>
 
       )}
 
