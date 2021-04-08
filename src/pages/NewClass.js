@@ -34,6 +34,7 @@ const NewClass = (props) => {
     console.log('inputNames:',props.inputNames)
     console.log('classList:',props.classList)
       const nameArray = props.inputNames.replace(/, /g, ",").split(",");
+
       console.log('nameArray',nameArray)
       let nameOnlyResult = [];
       let result = [];
@@ -67,7 +68,10 @@ const NewClass = (props) => {
       // console.log('inputClassName:'+props.inputClassName)
       let tempClassList = JSON.parse(JSON.stringify(props.classList));
       let tempClass = {title:props.inputClassName, students:result, count:0, styling:{groups:4, format:'groups', theme:'lightBlueGreen'}, classSnapShot: []};
-
+      for (let i = 0; i < 4-(nameArray.length%4); i++){
+        tempClass.students.push({name:'blank', key: Math.floor(Math.random())})
+        console.log(tempClass)
+      }
       tempClassList.push(tempClass);
       props.handleState({
         activeClass: tempClass,

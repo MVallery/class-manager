@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { SketchPicker } from "react-color";
-import NavBar from '../components/NavBar'
+import NavBar from "../components/NavBar";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -19,7 +19,7 @@ import ThumbDown from "@material-ui/icons/ThumbDown";
 import ThumbUp from "@material-ui/icons/ThumbUp";
 import FormLabel from "@material-ui/core/FormLabel";
 import TextField from "@material-ui/core/TextField";
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd-aligned-rbd';
 import {
   cap,
@@ -43,7 +43,12 @@ const Classes = (props) => {
   const [formatModal, setFormatModal] = useState(false);
   const [showAddNewClassModal, setAddNewClassModal] = useState(false);
   const [format, setFormat] = useState("");
-  const [smallStyle, setSmallStyle] = useState({smallGroup:null, smallIcon:null, smallButtons:null, smallFont:null})
+  const [smallStyle, setSmallStyle] = useState({
+    smallGroup: null,
+    smallIcon: null,
+    smallButtons: null,
+    smallFont: null,
+  });
   const [changePointsStyle, setChangePointStyle] = useState({});
 
   // const [container, setContainer] = useState('row-container')
@@ -106,21 +111,19 @@ const Classes = (props) => {
   const activeClassRef = useRef(activeClass);
   activeClassRef.current = activeClass;
   const classListRef = useRef(classList);
-  classListRef.current=classList;
+  classListRef.current = classList;
   const handleClearPointStyle = (index) => {
-
     let temp = JSON.parse(JSON.stringify(activeClassRef.current));
     let tempClassList = JSON.parse(JSON.stringify(classListRef.current));
-    temp.students[index].pointStyle = null
+    temp.students[index].pointStyle = null;
     var newTempList = checkActiveClass(tempClassList, temp);
     // }
     props.handleState({
-      activeClass:temp,
-      classList:newTempList
-    })
+      activeClass: temp,
+      classList: newTempList,
+    });
+  };
 
-  }
-  
   const handleSub = (index, key) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
@@ -221,36 +224,20 @@ const Classes = (props) => {
     handleFormatting();
     // draggedIdx = null;
   };
-  // const resetDisplayPositions = list => {
-  //   const resetList = list.map((c, index)=> {
-  //     const studentCard = c
-  //     slide.displayPosition = index+1
-  //     return slide
-  //   })
-  //   return resetList
-  // }
-  // const getContent = () => resetDisplayPositions()
-  const handleOnDragEnd = result => {
-    console.log(result)
-    if (!result.destination){
+
+  const handleOnDragEnd = (result) => {
+    console.log(result);
+    if (!result.destination) {
       return;
     }
+    console.log(activeClass)
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
+    console.log(temp)
+
     let draggedItem = activeClass.students[result.source.index];
     let swap = activeClass.students[result.destination.index];
-    let a = 0;
-    console.log(draggedItem, swap)
-    console.log(result.destination.index % 2 !==0)
-    console.log(result.destination.index-1 !== result.source.index)
-    
-    // if ((result.destination.index % 2 !==0) && (result.destination.index-1 !== result.source.index)){
-    //   swap = activeClass.students[result.destination.index+1];
-    //   a = 1
-    //   console.log('not divisible')
-    //   console.log(result.destination.index+a)
-    // }
-    console.log(result.source.index, result.destination.index)
+    console.log(result.source.index, result.destination.index);
     // console.log(draggedItem,swap)
     if (draggedItem === swap) {
       return;
@@ -258,30 +245,36 @@ const Classes = (props) => {
     temp.students = activeClass.students.filter(
       (item) => item !== draggedItem && item !== swap
     );
-    if (result.source.index > result.destination.index) {
-      temp.students.splice(result.destination.index+a, 0, draggedItem);
-      temp.students.splice(result.source.index, 0, swap);
+    if (result.destination.index> temp.length-1 || result.destination.index) {
+      if (result.source.index > result.destination.index) {
+        temp.students.splice(result.destination.index, 0, draggedItem)
+        temp.students.splice(result.source.index, 0, swap);
+
+      } else {
+        temp.students.splice(result.source.index, 0, swap);
+
+        temp.students.splice(result.destination.index, 0, draggedItem)
+
+      }
     } else {
-      temp.students.splice(result.source.index, 0, swap);
-      temp.students.splice(result.destination.index+a, 0, draggedItem);
+      if (result.source.index > result.destination.index) {
+        temp.students.splice(result.destination.index, 0, draggedItem);
+        temp.students.splice(result.source.index, 0, swap);
+      } else {
+        temp.students.splice(result.source.index, 0, swap);
+        temp.students.splice(result.destination.index, 0, draggedItem);
+      }
     }
+
+
     let newTempList = checkActiveClass(tempClassList, temp);
 
     props.handleState({
-      activeClass:temp,
-      classList: newTempList
-    })
-
-  }
-  const handleOnDragStart = result => {
-    // let temp = JSON.parse(JSON.stringify(activeClass))
-    // let draggedItem = activeClass.students[result.source.index];
-    // temp.students[result.source.index] = draggedItem
-    // props.handleState({
-    //   activeClass:temp
-    // })
-  }
-  // const { classes } = props;
+      activeClass: temp,
+      classList: newTempList,
+    });
+  };
+  const handleOnDragStart = (result) => {};
   const popover = {
     position: "absolute",
     zIndex: "2",
@@ -295,6 +288,46 @@ const Classes = (props) => {
   };
 
   const studentCards = props.activeClass.students.map((record, index) => {
+    function getStyle(style, snapshot) { //ensures that icons do not shift when moving other ones since we are swapping versus reordering all students.
+      if (!snapshot.isDragging)
+        return {
+          display: "inline",
+        };
+      if (!snapshot.isDropAnimating) {
+        return style;
+      }
+
+      return {
+        ...style,
+        // cannot be 0, but make it super tiny
+        transitionDuration: `0.001s`,
+      };
+    }
+      if (record.name==='blank'){ //if student record is blank - return an empty desk to allow swapping of students in seating arrangement
+      return <Draggable key={'blank'+index} draggableId={'blank'+index} index={index}>
+        {(provided, snapshot) => (
+          <div>
+        <div 
+        className={`student-card-container ${smallStyle.smallIcon} blank-student-card-container` }
+        style={getStyle(provided.draggableProps.style, snapshot)} 
+        ref={provided.innerRef}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+        >
+          <div className="student-icon-container">
+
+          </div>
+        <div className="desk-top blank-desk-top"></div>
+        <div
+          className={`desk blank-desk `}
+        >
+
+        </div>
+        </div>
+        </div>
+        )}
+        </Draggable>;
+    }
     // console.log('record:',record)
     var key = record.key;
     let keyString = JSON.parse(JSON.stringify(key));
@@ -311,8 +344,7 @@ const Classes = (props) => {
     };
     var selectStyle = {
       display: record.isChecked && "flex",
-      justifyContent: record.isChecked && 'end'
-
+      justifyContent: record.isChecked && "end",
     };
     var pointStyle =
       record.pointStyle === "positive"
@@ -344,132 +376,127 @@ const Classes = (props) => {
     //   transition:'background 1s',
     //   transitionTimingFunction: 'ease',
     // }
-    function getStyle(style, snapshot) {
-      if (!snapshot.isDragging) return {
-        display:'inline'
-      };
-      if (!snapshot.isDropAnimating) {
-        return style;
-      }
-    
-      return {
-        ...style,
-        // cannot be 0, but make it super tiny
-        transitionDuration: `0.001s`,
-      };
-    }
+
     return (
       <Draggable key={record.key} draggableId={record.key} index={index}>
         {(provided, snapshot) => (
+          <div
+            className={`student-card-container ${smallStyle.smallIcon}`}
+            style={pointStyle}
+          >
+            <div
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              key={record.key}
+              className="drag"
+              style={getStyle(provided.draggableProps.style, snapshot)}
+              // draggable="true"
+              // onDragStart={(e) => onDragStart(e, index)}
+              // onDragEnd={onDragEnd}
+              // onDragOver={() => onDragOver(index)}
+            >
+              <div className="student-icon-container">
+                <div className="student-head-button-container">
+                  <div className="student-head"></div>
+                  <div className="pts-button-container">
+                    <div className="pts-buttons">
+                      <IconButton
+                        className="icon"
+                        onClick={() => {
+                          handleSub(index);
+                          // handleClearPointStyle(index)
 
-        
-      <div className={`student-card-container ${smallStyle.smallIcon}`}style={pointStyle}>
-        <div
-        ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} 
-          key={record.key}
-          className="drag"
-          style={getStyle(provided.draggableProps.style, snapshot)}
-          // draggable="true"
-          // onDragStart={(e) => onDragStart(e, index)}
-          // onDragEnd={onDragEnd}
-          // onDragOver={() => onDragOver(index)}
-        >
-          <div className="student-icon-container">
-            <div className="student-head-button-container">
-              
-            <div className="student-head"></div>
-            <div className="pts-button-container">
-              <div className="pts-buttons">
-                <IconButton
-                  className="icon"
-                  onClick={() => {
-                    handleSub(index);
-                    // handleClearPointStyle(index)
-                    
-                    setTimeout(()=>{
-                      handleClearPointStyle(index)
-                    },[2000])
-                  }}
-                >
-                  <ThumbDown />
-                </IconButton>
-              </div>
-
-              <div className="pts-buttons">
-                <IconButton
-                  onClick={() => {
-                    handleAdd(index);
-                    // handleClearPointStyle(index)
-
-                    setTimeout(()=>{
-                      handleClearPointStyle(index)
-                    },[2000])
-                  }}
-                >
-                  <ThumbUp />
-                </IconButton>
-              </div>
-              </div>
-            </div>
-            <div className="student-body"></div>
-          </div>
-          <div className="desk-top" style={backgroundStyle}></div>
-          <div className={`desk ${smallStyle.smallFont}`} style={backgroundLightStyle}>
-            {record.name}
-            <br />
-
-            <div className="desk-button-main-container">
-              <div className="desk-button-container">
-                <div className={`desk-button ${smallStyle.smallButtons}`}>
-                  <IconButton
-                    onClick={() => {
-                      handleColorClick(index);
-                    }}
-                  >
-                    <ColorLens />
-                  </IconButton>
-                </div>
-                {activeClass.students[index].displayColorPicker ? (
-                  <div style={popover}>
-                    <div
-                      style={cover}
-                      onClick={() => {
-                        handleClose(index);
-                      }}
-                    />
-                    <SketchPicker
-                      color={activeClass.students[index].background}
-                      onChange={(e) => {
-                        handleColorSelect(index, e);
-                      }}
-                    />
-                  </div>
-                ) : null}
-                <div className={`desk-button ${smallStyle.smallButtons}`} style={selectStyle}>
-                  <FormGroup row>
-                    <div key={record.key}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            label={key}
-                            checked={activeClass.students[index].isChecked}
-                            onChange={() => {
-                              handleSelection(index);
-                            }}
-                            value={keyString}
-                          ></Checkbox>
-                        }
-                      />
+                          setTimeout(() => {
+                            handleClearPointStyle(index);
+                          }, [2000]);
+                        }}
+                      >
+                        <ThumbDown />
+                      </IconButton>
                     </div>
-                  </FormGroup>
+
+                    <div className="pts-buttons">
+                      <IconButton
+                        onClick={() => {
+                          handleAdd(index);
+                          // handleClearPointStyle(index)
+
+                          setTimeout(() => {
+                            handleClearPointStyle(index);
+                          }, [2000]);
+                        }}
+                      >
+                        <ThumbUp />
+                      </IconButton>
+                    </div>
+                  </div>
+                </div>
+                <div className="student-body"></div>
+              </div>
+              <div className="desk-top" style={backgroundStyle}></div>
+              <div
+                className={`desk ${smallStyle.smallFont}`}
+                style={backgroundLightStyle}
+              >
+                {record.name}
+                <br />
+
+                <div className="desk-button-main-container">
+                  <div className="desk-button-container">
+                    <div className={`desk-button ${smallStyle.smallButtons}`}>
+                      <IconButton
+                        onClick={() => {
+                          handleColorClick(index);
+                        }}
+                      >
+                        <ColorLens />
+                      </IconButton>
+                    </div>
+                    {activeClass.students[index].displayColorPicker ? (
+                      <div style={popover}>
+                        <div
+                          style={cover}
+                          onClick={() => {
+                            handleClose(index);
+                          }}
+                        />
+                        <SketchPicker
+                          color={activeClass.students[index].background}
+                          onChange={(e) => {
+                            handleColorSelect(index, e);
+                          }}
+                        />
+                      </div>
+                    ) : null}
+                    <div
+                      className={`desk-button ${smallStyle.smallButtons}`}
+                      style={selectStyle}
+                    >
+                      <FormGroup row>
+                        <div key={record.key}>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                label={key}
+                                checked={activeClass.students[index].isChecked}
+                                onChange={() => {
+                                  handleSelection(index);
+                                }}
+                                value={keyString}
+                              ></Checkbox>
+                            }
+                          />
+                        </div>
+                      </FormGroup>
+                    </div>
+                  </div>
+                  {record.count}
                 </div>
               </div>
-              {record.count}
             </div>
           </div>
-        </div>
-      </div>
-      )}
+        )}
       </Draggable>
     );
   });
@@ -479,45 +506,43 @@ const Classes = (props) => {
   let mainGroupContainer;
   let smallGroup;
   const handleGroup = () => {
-    console.log(activeClass.styling.size)
+    console.log(activeClass.styling.size);
     console.log("handleGroup", activeClass);
     mainGroupContainer = "group-main-container";
 
     if (format === "rows") {
       group = "row";
-      
+
       groupContainer = "row-container";
       mainGroupContainer = "row-main-container";
-      
+
       // setContainer('row-container')
     } else {
       if (activeClass.styling.groups === 4) {
         group = "group4";
         groupContainer = "group-container4";
-        if (activeClass.styling.size==='small'){
+        if (activeClass.styling.size === "small") {
           // setSmallStyle({...smallStyle, smallGroup:'small-group4'})
-          smallGroup = 'small-group4'
+          smallGroup = "small-group4";
         }
         // setContainer('group-container4')
       } else if (
         activeClass.styling.groups === 5 ||
         activeClass.styling.groups === 6
-        
       ) {
         group = "group56";
         groupContainer = "group-container56";
-        if (activeClass.styling.size==='small'){
+        if (activeClass.styling.size === "small") {
           // setSmallStyle({...smallStyle, smallGroup:'small-group56'})
-          smallGroup = 'small-group56'
-
+          smallGroup = "small-group56";
         }
         // setContainer('group-container56')
       } else if (activeClass.styling.groups === 7) {
         group = "group7";
         groupContainer = "group-container7";
-        if (activeClass.styling.size==='small'){
+        if (activeClass.styling.size === "small") {
           // setSmallStyle({...smallStyle, smallGroup:'small-group7'})
-          smallGroup= 'small-group7'
+          smallGroup = "small-group7";
         }
         // setContainer('group-container7')
       }
@@ -547,60 +572,80 @@ const Classes = (props) => {
     });
   };
   const handleFormatting = () => {
-    console.log(activeClass.styling.groups)
+    console.log(activeClass.styling.groups);
     let formattedNameList = [];
-    if (activeClass.styling.groups ===4){
-      for (let i = 0; i < studentCards.length; i += activeClass.styling.groups) {
-        let newArray = studentCards.slice(i, i + 2);
-        let newArray2 = studentCards.slice(i+2, i + 4);
-        let combinedArray=[newArray, newArray2]
-        // let newArray = props.studentCards.splice(i, props.generalSelection.groups);
-        formattedNameList.push(combinedArray);
+
+    for (let i = 0; i < studentCards.length; i += activeClass.styling.groups) {
+      let [newArray, newArray2] = [[], []]
+      if (activeClass.styling.groups === 4) {
+        newArray = studentCards.slice(i, i + 2);
+        newArray2 = studentCards.slice(i + 2, i + 4);
+      } else if (activeClass.styling.groups === 5) {
+        newArray = studentCards.slice(i, i + 3);
+        newArray2 = studentCards.slice(i + 3, i + 5);
+      } else if (activeClass.styling.groups === 6) {
+        newArray = studentCards.slice(i, i + 3);
+        newArray2 = studentCards.slice(i + 3, i + 6);
+      } else if (activeClass.styling.groups === 7) {
+        newArray = studentCards.slice(i, i + 4);
+        newArray2 = studentCards.slice(i + 4, i + 7);
       }
+      let combinedArray = [newArray, newArray2];
+      formattedNameList.push(combinedArray);
     }
-    // for (let i = 0; i < studentCards.length; i += activeClass.styling.groups) {
-    //   let newArray = studentCards.slice(i, i + activeClass.styling.groups);
-    //   // let newArray = props.studentCards.splice(i, props.generalSelection.groups);
-    //   formattedNameList.push(newArray);
-    // }
+
+
     console.log("studentCards:", studentCards);
     console.log("formattedNameList:", formattedNameList);
     let newNameList = formattedNameList.map((array, index) => {
-      return(
-        <div style={{display:'flex', width:'300px', margin:'20px'}}>
-      <Droppable droppableId={`group-${index}`} index={index} direction={activeClass.styling.format==='rows'?'horizontal':'vertical'}>
-        {(provided)=> (
-            <div {...provided.droppableProps} ref={provided.innerRef} className={`${group} ${smallGroup}`} >
-
-              {array[0]}
-
+      return (
+        <div style={{ display: "flex", margin: "0px 50px 50px 50px" }}>
+          <Droppable
+            droppableId={`group-${index}`}
+            index={index}
+            direction={
+              activeClass.styling.format === "rows" ? "horizontal" : "vertical"
+            }
+          >
+            {(provided) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className={`${group} ${smallGroup}`}
+              >
+                {array[0]}
               </div>
-        )}
-
-    </Droppable>
-      <Droppable droppableId={`group-${index}-a`} index={index*20} direction={activeClass.styling.format==='rows'?'horizontal':'vertical'}>
-      {(provided)=> (
-          <div {...provided.droppableProps} ref={provided.innerRef} className={`${group} ${smallGroup}`} >{array[1]}
-
-          
-          </div>
-
-      )}
-
-  </Droppable>
-  </div>
-
-      )
-      
+            )}
+          </Droppable>
+          <Droppable
+            droppableId={`group-${index}-a`}
+            index={index * 20}
+            direction={
+              activeClass.styling.format === "rows" ? "horizontal" : "vertical"
+            }
+          >
+            {(provided) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className={`${group} ${smallGroup}`}
+              >
+                {array[1]}
+              </div>
+            )}
+          </Droppable>
+        </div>
+      );
     });
     newNameList = (
-      <DragDropContext  onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd}>
-
-      <div className={mainGroupContainer}>
-        <div className={groupContainer}>{newNameList}</div>
-      </div>
-    </DragDropContext>
-
+      <DragDropContext
+        onDragStart={handleOnDragStart}
+        onDragEnd={handleOnDragEnd}
+      >
+        <div className={mainGroupContainer}>
+          <div className={groupContainer}>{newNameList}</div>
+        </div>
+      </DragDropContext>
     );
     console.log(newNameList);
     setNewNameListState(newNameList);
@@ -608,32 +653,36 @@ const Classes = (props) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    let temp = JSON.parse(JSON.stringify(activeClass))
+    let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
     temp.styling[name] = value;
-    if (name==='format') {
+    if (name === "format") {
       setFormat(value);
     }
 
-    if (name==='size'){
-      if (value==='regular'){
-        setSmallStyle({smallGroup:null, smallIcon:null, smallButtons:null, smallFont:null})
+    if (name === "size") {
+      if (value === "regular") {
+        setSmallStyle({
+          smallGroup: null,
+          smallIcon: null,
+          smallButtons: null,
+          smallFont: null,
+        });
       }
-        if (value==='small'){
+      if (value === "small") {
         setSmallStyle({
           ...smallStyle,
-          smallIcon:'small-icon',
-          smallButtons:'small-buttons',
-          smallFont:'small-font'
-        })
-  
-  }
+          smallIcon: "small-icon",
+          smallButtons: "small-buttons",
+          smallFont: "small-font",
+        });
+      }
     }
     let newTempList = checkActiveClass(tempClassList, temp);
     props.handleState({
       activeClass: temp,
-      classList:newTempList
-    })
+      classList: newTempList,
+    });
     // handleFormatting()
   };
   useEffect(() => {
@@ -688,7 +737,6 @@ const Classes = (props) => {
           </React.Fragment>
         }
       >
-              
         <FormControl>
           <FormLabel>Icon Size</FormLabel>
 
@@ -699,8 +747,11 @@ const Classes = (props) => {
             onChange={handleChange}
           >
             <FormControlLabel value="small" control={<Radio />} label="Small" />
-            <FormControlLabel value="regular" control={<Radio />} label="Regular" />
-
+            <FormControlLabel
+              value="regular"
+              control={<Radio />}
+              label="Regular"
+            />
           </RadioGroup>
         </FormControl>
         <FormControl>
@@ -797,14 +848,13 @@ const Classes = (props) => {
         </div>
         <DragDropContext onDragEnd={handleOnDragEnd}>
           <Droppable droppableId="students">
-            {(provided)=> (
-              <div {...provided.droppableProps} ref={provided.innerRef}>{newNameListState}
-              {provided.placeholder}
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {newNameListState}
+                {provided.placeholder}
               </div>
-
             )}
-
-        </Droppable>
+          </Droppable>
         </DragDropContext>
         <div className="multi-select-container">
           <div className="multi-select">
@@ -821,4 +871,3 @@ const Classes = (props) => {
 };
 
 export default Classes;
-

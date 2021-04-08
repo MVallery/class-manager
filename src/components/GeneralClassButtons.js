@@ -17,6 +17,9 @@ const ClassButtons = (props) => {
     let temp = JSON.parse(JSON.stringify(activeClassRef.current));
     let tempClassList = JSON.parse(JSON.stringify(classListRef.current));
       for (let i in temp.students){
+      // if (temp.students[x] === null || temp.students[x]===undefined) {
+        if (temp.students[i].name==='blank'){          continue;
+        }
         // if (temp.students[i].isChcked) {
           temp.students[i].pointStyle = null
         // }
@@ -35,6 +38,9 @@ const ClassButtons = (props) => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
     // if (props.checkAll === false) {
       for (let x = 0; x < temp.students.length; x++) {
+      // if (temp.students[x] === null || temp.students[x]===undefined) {
+        if (temp.students[x].name==='blank'){          continue;
+        }
         temp.students[x].isChecked = true;
       }
       props.handleState({
@@ -45,6 +51,9 @@ const ClassButtons = (props) => {
   const handleDeselectAll = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
     for (let x = 0; x < temp.students.length; x++) {
+      // if (temp.students[x] === null || temp.students[x]===undefined) {
+        if (temp.students[x].name==='blank'){        continue;
+      }
       temp.students[x].isChecked = false;
     }
     props.handleState({
@@ -58,6 +67,9 @@ const ClassButtons = (props) => {
     let tempClassList = JSON.parse(JSON.stringify(props.classList));
 
     for (let x = 0; x < temp.students.length; x++) {
+      // if (temp.students[x] === null || temp.students[x]===undefined) {
+        if (temp.students[x].name==='blank'){        continue;
+      }
       if (temp.students[x].isChecked === true) {
         temp.students[x].count = temp.students[x].count + 1;
         temp.count = temp.count + 1;
@@ -78,6 +90,10 @@ const ClassButtons = (props) => {
     let tempClassList = JSON.parse(JSON.stringify(props.classList));
 
     for (let x = 0; x < temp.students.length; x++) {
+      // if (temp.students[x] === null || temp.students[x]===undefined) {
+        if (temp.students[x].name==='blank'){
+        continue;
+      }
       if (temp.students[x].isChecked === true) {
         temp.students[x].count = temp.students[x].count - 1;
         temp.count = temp.count - 1;
@@ -99,6 +115,9 @@ const ClassButtons = (props) => {
 
     if (window.confirm("Are you sure you want to delete these students?")) {
       for (let x = temp.students.length - 1; x >= 0; x--) {
+      // if (temp.students[x] === null || temp.students[x]===undefined) {
+        if (temp.students[x].name==='blank'){          continue;
+        }
         if (temp.students[x].isChecked === true) {
           temp.count = temp.count- temp.students[x].count
           //temp[x] = 0;
@@ -122,6 +141,9 @@ const ClassButtons = (props) => {
     let tempClassList = JSON.parse(JSON.stringify(props.classList));
 
     for (let x in temp.students) {
+      // if (temp.students[x] === null || temp.students[x]===undefined) {
+        if (temp.students[x].name==='blank'){        continue;
+      }
       if (temp.students[x].isChecked === true) {
         temp.count = temp.count - temp.students[x].count;
         temp.students[x].count = 0;
@@ -136,6 +158,10 @@ const ClassButtons = (props) => {
   };
   useEffect(()=> {
     for (let i in props.activeClass.students){
+      // if (props.activeClass.students[i]===undefined || props.activeClass.students[i] === null){
+        if (props.activeClass.students[i].name==='blank'){
+        continue;
+      }
       if (props.activeClass.students[i].pointStyle === 'positive' || props.activeClass.students[i].pointStyle === 'negative'){
         // setTimeout(()=>{
         //   handleClearPointStyle();
