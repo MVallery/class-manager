@@ -116,16 +116,14 @@ const ClassButtons = (props) => {
     if (window.confirm("Are you sure you want to delete these students?")) {
       for (let x = temp.students.length - 1; x >= 0; x--) {
       // if (temp.students[x] === null || temp.students[x]===undefined) {
+
         if (temp.students[x].name==='blank'){          continue;
         }
         if (temp.students[x].isChecked === true) {
           temp.count = temp.count- temp.students[x].count
-          //temp[x] = 0;
-          temp.students.splice(x, 1);
-          // console.log(temp);
+          temp.students.splice(x, 1, {name:'blank'});
         }
-        // console.log(temp);
-        //this.setState({nameList:temp})
+
       }
     let newTempList = checkActiveClass(tempClassList, temp);
 

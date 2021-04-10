@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import { SketchPicker } from "react-color";
 import NavBar from "../components/NavBar";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
@@ -19,6 +18,7 @@ import ThumbDown from "@material-ui/icons/ThumbDown";
 import ThumbUp from "@material-ui/icons/ThumbUp";
 import FormLabel from "@material-ui/core/FormLabel";
 import TextField from "@material-ui/core/TextField";
+import StudentCard from '../components/StudentCard';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd-aligned-rbd';
 import {
@@ -31,9 +31,6 @@ import Modal from "../components/Modal";
 import NewClass from "./NewClass";
 import GeneralClassButtons from "../components/GeneralClassButtons";
 import "./Classes.css";
-import { Brightness1, InfoOutlined } from "@material-ui/icons";
-import { yellow } from "@material-ui/core/colors";
-import { Slide } from "@material-ui/core";
 
 const Classes = (props) => {
   const { activeClass, classList } = props;
@@ -49,7 +46,6 @@ const Classes = (props) => {
     smallButtons: null,
     smallFont: null,
   });
-  const [changePointsStyle, setChangePointStyle] = useState({});
 
   // const [container, setContainer] = useState('row-container')
   const showAddStudentHandler = () => {
@@ -83,94 +79,11 @@ const Classes = (props) => {
 
     props.handleState({ activeClass: temp, classList: newTempList });
   };
-  const handleSelection = (index, key) => {
-    let temp = JSON.parse(JSON.stringify(activeClass));
-    let tempClassList = JSON.parse(JSON.stringify(classList));
-    temp.students[index].isChecked = !temp.students[index].isChecked;
-    let newTempList = checkActiveClass(tempClassList, temp);
-    props.handleState({ activeClass: temp, classList: newTempList });
-  };
 
-  const handleAdd = (index, key) => {
-    // console.log('handleAdd',index,key)
-    let temp = JSON.parse(JSON.stringify(activeClass));
-    let tempClassList = JSON.parse(JSON.stringify(classList));
 
-    // console.log(temp)
-    temp.students[index].count = temp.students[index].count + 1;
-    temp.count = temp.count + 1;
-    temp.students[index].pointStyle = "positive";
-    let newTempList = checkActiveClass(tempClassList, temp);
 
-    props.handleState({
-      activeClass: temp,
-      classList: newTempList,
-      // classDisplay:tempClassDisplay
-    });
-  };
-  const activeClassRef = useRef(activeClass);
-  activeClassRef.current = activeClass;
-  const classListRef = useRef(classList);
-  classListRef.current = classList;
 
-  const handleClearPointStyle = (index) => {
-    let temp = JSON.parse(JSON.stringify(activeClassRef.current));
-    let tempClassList = JSON.parse(JSON.stringify(classListRef.current));
-    temp.students[index].pointStyle = null;
-    var newTempList = checkActiveClass(tempClassList, temp);
-    // }
-    props.handleState({
-      activeClass: temp,
-      classList: newTempList,
-    });
-  };
 
-  const handleSub = (index, key) => {
-    let temp = JSON.parse(JSON.stringify(activeClass));
-    let tempClassList = JSON.parse(JSON.stringify(classList));
-
-    temp.students[index].count = temp.students[index].count - 1;
-    temp.count = temp.count - 1;
-    temp.students[index].pointStyle = "negative";
-
-    let newTempList = checkActiveClass(tempClassList, temp);
-
-    props.handleState({
-      activeClass: temp,
-      classList: newTempList,
-    });
-  };
-
-  const handleColorClick = (index, key) => {
-    let tempClassList = JSON.parse(JSON.stringify(classList));
-
-    let temp = JSON.parse(JSON.stringify(activeClass));
-    temp.students[index].displayColorPicker = !temp.students[index]
-      .displayColorPicker;
-    let newTempList = checkActiveClass(tempClassList, temp);
-
-    props.handleState({ activeClass: temp, classList: newTempList });
-  };
-  const handleClose = (index, key) => {
-    let tempClassList = JSON.parse(JSON.stringify(classList));
-
-    let temp = JSON.parse(JSON.stringify(activeClass));
-
-    temp.students[index].displayColorPicker = false;
-    let newTempList = checkActiveClass(tempClassList, temp);
-
-    props.handleState({ activeClass: temp, classList: newTempList });
-  };
-
-  const handleColorSelect = (index, e) => {
-    let temp = JSON.parse(JSON.stringify(activeClass));
-    let tempClassList = JSON.parse(JSON.stringify(classList));
-
-    temp.students[index].background = e.hex;
-    let newTempList = checkActiveClass(tempClassList, temp);
-
-    props.handleState({ activeClass: temp, classList: newTempList });
-  };
   const [dropdownDisplay, setDropdownDisplay] = React.useState(null);
 
   const handleClick = (e) => {
@@ -232,17 +145,7 @@ const Classes = (props) => {
     });
   };
   const handleOnDragStart = (result) => {};
-  const popover = {
-    position: "absolute",
-    zIndex: "2",
-  };
-  const cover = {
-    position: "fixed",
-    top: "0px",
-    right: "0px",
-    bottom: "0px",
-    left: "0px",
-  };
+
 
   const studentCards = props.activeClass.students.map((record, index) => {
     function getStyle(style, snapshot) { //ensures that icons do not shift when moving other ones since we are swapping versus reordering all students.
@@ -291,159 +194,10 @@ const Classes = (props) => {
         </Draggable>;
     }
     // console.log('record:',record)
-    var key = record.key;
-    let keyString = JSON.parse(JSON.stringify(key));
-    var backgroundStyle = {
-      backgroundColor: record.background,
-      filter: "brightness(90%)",
-    };
-    var backgroundLightStyle = {
-      backgroundColor: record.background,
-      backgroundImage: `linear-gradient(181deg, rgb(117, 117, 117), ${record.background} 10%, ${record.background})`,
-      // backgroundImage: `radial-gradient(
-      //   circle at right, rgb(117, 117, 117), ${record.background} 40%)`,
-      // filter:'brightness(105%)', //causing flicker on select
-    };
-    var selectStyle = {
-      display: record.isChecked && "flex",
-      justifyContent: record.isChecked && "end",
-    };
-    var pointStyle =
-      record.pointStyle === "positive"
-        ? {
-            backgroundColor: "yellow",
 
-            backgroundImage:
-              "radial-gradient(circle, transparent 40%, #fffac4, #fffde6, white)",
-            transition: "background 1s",
-            transitionTimingFunction: "ease-in",
-            borderRadius: "45%",
-          }
-        : record.pointStyle === "negative"
-        ? {
-            backgroundColor: "red",
-
-            backgroundImage:
-              "radial-gradient(circle, transparent 40%, #ffc8c4, #ffe6e6, white)",
-            transition: "background 0.5s",
-            transitionTimingFunction: "ease-out",
-            borderRadius: "45%",
-          }
-        : null;
 
     return (
-      <Draggable key={record.key} draggableId={record.key} index={index}>
-        {(provided, snapshot) => (
-          <div
-            className={`student-card-container ${smallStyle.smallIcon}`}
-            style={pointStyle}
-          >
-            <div
-              ref={provided.innerRef}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
-              key={record.key}
-              className="drag"
-              style={getStyle(provided.draggableProps.style, snapshot)}
-            >
-              <div className="student-icon-container">
-                <div className="student-head-button-container">
-                  <div className="student-head"></div>
-                  <div className="pts-button-container">
-                    <div className="pts-buttons">
-                      <IconButton
-                        className="icon"
-                        onClick={() => {
-                          handleSub(index);
-                          setTimeout(() => {
-                            handleClearPointStyle(index);
-                          }, [2000]);
-                        }}
-                      >
-                        <ThumbDown />
-                      </IconButton>
-                    </div>
-
-                    <div className="pts-buttons">
-                      <IconButton
-                        onClick={() => {
-                          handleAdd(index);
-                          setTimeout(() => {
-                            handleClearPointStyle(index);
-                          }, [2000]);
-                        }}
-                      >
-                        <ThumbUp />
-                      </IconButton>
-                    </div>
-                  </div>
-                </div>
-                <div className="student-body"></div>
-              </div>
-              <div className="desk-top" style={backgroundStyle}></div>
-              <div
-                className={`desk ${smallStyle.smallFont}`}
-                style={backgroundLightStyle}
-              >
-                {record.name}
-                <br />
-
-                <div className="desk-button-main-container">
-                  <div className="desk-button-container">
-                    <div className={`desk-button ${smallStyle.smallButtons}`}>
-                      <IconButton
-                        onClick={() => {
-                          handleColorClick(index);
-                        }}
-                      >
-                        <ColorLens />
-                      </IconButton>
-                    </div>
-                    {activeClass.students[index].displayColorPicker ? (
-                      <div style={popover}>
-                        <div
-                          style={cover}
-                          onClick={() => {
-                            handleClose(index);
-                          }}
-                        />
-                        <SketchPicker
-                          color={activeClass.students[index].background}
-                          onChange={(e) => {
-                            handleColorSelect(index, e);
-                          }}
-                        />
-                      </div>
-                    ) : null}
-                    <div
-                      className={`desk-button ${smallStyle.smallButtons}`}
-                      style={selectStyle}
-                    >
-                      <FormGroup row>
-                        <div key={record.key}>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                label={key}
-                                checked={activeClass.students[index].isChecked}
-                                onChange={() => {
-                                  handleSelection(index);
-                                }}
-                                value={keyString}
-                              ></Checkbox>
-                            }
-                          />
-                        </div>
-                      </FormGroup>
-                    </div>
-                  </div>
-                  {record.count}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </Draggable>
+     <StudentCard smallStyle={smallStyle} getStyle={getStyle} record={record} index={index} handleState={props.handleState} activeClass={activeClass} classList={classList}/>
     );
   });
 
@@ -456,7 +210,7 @@ const Classes = (props) => {
     console.log("handleGroupStyling", activeClass);
     mainGroupContainer = "group-main-container";
 
-    if (format === "rows") {
+    if (activeClass.styling.format === "rows") {
       group = "row";
       groupContainer = "row-container";
       mainGroupContainer = "row-main-container";
@@ -514,20 +268,7 @@ const Classes = (props) => {
       temp.students.push(record);
     }
 
-    // for (let x = 0; x < newNameArray.length; x++) {
 
-    //   // const randColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-    //   const id = cap(newNameArray[x]) + Math.floor(Math.random() * 20);
-    //   let record = {
-    //     name: cap(newNameArray[x]),
-    //     count: 0,
-    //     background: colorPallet(activeClass.styling.theme),
-    //     key: id,
-    //     isChecked: false,
-    //     displayColorPicker: false,
-    //   };
-    //   temp.students.push(record);
-    // }
     let remainder = temp.students.length%temp.styling.groups
     if (remainder!==0){
       for (let i = 0; i < temp.styling.groups-remainder; i++){
@@ -625,24 +366,33 @@ const Classes = (props) => {
       </DragDropContext>
     );
     let newTempList = checkActiveClass(tempClassList, temp);
-
+    
     console.log(newNameList);
     setNewNameListState(newNameList);
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
-
+    
     let temp = JSON.parse(JSON.stringify(activeClass));
+    console.log(temp)
     let tempClassList = JSON.parse(JSON.stringify(classList));
     if (name==='groups'){
-      for (let i = 0; i < temp.styling.groups-(temp.students.length%value); i++){
-        temp.students.push({name:'blank', key: Math.floor(Math.random())})
+      let filteredTemp = temp.students.filter(student =>student.name !=='blank');
+      temp.students = filteredTemp; 
+      console.log(temp)
+      let blankDesks = value-(temp.students.length%value) //value - remainder= number of empty desks needed to fill the group
+      temp.styling.groups=(Number(value));
+      if (temp.students.length%value>0){
+        for (let i = 0; i < blankDesks ; i++){
+          temp.students.push({name:'blank', key: Math.floor(Math.random())})
+        } 
       }
+
     }
 
-    temp.styling[name] = value;
+    // temp.styling[name] = value;
     if (name === "format") {
-      setFormat(value);
+      temp.styling.format=value;
     }
 
     if (name === "size") {
@@ -663,14 +413,19 @@ const Classes = (props) => {
         });
       }
     }
+    let newTempList = checkActiveClass(tempClassList, temp);
 
+    props.handleState({
+      activeClass:temp,
+      classList:newTempList
+    })
     // handleFormatting()
   };
   useEffect(() => {
     console.log("useEffect");
     handleGroupStyling();
     handleFormatting();
-  }, [format, props.activeClass]); //props.generalSelection.groups
+  }, [props.activeClass]); //props.generalSelection.groups
 
   return (
     <React.Fragment>
@@ -694,13 +449,13 @@ const Classes = (props) => {
         <TextField
           variant="filled"
           id="filled-basic"
-          label={<span className="">Student Names:</span>}
+          label={<span className="">Input student names, separated by a comma.</span>}
           name="inputNames"
           // type="number"
           value={props.inputNames}
           onChange={props.handleChange}
           className="text-area-styles"
-          placeholder="Input student names, separated by a comma"
+          placeholder="John Smith, Jane Doe..."
           required
           multiline
           rows={2}
@@ -759,7 +514,8 @@ const Classes = (props) => {
           <Select
             className="select-form"
             value={activeClass.styling.groups}
-            onChange={props.handleInput}
+            name='groups'
+            onChange={handleChange}
             displayEmpty
           >
             <MenuItem value={4}>4</MenuItem>

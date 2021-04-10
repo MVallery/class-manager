@@ -63,7 +63,9 @@ class MyStudents extends React.Component {
 
     temp.styling.groups = Number(value)
     let newTempList = checkActiveClass(tempClassList, temp);
-    
+    for (let i = 0; i < value-(temp.students.length%value); i++){
+      temp.students.push({name:'blank', key: Math.floor(Math.random())})
+    }
     this.setState({
       activeClass:temp,
       classList:newTempList
