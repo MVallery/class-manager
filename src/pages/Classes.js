@@ -112,6 +112,7 @@ const Classes = (props) => {
   activeClassRef.current = activeClass;
   const classListRef = useRef(classList);
   classListRef.current = classList;
+
   const handleClearPointStyle = (index) => {
     let temp = JSON.parse(JSON.stringify(activeClassRef.current));
     let tempClassList = JSON.parse(JSON.stringify(classListRef.current));
@@ -180,50 +181,6 @@ const Classes = (props) => {
     setDropdownDisplay(null);
   };
 
-  let draggedItem;
-  let dragIndex;
-  let newActiveClass = activeClass;
-  const onDragStart = (e, index) => {
-    draggedItem = activeClass.students[index]; //griddisplay changed from nameList
-    console.log("ondragstart", activeClass.students);
-    dragIndex = index;
-    e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text/html", e.target.parentNode);
-    e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
-  };
-  const onDragOver = (index) => {
-    const draggedOverItem = activeClass.students[index];
-    let swap = activeClass.students[index];
-
-    // if the item is dragged over itself, ignore
-    if (draggedItem === draggedOverItem) {
-      return;
-    }
-    // filter out the currently dragged item
-    newActiveClass.students = activeClass.students.filter(
-      (item) => item !== draggedItem && item !== swap
-    );
-
-    // console.log(index)
-    if (dragIndex > index) {
-      newActiveClass.students.splice(index, 0, draggedItem);
-      newActiveClass.students.splice(dragIndex, 0, swap);
-    } else {
-      newActiveClass.students.splice(dragIndex, 0, swap);
-      newActiveClass.students.splice(index, 0, draggedItem);
-    }
-    // add the dragged item after the dragged over item
-  };
-  const onDragEnd = (index) => {
-    console.log("onDragEnd", newActiveClass.students);
-    let tempClassList = JSON.parse(JSON.stringify(classList));
-
-    let newTempList = checkActiveClass(tempClassList, newActiveClass);
-    props.handleState({ activeClass: newActiveClass, classList: newTempList });
-    handleGroup();
-    handleFormatting();
-    // draggedIdx = null;
-  };
 
   const handleOnDragEnd = (result) => {
     console.log(result);
@@ -289,10 +246,14 @@ const Classes = (props) => {
 
   const studentCards = props.activeClass.students.map((record, index) => {
     function getStyle(style, snapshot) { //ensures that icons do not shift when moving other ones since we are swapping versus reordering all students.
-      if (!snapshot.isDragging)
+      if (!snapshot.isDragging){
+        if (record.name==='blank'){
+          return {display:'flex'};
+        }
         return {
           display: "inline",
         };
+      }
       if (!snapshot.isDropAnimating) {
         return style;
       }
@@ -309,9 +270,10 @@ const Classes = (props) => {
           <div>
         <div 
         className={`student-card-container ${smallStyle.smallIcon} blank-student-card-container` }
+        {...provided.draggableProps}
+
         style={getStyle(provided.draggableProps.style, snapshot)} 
         ref={provided.innerRef}
-        {...provided.draggableProps}
         {...provided.dragHandleProps}
         >
           <div className="student-icon-container">
@@ -368,14 +330,6 @@ const Classes = (props) => {
             borderRadius: "45%",
           }
         : null;
-    // {
-    // // backgroundImage: 'radial-gradient(circle, transparent 40%,white)',
-    // borderRadius:'45%',
-
-    //   backgroundColor:'transparent',
-    //   transition:'background 1s',
-    //   transitionTimingFunction: 'ease',
-    // }
 
     return (
       <Draggable key={record.key} draggableId={record.key} index={index}>
@@ -391,10 +345,6 @@ const Classes = (props) => {
               key={record.key}
               className="drag"
               style={getStyle(provided.draggableProps.style, snapshot)}
-              // draggable="true"
-              // onDragStart={(e) => onDragStart(e, index)}
-              // onDragEnd={onDragEnd}
-              // onDragOver={() => onDragOver(index)}
             >
               <div className="student-icon-container">
                 <div className="student-head-button-container">
@@ -405,8 +355,6 @@ const Classes = (props) => {
                         className="icon"
                         onClick={() => {
                           handleSub(index);
-                          // handleClearPointStyle(index)
-
                           setTimeout(() => {
                             handleClearPointStyle(index);
                           }, [2000]);
@@ -420,8 +368,6 @@ const Classes = (props) => {
                       <IconButton
                         onClick={() => {
                           handleAdd(index);
-                          // handleClearPointStyle(index)
-
                           setTimeout(() => {
                             handleClearPointStyle(index);
                           }, [2000]);
@@ -505,27 +451,22 @@ const Classes = (props) => {
   let groupContainer;
   let mainGroupContainer;
   let smallGroup;
-  const handleGroup = () => {
+  const handleGroupStyling = () => {
     console.log(activeClass.styling.size);
-    console.log("handleGroup", activeClass);
+    console.log("handleGroupStyling", activeClass);
     mainGroupContainer = "group-main-container";
 
     if (format === "rows") {
       group = "row";
-
       groupContainer = "row-container";
       mainGroupContainer = "row-main-container";
-
-      // setContainer('row-container')
     } else {
       if (activeClass.styling.groups === 4) {
         group = "group4";
         groupContainer = "group-container4";
         if (activeClass.styling.size === "small") {
-          // setSmallStyle({...smallStyle, smallGroup:'small-group4'})
           smallGroup = "small-group4";
         }
-        // setContainer('group-container4')
       } else if (
         activeClass.styling.groups === 5 ||
         activeClass.styling.groups === 6
@@ -533,47 +474,83 @@ const Classes = (props) => {
         group = "group56";
         groupContainer = "group-container56";
         if (activeClass.styling.size === "small") {
-          // setSmallStyle({...smallStyle, smallGroup:'small-group56'})
           smallGroup = "small-group56";
         }
-        // setContainer('group-container56')
       } else if (activeClass.styling.groups === 7) {
         group = "group7";
         groupContainer = "group-container7";
         if (activeClass.styling.size === "small") {
-          // setSmallStyle({...smallStyle, smallGroup:'small-group7'})
           smallGroup = "small-group7";
         }
-        // setContainer('group-container7')
       }
     }
   };
   const handleNewStu = () => {
     const newNameArray = props.inputNames.replace(/ /g, "").split(",");
     let temp = JSON.parse(JSON.stringify(props.activeClass));
+    let tempClassList = JSON.parse(JSON.stringify(props.classList));
 
-    for (let x = 0; x < newNameArray.length; x++) {
-      // const randColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-      const id = cap(newNameArray[x]) + Math.floor(Math.random() * 20);
+
+    for (let i in newNameArray){
+      const id = cap(newNameArray[i]) + Math.floor(Math.random() * 20);
       let record = {
-        name: cap(newNameArray[x]),
+        name: cap(newNameArray[i]),
         count: 0,
         background: colorPallet(activeClass.styling.theme),
         key: id,
         isChecked: false,
         displayColorPicker: false,
       };
+      // console.log(Object.values(temp.students).includes('blank'))
+      if (temp.students.some(el=>el.name==='blank')) {
+        for(let x in temp.students){
+          if (temp.students[x].name==='blank'){
+            temp.students.splice(x, 1, record)
+            break;
+          }
+        }
+        continue;
+      }
       temp.students.push(record);
     }
+
+    // for (let x = 0; x < newNameArray.length; x++) {
+
+    //   // const randColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+    //   const id = cap(newNameArray[x]) + Math.floor(Math.random() * 20);
+    //   let record = {
+    //     name: cap(newNameArray[x]),
+    //     count: 0,
+    //     background: colorPallet(activeClass.styling.theme),
+    //     key: id,
+    //     isChecked: false,
+    //     displayColorPicker: false,
+    //   };
+    //   temp.students.push(record);
+    // }
+    let remainder = temp.students.length%temp.styling.groups
+    if (remainder!==0){
+      for (let i = 0; i < temp.styling.groups-remainder; i++){
+        temp.students.push({name:'blank', key: Math.floor(Math.random())})
+      }
+    }
+
+    let newTempList = checkActiveClass(tempClassList, temp);
+
+
     setAddStudentModal(false);
     props.handleState({
       activeClass: temp,
+      classList: newTempList,
       inputNames: "",
     });
   };
   const handleFormatting = () => {
     console.log(activeClass.styling.groups);
+    let remainder = activeClass.length%activeClass.styling.groups
     let formattedNameList = [];
+    let temp = JSON.parse(JSON.stringify(props.activeClass));
+    let tempClassList = JSON.parse(JSON.stringify(props.classList));
 
     for (let i = 0; i < studentCards.length; i += activeClass.styling.groups) {
       let [newArray, newArray2] = [[], []]
@@ -647,6 +624,8 @@ const Classes = (props) => {
         </div>
       </DragDropContext>
     );
+    let newTempList = checkActiveClass(tempClassList, temp);
+
     console.log(newNameList);
     setNewNameListState(newNameList);
   };
@@ -655,6 +634,12 @@ const Classes = (props) => {
 
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
+    if (name==='groups'){
+      for (let i = 0; i < temp.styling.groups-(temp.students.length%value); i++){
+        temp.students.push({name:'blank', key: Math.floor(Math.random())})
+      }
+    }
+
     temp.styling[name] = value;
     if (name === "format") {
       setFormat(value);
@@ -678,16 +663,12 @@ const Classes = (props) => {
         });
       }
     }
-    let newTempList = checkActiveClass(tempClassList, temp);
-    props.handleState({
-      activeClass: temp,
-      classList: newTempList,
-    });
+
     // handleFormatting()
   };
   useEffect(() => {
     console.log("useEffect");
-    handleGroup();
+    handleGroupStyling();
     handleFormatting();
   }, [format, props.activeClass]); //props.generalSelection.groups
 

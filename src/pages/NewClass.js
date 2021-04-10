@@ -35,52 +35,55 @@ const NewClass = (props) => {
     console.log('classList:',props.classList)
       const nameArray = props.inputNames.replace(/, /g, ",").split(",");
 
-      console.log('nameArray',nameArray)
-      let nameOnlyResult = [];
-      let result = [];
-      for (let x = 0; x < nameArray.length; x++) {
-        if (!nameArray[x].length>0){
-          continue;
-        }
+    console.log('nameArray',nameArray)
+    let nameOnlyResult = [];
+    let result = [];
+    for (let x = 0; x < nameArray.length; x++) {
+      if (nameArray[x].length===0){
+        continue;
+      }
       // let randColor = shuffleArray(colorPalette.softPurplePink)
 
-        let [first, last] = nameArray[x].split(' ')
-        // const randColor =
-        //   "#" + Math.floor(Math.random() * 16777215).toString(16);
-        const id = cap(nameArray[x]) + Math.floor(Math.random() * 20);
-        let initial = last ? ' '+ cap(last[0]) : ''
-        let record = {
-          name: cap(first) + initial,
-          first:first,
-          last:last?last:'',
-          count: 0,
-          pointStyle:null,
-          // background: randColor[0],
-          background: colorPallet('lightBlueGreen'),
-          key: id,
-          isChecked: false,
-          displayColorPicker: false,
-        };
-        result.push(record);
-        nameOnlyResult.push(record.name);
+      let [first, last] = nameArray[x].split(' ')
+      // const randColor =
+      //   "#" + Math.floor(Math.random() * 16777215).toString(16);
+      const id = cap(nameArray[x]) + Math.floor(Math.random() * 20);
+      let initial = last ? ' '+ cap(last[0]) : ''
+      let record = {
+        name: cap(first) + initial,
+        first:first,
+        last:last?last:'',
+        count: 0,
+        pointStyle:null,
+        // background: randColor[0],
+        background: colorPallet('lightBlueGreen'),
+        key: id,
+        isChecked: false,
+        displayColorPicker: false,
       };
-      // console.log('result:'+result)
-      // console.log('inputClassName:'+props.inputClassName)
-      let tempClassList = JSON.parse(JSON.stringify(props.classList));
-      let tempClass = {title:props.inputClassName, students:result, count:0, styling:{groups:4, format:'groups', theme:'lightBlueGreen'}, classSnapShot: []};
+      result.push(record);
+      nameOnlyResult.push(record.name);
+    };
+    // console.log('result:'+result)
+    // console.log('inputClassName:'+props.inputClassName)
+    let tempClassList = JSON.parse(JSON.stringify(props.classList));
+    let tempClass = {title:props.inputClassName, students:result, count:0, styling:{groups:4, format:'groups', theme:'lightBlueGreen'}, classSnapShot: []};
+    if (nameArray.length%4 !==0){
       for (let i = 0; i < 4-(nameArray.length%4); i++){
         tempClass.students.push({name:'blank', key: Math.floor(Math.random())})
         console.log(tempClass)
       }
-      tempClassList.push(tempClass);
-      props.handleState({
-        activeClass: tempClass,
-        classList: tempClassList,
-        nameOnlyList: nameOnlyResult,
-        inputClassName: '',
-        inputNames: "",
-        
-      });
+    }
+
+    tempClassList.push(tempClass);
+    props.handleState({
+      activeClass: tempClass,
+      classList: tempClassList,
+      nameOnlyList: nameOnlyResult,
+      inputClassName: '',
+      inputNames: "",
+      
+    });
     // }
   };
 
