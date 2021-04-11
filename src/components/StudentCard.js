@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import Checkbox from "@material-ui/core/Checkbox";
 import ColorLens from "@material-ui/icons/ColorLens";
@@ -10,13 +10,11 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { SketchPicker } from "react-color";
 
 // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd-aligned-rbd';
-import { checkActiveClass } from "../app-files/general";
+import { checkActiveClass, colorPallet } from "../app-files/general";
 import "../pages/Classes.css";
+import "./StudentCard.css"
 const StudentCard = (props) => {
   const { record, index, getStyle, smallStyle, classList, activeClass } = props;
-
-  const [changePointsStyle, setChangePointStyle] = useState({});
-
   const popover = {
     position: "absolute",
     zIndex: "2",
@@ -28,7 +26,7 @@ const StudentCard = (props) => {
     bottom: "0px",
     left: "0px",
   };
-  const handleSelection = (index, key) => {
+  const handleSelection = (index) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
     temp.students[index].isChecked = !temp.students[index].isChecked;
@@ -36,12 +34,10 @@ const StudentCard = (props) => {
     props.handleState({ activeClass: temp, classList: newTempList });
   };
 
-  const handleAdd = (index, key) => {
-    // console.log('handleAdd',index,key)
+  const handleAdd = (index) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
 
-    // console.log(temp)
     temp.students[index].count = temp.students[index].count + 1;
     temp.count = temp.count + 1;
     temp.students[index].pointStyle = "positive";
@@ -69,7 +65,7 @@ const StudentCard = (props) => {
       classList: newTempList,
     });
   };
-  const handleSub = (index, key) => {
+  const handleSub = (index) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
 
@@ -84,7 +80,7 @@ const StudentCard = (props) => {
       classList: newTempList,
     });
   };
-  const handleColorClick = (index, key) => {
+  const handleColorClick = (index) => {
     let tempClassList = JSON.parse(JSON.stringify(classList));
 
     let temp = JSON.parse(JSON.stringify(activeClass));
@@ -94,7 +90,7 @@ const StudentCard = (props) => {
 
     props.handleState({ activeClass: temp, classList: newTempList });
   };
-  const handleClose = (index, key) => {
+  const handleClose = (index) => {
     let tempClassList = JSON.parse(JSON.stringify(classList));
 
     let temp = JSON.parse(JSON.stringify(activeClass));
@@ -123,9 +119,6 @@ const StudentCard = (props) => {
   var backgroundLightStyle = {
     backgroundColor: record.background,
     backgroundImage: `linear-gradient(181deg, rgb(117, 117, 117), ${record.background} 10%, ${record.background})`,
-    // backgroundImage: `radial-gradient(
-    //   circle at right, rgb(117, 117, 117), ${record.background} 40%)`,
-    // filter:'brightness(105%)', //causing flicker on select
   };
   var selectStyle = {
     display: record.isChecked && "flex",
@@ -135,7 +128,6 @@ const StudentCard = (props) => {
     record.pointStyle === "positive"
       ? {
           backgroundColor: "yellow",
-
           backgroundImage:
             "radial-gradient(circle, transparent 40%, #fffac4, #fffde6, white)",
           transition: "background 1s",
@@ -145,7 +137,6 @@ const StudentCard = (props) => {
       : record.pointStyle === "negative"
       ? {
           backgroundColor: "red",
-
           backgroundImage:
             "radial-gradient(circle, transparent 40%, #ffc8c4, #ffe6e6, white)",
           transition: "background 0.5s",
@@ -153,6 +144,36 @@ const StudentCard = (props) => {
           borderRadius: "45%",
         }
       : null;
+
+      if (record.name==='blank'){ //if student record is blank - return an empty desk to allow swapping of students in seating arrangement
+        return <Draggable key={'blank'+index} draggableId={'blank'+index} index={index}>
+          {(provided, snapshot) => (
+            <div>
+          <div 
+          className={`student-card-container ${smallStyle.smallIcon} blank-student-card-container` }
+          {...provided.draggableProps}
+  
+          style={getStyle(provided.draggableProps.style, snapshot)} 
+          ref={provided.innerRef}
+          {...provided.dragHandleProps}
+          >
+            <div className="student-icon-container">
+  
+            </div>
+          <div className="desk-top blank-desk-top" style={backgroundStyle}></div>
+          <div
+            className={`desk blank-desk` } style={backgroundLightStyle}
+          >
+  
+          </div>
+          </div>
+          </div>
+          )}
+          </Draggable>;
+      }
+
+
+
   return (
     <Draggable key={record.key} draggableId={record.key} index={index}>
       {(provided, snapshot) => (

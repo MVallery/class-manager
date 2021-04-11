@@ -1,26 +1,19 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import MenuIcon from "@material-ui/icons/Menu";
-import ClassButtonList from "../components/ClassButtonList";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import InputLabel from "@material-ui/core/InputLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import ColorLens from "@material-ui/icons/ColorLens";
-import FormGroup from "@material-ui/core/FormGroup";
 import IconButton from "@material-ui/core/IconButton";
-import ThumbDown from "@material-ui/icons/ThumbDown";
-import ThumbUp from "@material-ui/icons/ThumbUp";
 import FormLabel from "@material-ui/core/FormLabel";
 import TextField from "@material-ui/core/TextField";
 import StudentCard from '../components/StudentCard';
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-// import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd-aligned-rbd';
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import {
   cap,
   checkActiveClass,
@@ -39,7 +32,6 @@ const Classes = (props) => {
   const [showAddStudentModal, setAddStudentModal] = useState(false);
   const [formatModal, setFormatModal] = useState(false);
   const [showAddNewClassModal, setAddNewClassModal] = useState(false);
-  const [format, setFormat] = useState("");
   const [smallStyle, setSmallStyle] = useState({
     smallGroup: null,
     smallIcon: null,
@@ -79,10 +71,6 @@ const Classes = (props) => {
 
     props.handleState({ activeClass: temp, classList: newTempList });
   };
-
-
-
-
 
   const [dropdownDisplay, setDropdownDisplay] = React.useState(null);
 
@@ -167,32 +155,7 @@ const Classes = (props) => {
         transitionDuration: `0.001s`,
       };
     }
-      if (record.name==='blank'){ //if student record is blank - return an empty desk to allow swapping of students in seating arrangement
-      return <Draggable key={'blank'+index} draggableId={'blank'+index} index={index}>
-        {(provided, snapshot) => (
-          <div>
-        <div 
-        className={`student-card-container ${smallStyle.smallIcon} blank-student-card-container` }
-        {...provided.draggableProps}
 
-        style={getStyle(provided.draggableProps.style, snapshot)} 
-        ref={provided.innerRef}
-        {...provided.dragHandleProps}
-        >
-          <div className="student-icon-container">
-
-          </div>
-        <div className="desk-top blank-desk-top"></div>
-        <div
-          className={`desk blank-desk `}
-        >
-
-        </div>
-        </div>
-        </div>
-        )}
-        </Draggable>;
-    }
     // console.log('record:',record)
 
 
@@ -272,7 +235,7 @@ const Classes = (props) => {
     let remainder = temp.students.length%temp.styling.groups
     if (remainder!==0){
       for (let i = 0; i < temp.styling.groups-remainder; i++){
-        temp.students.push({name:'blank', key: Math.floor(Math.random())})
+        temp.students.push({name:'blank', background: colorPallet(activeClass.styling.theme), key: Math.floor(Math.random())})
       }
     }
 
@@ -384,7 +347,7 @@ const Classes = (props) => {
       temp.styling.groups=(Number(value));
       if (temp.students.length%value>0){
         for (let i = 0; i < blankDesks ; i++){
-          temp.students.push({name:'blank', key: Math.floor(Math.random())})
+          temp.students.push({name:'blank', key: Math.floor(Math.random()),background: colorPallet(activeClass.styling.theme)})
         } 
       }
 
@@ -434,7 +397,36 @@ const Classes = (props) => {
         activeClass={props.activeClass}
         classList={props.classList}
         showAddNewClassHandler={showAddNewClassHandler}
-      />
+      >
+        <div className="classes-title-menu-container">
+          <div className="clases-chalkboard-border">
+        <div className="classes-chalkboard-container">
+        <div className="classes-chalkboard-title-menu">
+          <h1>{props.activeClass.title}</h1>
+          <div className="classes-count">{props.activeClass.count}</div>
+          <IconButton style={{color:'white'}} onClick={handleClick}>
+            <MenuIcon />
+          </IconButton>
+        </div>
+
+          <Menu
+            id="simple-menu"
+            anchorEl={dropdownDisplay}
+            keepMounted
+            open={Boolean(dropdownDisplay)}
+            onClose={handleCloseMenu}
+            getContentAnchorEl={null}
+          >
+            <MenuItem onClick={showAddStudentHandler}>Add Student</MenuItem>
+            <MenuItem onClick={showFormatModalHandler}>Change Layout</MenuItem>
+            <MenuItem onClick={handleShuffleClass}>Shuffle Class</MenuItem>
+
+            <MenuItem onClick={handleCloseMenu}>Delete</MenuItem>
+          </Menu>
+          </div>
+        </div>
+        </div>
+      </NavBar>
       <Modal
         show={showAddStudentModal}
         onCancel={cancelAddStudentHandler}
@@ -562,27 +554,7 @@ const Classes = (props) => {
         />
       </Modal>
       <div className="classes-container">
-        <div className="classes-title-menu-container">
-          <h1>{props.activeClass.title}</h1>
-          <div className="classes-count">{props.activeClass.count}</div>
-          <IconButton onClick={handleClick}>
-            <MenuIcon />
-          </IconButton>
-          <Menu
-            id="simple-menu"
-            anchorEl={dropdownDisplay}
-            keepMounted
-            open={Boolean(dropdownDisplay)}
-            onClose={handleCloseMenu}
-            getContentAnchorEl={null}
-          >
-            <MenuItem onClick={showAddStudentHandler}>Add Student</MenuItem>
-            <MenuItem onClick={showFormatModalHandler}>Change Layout</MenuItem>
-            <MenuItem onClick={handleShuffleClass}>Shuffle Class</MenuItem>
 
-            <MenuItem onClick={handleCloseMenu}>Delete</MenuItem>
-          </Menu>
-        </div>
         <DragDropContext onDragEnd={handleOnDragEnd}>
           <Droppable droppableId="students">
             {(provided) => (

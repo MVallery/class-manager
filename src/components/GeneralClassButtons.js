@@ -1,80 +1,82 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef, useState } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import Delete from "@material-ui/icons/Delete";
 import ThumbDown from "@material-ui/icons/ThumbDown";
 import ThumbUp from "@material-ui/icons/ThumbUp";
 import Sync from "@material-ui/icons/Sync";
 import SelectAll from "@material-ui/icons/SelectAll";
-import LibraryAddCheckIcon from '@material-ui/icons/LibraryAddCheck';
-import {checkActiveClass} from '../app-files/general'
+import LibraryAddCheckIcon from "@material-ui/icons/LibraryAddCheck";
+import ShuffleIcon from "@material-ui/icons/Shuffle";
+import Modal from "../components/Modal";
+
+import { checkActiveClass, shuffleArray } from "../app-files/general";
+import './GeneralClassButtons.css'
 const ClassButtons = (props) => {
+  const [randomStudentModal, setRandomStudentModal] = useState(false);
+  const [randomStudent, setRandomStudent] = useState({ name: "" });
+
   const activeClassRef = useRef(props.activeClass);
   activeClassRef.current = props.activeClass;
   const classListRef = useRef(props.classList);
-  classListRef.current= props.classList;
+  classListRef.current = props.classList;
 
   const handleClearPointStyle = () => {
     let temp = JSON.parse(JSON.stringify(activeClassRef.current));
     let tempClassList = JSON.parse(JSON.stringify(classListRef.current));
-      for (let i in temp.students){
-      // if (temp.students[x] === null || temp.students[x]===undefined) {
-        if (temp.students[i].name==='blank'){          continue;
-        }
-        // if (temp.students[i].isChcked) {
-          temp.students[i].pointStyle = null
-        // }
+    for (let i in temp.students) {
+      if (temp.students[i].name === "blank") {
+        continue;
       }
-
-      var newTempList = checkActiveClass(tempClassList, temp);
+      temp.students[i].pointStyle = null;
+    }
+    var newTempList = checkActiveClass(tempClassList, temp);
 
     props.handleState({
       activeClass: temp,
       classList: newTempList,
-      // classDisplay:tempClassDisplay
     });
-  }
+  };
+
+  const cancelRandomStudentHandler = () => {
+    setRandomStudentModal(false);
+  };
 
   const handleSelectAll = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
-    // if (props.checkAll === false) {
-      for (let x = 0; x < temp.students.length; x++) {
-      // if (temp.students[x] === null || temp.students[x]===undefined) {
-        if (temp.students[x].name==='blank'){          continue;
-        }
-        temp.students[x].isChecked = true;
+    for (let x = 0; x < temp.students.length; x++) {
+      if (temp.students[x].name === "blank") {
+        continue;
       }
-      props.handleState({
-        activeClass: temp,
-        // checkAll: true,
-      })
+      temp.students[x].isChecked = true;
+    }
+    props.handleState({
+      activeClass: temp,
+    });
   };
   const handleDeselectAll = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
     for (let x = 0; x < temp.students.length; x++) {
-      // if (temp.students[x] === null || temp.students[x]===undefined) {
-        if (temp.students[x].name==='blank'){        continue;
+      if (temp.students[x].name === "blank") {
+        continue;
       }
       temp.students[x].isChecked = false;
     }
     props.handleState({
       activeClass: temp,
-
-      // checkAll: false,
-    })
-  }
-  const handleAddMulti = (change) => {
+    });
+  };
+  const handleAddMulti = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
     let tempClassList = JSON.parse(JSON.stringify(props.classList));
 
     for (let x = 0; x < temp.students.length; x++) {
-      // if (temp.students[x] === null || temp.students[x]===undefined) {
-        if (temp.students[x].name==='blank'){        continue;
+      if (temp.students[x].name === "blank") {
+        continue;
       }
       if (temp.students[x].isChecked === true) {
         temp.students[x].count = temp.students[x].count + 1;
         temp.count = temp.count + 1;
-        temp.students[x].pointStyle = 'positive'
-
+        temp.students[x].pointStyle = "positive";
       }
     }
     let newTempList = checkActiveClass(tempClassList, temp);
@@ -82,23 +84,20 @@ const ClassButtons = (props) => {
     props.handleState({
       activeClass: temp,
       classList: newTempList,
-
-    })
+    });
   };
-  const handleSubMulti = (change) => {
+  const handleSubMulti = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
     let tempClassList = JSON.parse(JSON.stringify(props.classList));
 
     for (let x = 0; x < temp.students.length; x++) {
-      // if (temp.students[x] === null || temp.students[x]===undefined) {
-        if (temp.students[x].name==='blank'){
+      if (temp.students[x].name === "blank") {
         continue;
       }
       if (temp.students[x].isChecked === true) {
         temp.students[x].count = temp.students[x].count - 1;
         temp.count = temp.count - 1;
-        temp.students[x].pointStyle = 'negative'
-
+        temp.students[x].pointStyle = "negative";
       }
     }
     let newTempList = checkActiveClass(tempClassList, temp);
@@ -106,8 +105,7 @@ const ClassButtons = (props) => {
     props.handleState({
       activeClass: temp,
       classList: newTempList,
-
-    })
+    });
   };
   const handleDeleteMulti = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
@@ -115,32 +113,29 @@ const ClassButtons = (props) => {
 
     if (window.confirm("Are you sure you want to delete these students?")) {
       for (let x = temp.students.length - 1; x >= 0; x--) {
-      // if (temp.students[x] === null || temp.students[x]===undefined) {
-
-        if (temp.students[x].name==='blank'){          continue;
+        if (temp.students[x].name === "blank") {
+          continue;
         }
         if (temp.students[x].isChecked === true) {
-          temp.count = temp.count- temp.students[x].count
-          temp.students.splice(x, 1, {name:'blank'});
+          temp.count = temp.count - temp.students[x].count;
+          temp.students.splice(x, 1, { name: "blank" });
         }
-
       }
-    let newTempList = checkActiveClass(tempClassList, temp);
+      let newTempList = checkActiveClass(tempClassList, temp);
 
       props.handleState({
         activeClass: temp,
-      classList: newTempList,
-
-      })
+        classList: newTempList,
+      });
     }
   };
-  const handleResetMulti = (index, key) => {
+  const handleResetMulti = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
     let tempClassList = JSON.parse(JSON.stringify(props.classList));
 
     for (let x in temp.students) {
-      // if (temp.students[x] === null || temp.students[x]===undefined) {
-        if (temp.students[x].name==='blank'){        continue;
+      if (temp.students[x].name === "blank") {
+        continue;
       }
       if (temp.students[x].isChecked === true) {
         temp.count = temp.count - temp.students[x].count;
@@ -154,52 +149,76 @@ const ClassButtons = (props) => {
       classList: newTempList,
     });
   };
-  useEffect(()=> {
-    for (let i in props.activeClass.students){
-      // if (props.activeClass.students[i]===undefined || props.activeClass.students[i] === null){
-        if (props.activeClass.students[i].name==='blank'){
-        continue;
-      }
-      if (props.activeClass.students[i].pointStyle === 'positive' || props.activeClass.students[i].pointStyle === 'negative'){
-        // setTimeout(()=>{
-        //   handleClearPointStyle();
-        // },[2000])
-        break;
-      }
-    }
-  },[props.activeClass.students])
-return (
-  <React.Fragment>
-              <IconButton className="iconbutton" onClick={() => {
-                handleAddMulti();
-                setTimeout(()=>{
-                handleClearPointStyle();
-                },[2000])
-                }}>
-            <ThumbUp />
-          </IconButton>
-          <IconButton className="iconbutton" onClick={() => {
-            handleSubMulti();
-            setTimeout(()=>{
-              handleClearPointStyle();
-              },[2000])
-            }}>
-            <ThumbDown />
-          </IconButton>
-          <IconButton className="iconbutton" onClick={handleResetMulti}>
-            <Sync />
-          </IconButton>
-          <IconButton className="iconbutton" onClick={handleDeleteMulti}>
-            <Delete />
-          </IconButton>
-          <IconButton className="iconbutton" onClick={handleDeselectAll}>
-            <SelectAll />
-          </IconButton>
-          <IconButton className="iconbutton" onClick={handleSelectAll}>
-            <LibraryAddCheckIcon/>
-          </IconButton>
-  </React.Fragment>
-)
-}
+  const handleShuffle = () => {
+    let filterBlank = props.activeClass.students.filter(
+      (student) => student.name !== "blank"
+    );
+    let randomStudent = shuffleArray(filterBlank)[0];
+    setRandomStudent(randomStudent);
+    setRandomStudentModal(true);
+  };
 
-export default ClassButtons
+  return (
+    <React.Fragment>
+      <Modal
+        show={randomStudentModal}
+        onCancel={cancelRandomStudentHandler}
+        header={<div>Randomly Selected: </div>}
+        footerClass="worksheet-item__modal-actions"
+        // headerClass="random-student-header"
+        contentClass="random-student-content-modal"
+        footer={
+          <React.Fragment>
+            <div className="random-student-button">
+            <IconButton onClick={handleShuffle}>
+            Get another random student <ShuffleIcon />
+            </IconButton>
+            </div>
+            {/* <button onClick={handleShuffle}></button> */}
+          </React.Fragment>
+        }
+      >
+        <div className='random-student' style={{backgroundColor:`${randomStudent.background}`}}>
+        {randomStudent.name}
+        </div>
+      </Modal>
+      <IconButton
+        onClick={() => {
+          handleAddMulti();
+          setTimeout(() => {
+            handleClearPointStyle();
+          }, [2000]);
+        }}
+      >
+        <ThumbUp />
+      </IconButton>
+      <IconButton
+        onClick={() => {
+          handleSubMulti();
+          setTimeout(() => {
+            handleClearPointStyle();
+          }, [2000]);
+        }}
+      >
+        <ThumbDown />
+      </IconButton>
+      <IconButton onClick={handleResetMulti}>
+        Reset Points<Sync />
+      </IconButton>
+      <IconButton onClick={handleDeleteMulti}>
+        <Delete />
+      </IconButton>
+      <IconButton onClick={handleShuffle}>
+        <ShuffleIcon />
+      </IconButton>
+      <IconButton className="iconbutton" onClick={handleDeselectAll}>
+        <SelectAll />
+      </IconButton>
+      <IconButton className="iconbutton" onClick={handleSelectAll}>
+        <LibraryAddCheckIcon />
+      </IconButton>
+    </React.Fragment>
+  );
+};
+
+export default ClassButtons;

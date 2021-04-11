@@ -26,7 +26,9 @@ const NavBar = props => {
                     handleState={props.handleState}
                     activeClass={props.activeClass}
                     classList={props.classList}
-                    />
+                    >
+          {props.children}
+          </NavLinks>
         </nav>
       </header>
 

@@ -70,7 +70,7 @@ const NewClass = (props) => {
     let tempClass = {title:props.inputClassName, students:result, count:0, styling:{groups:4, format:'groups', theme:'lightBlueGreen'}, classSnapShot: []};
     if (nameArray.length%4 !==0){
       for (let i = 0; i < 4-(nameArray.length%4); i++){
-        tempClass.students.push({name:'blank', key: Math.floor(Math.random())})
+        tempClass.students.push({name:'blank',  background: colorPallet('lightBlueGreen'), key: Math.floor(Math.random())})
         console.log(tempClass)
       }
     }

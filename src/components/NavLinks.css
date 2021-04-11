@@ -1,6 +1,6 @@
-.navlinks-container{
+.navlinks-main-container{
   display:flex;
-  justify-content:space-between;
+  justify-content:center;
   box-shadow:2px 2px 9px 3px grey;
   padding:3px;
 }
@@ -18,4 +18,12 @@
 }
 .navlinks-container-links:focus{
   outline:none;
+}
+.navlinks-container{
+  width:auto;
+  display:flex;
+  flex:1;
+  justify-content: flex-end;
+  align-items:flex-start;
+
 }

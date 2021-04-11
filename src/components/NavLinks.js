@@ -17,11 +17,14 @@ const NavLinks = props => {
   };
   return (
     <React.Fragment>
-      <div className='navlinks-container'>
-        <Link className='navlinks-container-links' to='/'>
+      <div className='navlinks-main-container'>
+        {/* <Link className='navlinks-container-links' to='/'>
           <Logo style='navbar'/>
-        </Link>
-          <div>
+        </Link> */}
+          <div style={{visibility: 'hidden', flex:1}}></div>
+            {props.children}
+          <div className='navlinks-container'>
+
           <button className='navlinks-container-links'
               onClick={handleMainMenuClick}>
             Classes
@@ -34,6 +37,7 @@ const NavLinks = props => {
             onClose={handleCloseMainMenu}
             getContentAnchorEl={null}
           >
+            
             <ClassButtonList
                         handleState={props.handleState}
                         activeClass={props.activeClass}
@@ -48,6 +52,7 @@ const NavLinks = props => {
             Log out
           </Link>
           </div>
+         
       </div>
     </React.Fragment>
   )

@@ -1,4 +1,20 @@
+
+.classes-main-container{
+  
+}
 .classes-container {
+  background: url("../app-files/images/tan-floor.jpg"); 
+  background-repeat: repeat;
+  background-size: 700px 500px;
+  height:100vh
+  /* background: url("../app-files/images/warmwood-background.jpg"); 
+  background-repeat: repeat;
+  background-size: 500px 300px;
+
+  background: url("../app-files/images/tantile-background.jpg"); 
+  background-repeat: repeat;
+  background-size: 100px 80px; */
+
 
 }
 .classes-container h1{
@@ -13,15 +29,7 @@
   align-items:center;
   background-color:rgb(118, 195, 209);
 }
-.grid-row {
-  display:flex;
-  justify-content:center;
-}
-.grid-display {
-  padding:20px;
-  display:flex;
-  flex-direction:column;
-}
+
 .row-container {
   display:flex;
   flex-direction:column;
@@ -30,6 +38,12 @@
 .row-main-container {
   display:flex;
   justify-content: center;
+}
+.group-main-container {
+  height:100vh;
+  background-image: linear-gradient(
+    45deg
+    ,rgb(249 242 219 / 80%), rgb(204 202 183 / 80%), rgb(164 165 137 / 80%));
 }
 .row {
   display:flex;
@@ -74,7 +88,7 @@
 .group56 {
   display:flex;
   flex-direction:column;
-  height:500px;
+  /* height:500px; */
   min-width: 145px;
 
   /* margin:0px 40px 10px 40px; */
@@ -132,38 +146,8 @@
   display: flex;
   flex-direction:column;
   align-items:center;
-
-}
-.blank-student-card-container{
-
-}
-.student-name-points-container {
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  display:flex;
-  color: white;
-  font-size: 30px;
-  justify-content:center;
-  background-color: black;
-
-}
-.student-card-points {
-  /* flex-grow:1; */
-  text-align:center;
-  font-size:55px;
-  font-weight:bold;
-  /* justify-content:center; */
-  align-self:center;
-
 }
 
-.student-card-popup {
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  position:relative;
-  bottom:0;
-}
 .classes-cb-list-container{
   display:flex;
   justify-content:center;
@@ -172,13 +156,55 @@
 }
 .classes-title-menu-container{
   display:flex;
+  background-color:white;
   justify-content:center;
   align-items:center;
+  /* transform:skewX(10deg); */
+
 }
 .classes-title-menu-container h1{
+
+
   font-size:45px;
   margin-top:10px;
 }
+.classes-chalkboard-border{
+  position:absolute;
+  
+  border-top:130px solid rgb(110, 76, 44);
+  border-left:30px solid;
+  border-right:30px solid;
+  height:0;
+}
+.classes-chalkboard-container{
+  /* border:solid 4px rgb(136, 96, 59); */
+  position: relative;
+  border-top:100px solid black;
+  border-left:30px solid;
+  border-right:30px solid;
+  height:0;
+  background-color:black;
+  color:white;
+}
+.classes-chalkboard-container:before{
+
+  /* background-color:black; */
+}
+.classes-chalkboard-title-menu{
+  display:flex;
+  top:-100px;
+  align-items:center;
+  position:relative;
+}
+
+.classes-title-menu-chalkboard h1{
+  transform:skewX(0deg)
+}
+.classes-title-menu-chalkboard::before{
+  content: ""; display: block; position: absolute; top: 0; left: 0;
+  z-index:-1
+}
+
 .temp-container {
   margin-bottom:100px
 }
@@ -221,47 +247,7 @@
    /* transition: background-color 5s;
    transition-timing-function: ease-out; */
  }
- .student-head {
-   background-color:black;
-   background-image: radial-gradient(circle at top left, rgb(95, 94, 94) 10%, black );
-   height:65%;
-   width:30%;
-   border-radius:50%;
-   margin-bottom:2px;
- }
- .student-head-button-container {
-   display:flex;
-   width:100%;
-   height:100%;
-   align-items:flex-end;
-   position:relative;
-   justify-content:center;
- }
- .student-body {
-   background-color: black;
-   background-image: radial-gradient(circle at top left, rgb(95, 94, 94) 10%, black );
 
-   height: 28%;
-   width: 65%;
-   border-radius: 50px 50px 0% 0%
- }
- .pts-button-container{
-   position:absolute;
-   display:flex;
-   height:100%;
-   width:100%;
-   align-items:flex-start;
-   justify-content:space-between;
- }
- .pts-buttons {
-  display:none;
-  max-height:20px;
-  height:20px;
-}
-
-.student-card-container:hover .pts-buttons{
-  display:inline;
-}
 
 
 /* Desk & Desk Buttons */
@@ -301,51 +287,11 @@
  }
 
 
- .desk-button-main-container {
-  display:flex;
-  /* justify-content:center; */
-  position:relative;
-  /* width: 160px; */
-  justify-content: center;
-  align-items: end;
-}
-
-.desk-button-container {
-  /* display:none; */
-  max-height:20%;
-  height:20%;
-  position:absolute;
-  /* margin-left:-55%; */
-  width: 100%;
-  /* margin-left: -10px; */
-  display: flex;
-  justify-content: flex-end;
-  align-items: end
-  
- }
- .student-card-container:hover .desk-button-container{
-  justify-content: space-between
- 
- }
-.desk-button {
-  display:none;
-  margin-left: -10%;
-  margin-right:-20%
-}
-
-.student-card-container:hover .desk-button{
- display:inline;
-}
 /* .pts-buttons:active{
   background-image: radial-gradient(circle, yellow, transparent)
 } */
 
 
-
-.student-card-count{
-  flex-grow:1;
-  position:absolute;
-}
 
 .testing {
   background-color:rgb(117, 117, 117)

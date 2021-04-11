@@ -1,0 +1,23 @@
+.random-student {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:200px;
+  width:auto;
+  font-size:70px;
+}
+.random-student-header {
+  width:auto;
+}
+.random-student-button{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  
+}
+.random-student-content-modal{
+  padding:0px;
+  margin-right:2px;
+  font-weight:bold;
+  box-shadow:2px 3px 7px 2px rgb(44, 37, 37);
+}
