@@ -48,9 +48,12 @@ const NavLinks = props => {
 
 
           </Menu>
-          <Link className='navlinks-container-links' to='/authenticate'>
-            Log out
-          </Link>
+          <button className='navlinks-container-links'>
+        <Link className='link-style' to='/authenticate'>
+        Log out
+      </Link>
+          </button>
+  
           </div>
          
       </div>

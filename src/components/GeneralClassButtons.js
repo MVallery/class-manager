@@ -9,8 +9,8 @@ import LibraryAddCheckIcon from "@material-ui/icons/LibraryAddCheck";
 import ShuffleIcon from "@material-ui/icons/Shuffle";
 import Modal from "../components/Modal";
 
-import { checkActiveClass, shuffleArray } from "../app-files/general";
-import './GeneralClassButtons.css'
+import { checkActiveClass, colorPallet, randWhole, shuffleArray } from "../app-files/general";
+import "./GeneralClassButtons.css";
 const ClassButtons = (props) => {
   const [randomStudentModal, setRandomStudentModal] = useState(false);
   const [randomStudent, setRandomStudent] = useState({ name: "" });
@@ -107,28 +107,7 @@ const ClassButtons = (props) => {
       classList: newTempList,
     });
   };
-  const handleDeleteMulti = () => {
-    let temp = JSON.parse(JSON.stringify(props.activeClass));
-    let tempClassList = JSON.parse(JSON.stringify(props.classList));
 
-    if (window.confirm("Are you sure you want to delete these students?")) {
-      for (let x = temp.students.length - 1; x >= 0; x--) {
-        if (temp.students[x].name === "blank") {
-          continue;
-        }
-        if (temp.students[x].isChecked === true) {
-          temp.count = temp.count - temp.students[x].count;
-          temp.students.splice(x, 1, { name: "blank" });
-        }
-      }
-      let newTempList = checkActiveClass(tempClassList, temp);
-
-      props.handleState({
-        activeClass: temp,
-        classList: newTempList,
-      });
-    }
-  };
   const handleResetMulti = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
     let tempClassList = JSON.parse(JSON.stringify(props.classList));
@@ -170,53 +149,66 @@ const ClassButtons = (props) => {
         footer={
           <React.Fragment>
             <div className="random-student-button">
-            <IconButton onClick={handleShuffle}>
-            Get another random student <ShuffleIcon />
-            </IconButton>
+              <IconButton onClick={handleShuffle}>
+                Get another random student <ShuffleIcon />
+              </IconButton>
             </div>
             {/* <button onClick={handleShuffle}></button> */}
           </React.Fragment>
         }
       >
-        <div className='random-student' style={{backgroundColor:`${randomStudent.background}`}}>
-        {randomStudent.name}
+        <div
+          className="random-student"
+          style={{ backgroundColor: `${randomStudent.background}` }}
+        >
+          {randomStudent.name}
         </div>
       </Modal>
-      <IconButton
-        onClick={() => {
-          handleAddMulti();
-          setTimeout(() => {
-            handleClearPointStyle();
-          }, [2000]);
-        }}
-      >
-        <ThumbUp />
-      </IconButton>
-      <IconButton
-        onClick={() => {
-          handleSubMulti();
-          setTimeout(() => {
-            handleClearPointStyle();
-          }, [2000]);
-        }}
-      >
-        <ThumbDown />
-      </IconButton>
-      <IconButton onClick={handleResetMulti}>
-        Reset Points<Sync />
-      </IconButton>
-      <IconButton onClick={handleDeleteMulti}>
-        <Delete />
-      </IconButton>
-      <IconButton onClick={handleShuffle}>
-        <ShuffleIcon />
-      </IconButton>
-      <IconButton className="iconbutton" onClick={handleDeselectAll}>
-        <SelectAll />
-      </IconButton>
-      <IconButton className="iconbutton" onClick={handleSelectAll}>
-        <LibraryAddCheckIcon />
-      </IconButton>
+      <div className="gcb-container">
+        <div className="multi-select">
+          <IconButton onClick={handleResetMulti}>
+            <span className="icon-button-text">Reset Points</span>
+            <Sync />
+          </IconButton>
+          {/* <IconButton onClick={handleDeleteMulti}>
+            <span className="icon-button-text">Delete Student(s)</span>
+
+            <Delete />
+          </IconButton> */}
+          <IconButton onClick={handleShuffle}>
+            <span className="icon-button-text">Random Student</span>
+            <ShuffleIcon />
+          </IconButton>
+          <IconButton onClick={handleDeselectAll}>
+            <span className="icon-button-text">Deselect All</span>
+            <SelectAll />
+          </IconButton>
+          <IconButton onClick={handleSelectAll}>
+            <span className="icon-button-text">Select All</span>
+            <LibraryAddCheckIcon />
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              handleAddMulti();
+              setTimeout(() => {
+                handleClearPointStyle();
+              }, [2000]);
+            }}
+          >
+            <ThumbUp />
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              handleSubMulti();
+              setTimeout(() => {
+                handleClearPointStyle();
+              }, [2000]);
+            }}
+          >
+            <ThumbDown />
+          </IconButton>
+        </div>
+      </div>
     </React.Fragment>
   );
 };
