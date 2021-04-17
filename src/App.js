@@ -49,6 +49,7 @@ class MyStudents extends React.Component {
   };
   handleChange = (e) => {
     console.log(e);
+
     const { name, value } = e.target;
     this.setState({
       [name]: value,
@@ -96,7 +97,7 @@ class MyStudents extends React.Component {
           header={<div>Create a new class: </div>}
           footerClass="worksheet-item__modal-actions"
         >
-          <NewClass {...this} {...this.state} />
+          <NewClass {...this} {...this.state} cancelAddNewClassHandler= {this.cancelAddNewClassHandler} />
         </Modal>
         <Switch>
           <Route path="/" exact>

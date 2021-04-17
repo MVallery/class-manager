@@ -2,6 +2,7 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 
 import { cap, colorPallet } from "../app-files/general";
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -24,12 +25,12 @@ const NewClass = (props) => {
 
   // console.log(props.names);
   const handleSubmit = (props) => {
+    console.log(props)
     props.cancelAddNewClassHandler();
 
     console.log("inputNames:", props.inputNames);
     console.log("classList:", props.classList);
-    const nameArray = props.inputNames.replace(/, /g, ",").split(",");
-
+    const nameArray =  props.inputNames.replace(/,\s+/g, ',').replace(/\s+[^a-zA-Z]/,'').split(',')
     console.log("nameArray", nameArray);
     // let nameOnlyResult = [];
     let result = [];
@@ -37,8 +38,6 @@ const NewClass = (props) => {
       if (nameArray[x].length === 0) {
         continue;
       }
-      // let randColor = shuffleArray(colorPalette.softPurplePink)
-
       let [first, last] = nameArray[x].split(" ");
 
       const id = cap(nameArray[x]) + Math.floor(Math.random() * 20);
@@ -55,10 +54,7 @@ const NewClass = (props) => {
         displayColorPicker: false,
       };
       result.push(record);
-      // nameOnlyResult.push(record.name);
     }
-    // console.log('result:'+result)
-    // console.log('inputClassName:'+props.inputClassName)
     let tempClassList = JSON.parse(JSON.stringify(props.classList));
     let tempClass = {
       title: props.inputClassName,
@@ -82,13 +78,13 @@ const NewClass = (props) => {
     props.handleState({
       activeClass: tempClass,
       classList: tempClassList,
-      // nameOnlyList: nameOnlyResult,
       inputClassName: "",
       inputNames: "",
     });
     // }
   };
-
+  let inputClassNamesError = /[^a-zA-Z0-9 ]/.test(props.inputClassName)? true:false
+  let inputNamesError = /[^a-zA-Z, ]/.test(props.inputNames)? true:false
   return (
     <React.Fragment>
       <div className="new-class-container">
@@ -97,11 +93,14 @@ const NewClass = (props) => {
           id="filled-basic"
           label={<span className="">Class Name:</span>}
           name="inputClassName"
+          error = {inputClassNamesError}
           value={props.inputClassName}
           onChange={props.handleChange}
           required
           className=""
         />
+          {inputClassNamesError ? <FormHelperText>Input only letters and numbers</FormHelperText>:<div style={{height:'21.89px'}}></div>}
+
         <div className="names-input-container">
           <TextField
             variant="filled"
@@ -110,6 +109,7 @@ const NewClass = (props) => {
             name="inputNames"
             value={props.inputNames}
             onChange={props.handleChange}
+            error={inputNamesError}
             className="text-area-styles"
             placeholder="Input student names, separated by a comma"
             required
@@ -119,7 +119,9 @@ const NewClass = (props) => {
           />
           <br />
         </div>
-        <Link className="new-class-link" to="/classes">
+        {inputNamesError ? <div>Input only names separated by commas</div>:<div style={{height:'21.89px'}}></div>}
+        {!inputNamesError && !inputClassNamesError ? (
+          <Link className="new-class-link" to="/classes">
           <button
             onClick={() => {
               handleSubmit(props);
@@ -128,6 +130,23 @@ const NewClass = (props) => {
             Create Class
           </button>
         </Link>
+        ): (
+          <Link className="new-class-link" to="/classes">
+          <button disabled
+            onClick={() => {
+              handleSubmit(props);
+            }}
+          >
+            Create Class
+          </button>
+        </Link>
+        )
+        
+      }
+        
+        
+        
+
       </div>
     </React.Fragment>
   );
