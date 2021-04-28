@@ -113,3 +113,23 @@
 .student-card-container:hover .desk-button{
  display:inline;
 }
+
+.name-large{
+  font-size: 24px;
+}
+.name-medium{
+  font-size: 22px;
+
+}
+.name-small{
+  font-size: 18px;
+
+}
+.name-xsmall{
+  font-size: 14px;
+
+}
+.name-xxsmall{
+  font-size: 12px;
+
+}

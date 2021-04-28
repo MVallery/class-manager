@@ -231,7 +231,8 @@ const StudentCard = (props) => {
               className={`desk ${smallStyle.smallFont}`}
               style={backgroundLightStyle}
             >
-              {record.name}
+              {smallStyle&& (<span className= {record.name.length<9?"name-small": record.name.length<15?"name-xsmall":"name-xxsmall"}> {record.name}</span>)}
+              {!smallStyle&&(<span className={record.name.length<9?"name-large":record.name.length<15?"name-medium":"name-small"}>{record.name}</span>)}
               <br />
 
               <div className="desk-button-main-container">
