@@ -65,35 +65,35 @@ const Classes = (props) => {
          console.log(err)
        }
     }
-  useEffect(()=>{
-    if (mounted === true){
-      const updateClass = async () => {
-        try {
-          await sendRequest('http://localhost:5000/api/users/'+auth.userId+'/'+activeClass.id, "PATCH", 
-           JSON.stringify({
-             title: activeClass.title,
-             students: activeClass.students,
-             styling: activeClass.styling,
-             count: activeClass.count,
+  // useEffect(()=>{
+  //   if (mounted === true){
+  //     const updateClass = async () => {
+  //       try {
+  //         await sendRequest('http://localhost:5000/api/users/'+auth.userId+'/'+activeClass.id, "PATCH", 
+  //          JSON.stringify({
+  //            title: activeClass.title,
+  //            students: activeClass.students,
+  //            styling: activeClass.styling,
+  //            count: activeClass.count,
      
-           }), {
-             'Content-Type': 'application/json'
-           }
-           )
+  //          }), {
+  //            'Content-Type': 'application/json'
+  //          }
+  //          )
      
-         } catch(err) {
-           console.log(err)
-         }
-         updateClass();
-      }
+  //        } catch(err) {
+  //          console.log(err)
+  //        }
+  //        updateClass();
+  //     }
 
-    } else {
-      setMounted(true)
-      return 
-    }
+  //   } else {
+  //     setMounted(true)
+  //     return 
+  //   }
 
 
-  }, [activeClass])
+  // }, [activeClass])
   const handleOnDragEnd = (result) => {
     console.log(result);
     if (!result.destination) {
@@ -136,6 +136,7 @@ const Classes = (props) => {
     }
 
     let newTempList = checkActiveClass(tempClassList, temp);
+    handleDatabaseUpdate(temp);
 
     props.handleState({
       activeClass: temp,
@@ -171,6 +172,7 @@ const Classes = (props) => {
       <StudentCard
         smallStyle={smallStyle}
         getStyle={getStyle}
+        handleDatabaseUpdate={handleDatabaseUpdate}
         record={record}
         index={index}
         handleState={props.handleState}
@@ -345,6 +347,7 @@ const Classes = (props) => {
               activeClass={props.activeClass}
               classList={props.classList}
               handleState={props.handleState}
+              handleDatabaseUpdate={handleDatabaseUpdate}
             />
 
       </div>

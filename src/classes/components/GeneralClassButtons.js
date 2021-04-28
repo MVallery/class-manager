@@ -60,6 +60,7 @@ const ClassButtons = (props) => {
       }
       temp.students[x].isChecked = false;
     }
+
     props.handleState({
       activeClass: temp,
     });
@@ -101,6 +102,7 @@ const ClassButtons = (props) => {
       }
     }
     let newTempList = checkActiveClass(tempClassList, temp);
+    props.handleDatabaseUpdate(temp);
 
     props.handleState({
       activeClass: temp,
@@ -122,6 +124,7 @@ const ClassButtons = (props) => {
       }
     }
     let newTempList = checkActiveClass(tempClassList, temp);
+    props.handleDatabaseUpdate(temp);
 
     props.handleState({
       activeClass: temp,

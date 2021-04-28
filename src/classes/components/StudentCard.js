@@ -42,6 +42,7 @@ const StudentCard = (props) => {
     temp.count = temp.count + 1;
     temp.students[index].pointStyle = "positive";
     let newTempList = checkActiveClass(tempClassList, temp);
+    props.handleDatabaseUpdate(temp);
 
     props.handleState({
       activeClass: temp,
@@ -74,6 +75,7 @@ const StudentCard = (props) => {
     temp.students[index].pointStyle = "negative";
 
     let newTempList = checkActiveClass(tempClassList, temp);
+    props.handleDatabaseUpdate(temp);
 
     props.handleState({
       activeClass: temp,
@@ -107,6 +109,7 @@ const StudentCard = (props) => {
 
     temp.students[index].background = e.hex;
     let newTempList = checkActiveClass(tempClassList, temp);
+    props.handleDatabaseUpdate(temp);
 
     props.handleState({ activeClass: temp, classList: newTempList });
   };

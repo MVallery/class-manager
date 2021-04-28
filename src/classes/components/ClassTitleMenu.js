@@ -52,6 +52,7 @@ const ClassTitleMenu = (props) => {
     let shuffledTemp = shuffleArray(temp.students);
     temp.students = shuffledTemp;
     let newTempList = checkActiveClass(tempClassList, temp);
+    props.handleDatabaseUpdate(temp);
 
     props.handleState({ activeClass: temp, classList: newTempList });
   };
@@ -77,6 +78,7 @@ const ClassTitleMenu = (props) => {
         }
       }
       let newTempList = checkActiveClass(tempClassList, temp);
+      props.handleDatabaseUpdate(temp);
 
       props.handleState({
         activeClass: temp,
@@ -135,6 +137,7 @@ const ClassTitleMenu = (props) => {
       }
     }
     let newTempList = checkActiveClass(tempClassList, temp);
+    props.handleDatabaseUpdate(temp);
 
     props.handleState({
       activeClass: temp,
