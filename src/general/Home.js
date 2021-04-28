@@ -1,12 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Modal from "../components/Modal";
-import NewClass from "./NewClass";
 import Students from "../app-files/images/students2.jpg";
 import Teacher from "../app-files/images/teacher2.jpg";
-import Desks from "../app-files/images/desks.jpg";
 import Clock from "../app-files/images/clock2.jpg";
-import Logo from '../components/Logo'
+import Logo from './components/Logo'
 import "./Home.css";
 
 // import "./Classes.css";

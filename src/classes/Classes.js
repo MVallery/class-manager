@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import NavBar from "../components/NavBar";
+import React, { useEffect, useState, useContext } from "react";
+import NavBar from "../general/components/NavBar";
 
-import StudentCard from "../components/StudentCard";
+import StudentCard from "./components/StudentCard";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import {
   cap,
@@ -9,18 +9,25 @@ import {
   colorPallet,
   shuffleArray,
 } from "../app-files/general";
-import Modal from "../components/Modal";
-import ClassTitleMenu from "../components/ClassTitleMenu";
-import GeneralClassButtons from "../components/GeneralClassButtons";
-import NewClass from './NewClass'
+
+import {AuthContext} from '../users/auth-context'
+import {useHttpClient} from '../general/http-hook';
+import Modal from "../general/components/Modal";
+import ClassTitleMenu from "./components/ClassTitleMenu";
+import GeneralClassButtons from "./components/GeneralClassButtons";
+import NewClass from './components/NewClass'
 import "./Classes.css";
 
 const Classes = (props) => {
   const { activeClass, classList } = props;
   console.log("classList inside Classes:", props.classList);
+  const auth = useContext(AuthContext);
+
+  const {isLoading, error, sendRequest, clearError } = useHttpClient();
   const [newNameListState, setNewNameListState] = useState([]);
 
   const [showAddNewClassModal, setAddNewClassModal] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const cancelAddNewClassHandler = () => {
     setAddNewClassModal(false);
   };
@@ -38,6 +45,55 @@ const Classes = (props) => {
   const handleSmallStyle = (state) => {
     setSmallStyle(state)
   }
+  const handleDatabaseUpdate= async(tempActiveClass)=> {
+    console.log(activeClass)
+    console.log('inside handledatabaseupdate', activeClass.id)
+      try {
+        await sendRequest('http://localhost:5000/api/users/'+auth.userId+'/'+activeClass.id, "PATCH", 
+         JSON.stringify({
+           title: tempActiveClass.title,
+           students: tempActiveClass.students,
+           styling: tempActiveClass.styling,
+           count: tempActiveClass.count,
+   
+         }), {
+           'Content-Type': 'application/json'
+         }
+         )
+   
+       } catch(err) {
+         console.log(err)
+       }
+    }
+  useEffect(()=>{
+    if (mounted === true){
+      const updateClass = async () => {
+        try {
+          await sendRequest('http://localhost:5000/api/users/'+auth.userId+'/'+activeClass.id, "PATCH", 
+           JSON.stringify({
+             title: activeClass.title,
+             students: activeClass.students,
+             styling: activeClass.styling,
+             count: activeClass.count,
+     
+           }), {
+             'Content-Type': 'application/json'
+           }
+           )
+     
+         } catch(err) {
+           console.log(err)
+         }
+         updateClass();
+      }
+
+    } else {
+      setMounted(true)
+      return 
+    }
+
+
+  }, [activeClass])
   const handleOnDragEnd = (result) => {
     console.log(result);
     if (!result.destination) {
@@ -88,7 +144,7 @@ const Classes = (props) => {
   };
   const handleOnDragStart = (result) => {};
 
-  const studentCards = props.activeClass.students.map((record, index) => {
+  const studentCards = activeClass?props.activeClass.students.map((record, index) => {
     function getStyle(style, snapshot) {
       //ensures that icons do not shift when moving other ones since we are swapping versus reordering all students.
       if (!snapshot.isDragging) {
@@ -122,7 +178,7 @@ const Classes = (props) => {
         classList={classList}
       />
     );
-  });
+  }):null;
 
   let group;
   let groupContainer;
@@ -270,7 +326,7 @@ const Classes = (props) => {
         classList={props.classList}
         showAddNewClassHandler={showAddNewClassHandler}
       >
-        <ClassTitleMenu {...props} handleSmallStyle={handleSmallStyle}/>
+        <ClassTitleMenu {...props} handleDatabaseUpdate={handleDatabaseUpdate} handleSmallStyle={handleSmallStyle}/>
       </NavBar>
 
       <div className="classes-container">

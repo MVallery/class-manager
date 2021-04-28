@@ -1,15 +1,14 @@
 import React, { useRef, useState } from "react";
 import IconButton from "@material-ui/core/IconButton";
-import Delete from "@material-ui/icons/Delete";
 import ThumbDown from "@material-ui/icons/ThumbDown";
 import ThumbUp from "@material-ui/icons/ThumbUp";
 import Sync from "@material-ui/icons/Sync";
 import SelectAll from "@material-ui/icons/SelectAll";
 import LibraryAddCheckIcon from "@material-ui/icons/LibraryAddCheck";
 import ShuffleIcon from "@material-ui/icons/Shuffle";
-import Modal from "../components/Modal";
+import Modal from "../../general/components/Modal";
 
-import { checkActiveClass, colorPallet, randWhole, shuffleArray } from "../app-files/general";
+import { checkActiveClass, colorPallet, randWhole, shuffleArray } from "../../app-files/general";
 import "./GeneralClassButtons.css";
 const ClassButtons = (props) => {
   const [randomStudentModal, setRandomStudentModal] = useState(false);
@@ -80,6 +79,7 @@ const ClassButtons = (props) => {
       }
     }
     let newTempList = checkActiveClass(tempClassList, temp);
+    props.handleDatabaseUpdate();
 
     props.handleState({
       activeClass: temp,

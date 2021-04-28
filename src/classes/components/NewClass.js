@@ -1,11 +1,11 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
-
-import { cap, colorPallet } from "../app-files/general";
+import React, {useContext} from "react";
+import { cap, colorPallet } from "../../app-files/general";
 import FormHelperText from '@material-ui/core/FormHelperText';
-
-import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import { v4 as uuid } from 'uuid';
+import {AuthContext} from '../../users/auth-context';
+import {useHttpClient} from '../../general/http-hook';
+// import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import "./NewClass.css";
 
@@ -20,6 +20,9 @@ import "./NewClass.css";
 // }));
 
 const NewClass = (props) => {
+const auth = useContext(AuthContext);
+console.log(auth)
+  const {isLoading, error, sendRequest, clearError } = useHttpClient();
   // let location=useLocation()
   // const classes = useStyles();
 
@@ -62,6 +65,7 @@ const NewClass = (props) => {
       count: 0,
       styling: { groups: 4, format: "groups", theme: "lightBlueGreen" },
       classSnapShot: [],
+      id: uuid()
     };
     if (nameArray.length % 4 !== 0) {
       for (let i = 0; i < 4 - (nameArray.length % 4); i++) {
@@ -75,6 +79,22 @@ const NewClass = (props) => {
     }
 
     tempClassList.push(tempClass);
+    try {
+     sendRequest('http://localhost:5000/api/users/'+auth.userId+'/create-class', "POST", 
+      JSON.stringify({
+        title: tempClass.title,
+        students: tempClass.students,
+        styling: tempClass.styling,
+        count: tempClass.count,
+        id: tempClass.id
+      }), {
+        'Content-Type': 'application/json'
+      }
+      )
+
+    } catch(err) {
+      console.log(err)
+    }
     props.handleState({
       activeClass: tempClass,
       classList: tempClassList,

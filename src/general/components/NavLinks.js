@@ -1,13 +1,14 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {Link} from 'react-router-dom'
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import ClassButtonList from "../components/ClassButtonList";
-import IconButton from "@material-ui/core/IconButton";
+import ClassButtonList from "../../classes/components/ClassButtonList";
+import {AuthContext} from '../../users/auth-context'
 
-import Logo from './Logo'
 import './NavLinks.css'
 const NavLinks = props => {
+  const auth = useContext(AuthContext);
+
   const [mainDropdownDisplay, setMainDropdownDisplay] = React.useState(null);
   const handleMainMenuClick = (e) => {
     setMainDropdownDisplay(e.currentTarget);
@@ -48,11 +49,23 @@ const NavLinks = props => {
 
 
           </Menu>
+          {auth.isLoggedIn && (
           <button className='navlinks-container-links'>
-        <Link className='link-style' to='/authenticate'>
-        Log out
-      </Link>
+              <Link className='link-style' to='/authenticate'>
+                Sign out
+              </Link>
+
           </button>
+            )}
+          {!auth.isLoggedIn && (
+              <button className='navlinks-container-links'>
+                <Link className='link-style' to='/authenticate'>
+                  Sign in
+                </Link>
+
+          </button>
+          )}
+
   
           </div>
          

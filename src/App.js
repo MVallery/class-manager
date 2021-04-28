@@ -1,17 +1,20 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
 
-import "./App.css";
-import Classes from "./pages/Classes";
-import NewClass from "./pages/NewClass";
-import Home from "./pages/Home";
+import Classes from "./classes/Classes";
+import NewClass from "./classes/components/NewClass";
+import Home from "./general/Home";
+import Authenticate from "./users/Authenticate";
 import { styles } from "./AppStyles";
 import { colorPallet, checkActiveClass } from "./app-files/general";
 
-import Modal from "./components/Modal";
-
+import Modal from "./general/components/Modal";
+import { AuthContext } from "./users/auth-context";
+import {useHttpClient} from './general/http-hook'
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
+import "./App.css";
+
 
 class MyStudents extends React.Component {
   constructor(props) {
@@ -27,13 +30,73 @@ class MyStudents extends React.Component {
       },
       inputClassName: "",
       classList: [],
-      // nameOnlyList: [],
-
-      // count: 0,
+      token: null,
+      userId: false,
+      isLoggedIn: false,
       hideClass: false,
       showAddNewClassModal: false,
     };
   }
+
+  login = (uid, token) => {
+    this.setState({ token: token, userId:uid, isLoggedIn:true });
+    // this.setState({ userId: uid });
+    // this.setState({ isLoggedIn: true });
+    // this.setState
+    const tokenExpirationDate = new Date(new Date().getTime() + 1000 * 60 * 60);
+
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({
+        userId: uid,
+        token: token,
+        expiration: tokenExpirationDate.toISOString(),
+      })
+    );
+    this.props.history.push("/classes");
+  };
+
+  logout = () => {
+    this.setState({ token: null });
+    this.setState({ userId: null });
+    this.setState({ isLoggedIn: false });
+    localStorage.removeItem("userData");
+    this.props.history.push("/");
+  };
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    const storedData = JSON.parse(localStorage.getItem("userData"));
+    if (prevProps.isLoggedIn !== this.state.isLoggedIn) {
+      if (!this.state.isLoggedIn) {
+        if (
+          storedData &&
+          storedData.token &&
+          new Date(storedData.expiration) > new Date()
+        ) {
+          this.login(
+            storedData.userId,
+            storedData.token,
+            new Date(storedData.expiration)
+          );
+        }
+      }
+    }
+  }
+
+  // useEffect(() => {
+  //   const storedData = JSON.parse(localStorage.getItem("userData"));
+  //   if (
+  //     storedData &&
+  //     storedData.token &&
+  //     new Date(storedData.expiration) > new Date()
+  //   ) {
+  //     login(
+  //       storedData.userId,
+  //       storedData.token,
+  //       new Date(storedData.expiration)
+  //     );
+  //   }
+  // }, [login]);
   showAddNewClassHandler = () => {
     this.setState({ showAddNewClassModal: true });
   };
@@ -90,35 +153,64 @@ class MyStudents extends React.Component {
     console.log(this);
 
     return (
-      <div>
-        <Modal
-          show={this.state.showAddNewClassModal}
-          onCancel={this.cancelAddNewClassHandler}
-          header={<div>Create a new class: </div>}
-          footerClass="worksheet-item__modal-actions"
+      <React.Fragment>
+        <AuthContext.Provider
+          value={{
+            isLoggedIn: !!this.state.token,
+            token: this.state.token,
+            userId: this.state.userId,
+            login: this.login,
+            logout: this.logout,
+          }}
         >
-          <NewClass {...this} {...this.state} cancelAddNewClassHandler= {this.cancelAddNewClassHandler} />
-        </Modal>
-        <Switch>
-          <Route path="/" exact>
-            <Home showAddNewClassHandler={this.showAddNewClassHandler} />
-          </Route>
-          <Route path="/signup" exact>
-            {/* <Authenticate /> */}
-          </Route>
-          <Route
-            path="/new-class"
-            exact
-            render={(props) => <NewClass {...this} {...this.state} />}
-          />
-
-          <Route
+          <Modal
+            show={this.state.showAddNewClassModal}
+            onCancel={this.cancelAddNewClassHandler}
+            header={<div>Create a new class: </div>}
+            footerClass="worksheet-item__modal-actions"
+          >
+            <NewClass
+              {...this}
+              {...this.state}
+              cancelAddNewClassHandler={this.cancelAddNewClassHandler}
+            />
+          </Modal>
+          <Switch>
+            <Route path="/" exact>
+              <Home showAddNewClassHandler={this.showAddNewClassHandler} />
+            </Route>
+            <Route path="/signup" exact>
+              <Authenticate handleState={this.handleState}/>
+            </Route>
+            <Route path="/authenticate" exact>
+              <Authenticate handleState={this.handleState}/>
+            </Route>
+            <Route
+              path="/new-class"
+              exact
+              render={(props) => <NewClass {...this} {...this.state} />}
+            />
+          {this.state.activeClass?
+            <Route
             path="/classes"
             exact
             render={(props) => <Classes {...this} {...this.state} />}
           />
-        </Switch>
-      </div>
+        :
+        <Route
+        path="/classes"
+        exact
+        render={(props) => <React.Fragment><div><div><h2>You have no classes yet, please add your first class now!</h2></div><NewClass {...this} {...this.state} /></div></React.Fragment>}
+      />
+        }
+            {/* <Route
+              path="/classes"
+              exact
+              render={(props) => <Classes {...this} {...this.state} />}
+            /> */}
+          </Switch>
+        </AuthContext.Provider>
+      </React.Fragment>
     );
   }
 }
@@ -126,4 +218,4 @@ class MyStudents extends React.Component {
 MyStudents.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(MyStudents);
+export default withStyles(styles)(withRouter(MyStudents));

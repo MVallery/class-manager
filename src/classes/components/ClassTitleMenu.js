@@ -18,9 +18,8 @@ import {
   colorPallet,
   shuffleArray,
   randWhole
-} from "../app-files/general";
-import Modal from "../components/Modal";
-import NewClass from "../pages/NewClass";
+} from "../../app-files/general";
+import Modal from "../../general/components/Modal";
 
 import "./ClassTitleMenu.css";
 const ClassTitleMenu = (props) => {
@@ -185,6 +184,7 @@ const ClassTitleMenu = (props) => {
     let newTempList = checkActiveClass(tempClassList, temp);
 
     setAddStudentModal(false);
+    props.handleDatabaseUpdate(temp);
     props.handleState({
       activeClass: temp,
       classList: newTempList,
@@ -197,8 +197,8 @@ const ClassTitleMenu = (props) => {
         <div className="classes-chalkboard-border">
           <div className="classes-chalkboard-container">
             <div className="classes-chalkboard-title-menu">
-              <h1>{props.activeClass.title}</h1>
-              <div className="classes-count">{props.activeClass.count}</div>
+              <h1>{activeClass?activeClass.title:null}</h1>
+              <div className="classes-count">{activeClass?activeClass.count:null}</div>
               <IconButton style={{ color: "white" }} onClick={handleClick}>
                 <MenuIcon />
               </IconButton>
@@ -227,7 +227,7 @@ const ClassTitleMenu = (props) => {
       <Modal
         show={showAddStudentModal}
         onCancel={cancelAddStudentHandler}
-        header={<div>Add students to {activeClass.title} </div>}
+        header={<div>Add students to {activeClass?activeClass.title:null} </div>}
         footerClass="worksheet-item__modal-actions"
         footer={
           <React.Fragment>
@@ -256,7 +256,7 @@ const ClassTitleMenu = (props) => {
       <Modal
         show={formatModal}
         onCancel={submitFormatModalHandler}
-        header={<div>Change the class layout of {activeClass.title} </div>}
+        header={<div>Change the class layout of {activeClass?activeClass.title:null} </div>}
         footerClass="worksheet-item__modal-actions"
         footer={
           <React.Fragment>
@@ -304,7 +304,7 @@ const ClassTitleMenu = (props) => {
 
           <Select
             className="select-form"
-            value={activeClass.styling.groups}
+            value={activeClass?activeClass.styling.groups:null}
             name="groups"
             onChange={handleChange}
             displayEmpty
@@ -322,7 +322,7 @@ const ClassTitleMenu = (props) => {
           <Select
             className="select-form"
             style={{ width: "200px" }}
-            value={activeClass.styling.theme}
+            value={activeClass?activeClass.styling.theme:null}
             onChange={props.handleThemeInput}
             width={10}
             displayEmpty

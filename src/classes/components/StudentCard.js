@@ -10,8 +10,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { SketchPicker } from "react-color";
 
 // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd-aligned-rbd';
-import { checkActiveClass, colorPallet } from "../app-files/general";
-import "../pages/Classes.css";
+import { checkActiveClass } from "../../app-files/general";
+import "../Classes.css";
 import "./StudentCard.css"
 const StudentCard = (props) => {
   const { record, index, getStyle, smallStyle, classList, activeClass } = props;
