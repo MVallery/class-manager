@@ -317,6 +317,7 @@ const Classes = (props) => {
         show={showAddNewClassModal}
         onCancel={cancelAddNewClassHandler}
         header={<div>Create a new class: </div>}
+        contentClass="addNewStu-modal"
         footerClass="worksheet-item__modal-actions"
         // footer={}
       >

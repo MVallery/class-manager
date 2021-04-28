@@ -233,9 +233,9 @@ const ClassTitleMenu = (props) => {
         header={<div>Add students to {activeClass?activeClass.title:null} </div>}
         footerClass="worksheet-item__modal-actions"
         footer={
-          <React.Fragment>
-            <button onClick={handleNewStu}>ADD STUDENT(S)</button>
-          </React.Fragment>
+          <div className="add-student-button-container">
+            <button className="add-student-button" onClick={handleNewStu}>ADD STUDENT(S)</button>
+            </div>
         }
       >
         <TextField
@@ -259,13 +259,13 @@ const ClassTitleMenu = (props) => {
       <Modal
         show={formatModal}
         onCancel={submitFormatModalHandler}
-        header={<div>Change the class layout of {activeClass?activeClass.title:null} </div>}
+        header={<div>Change the layout of {activeClass?activeClass.title:null} </div>}
         footerClass="worksheet-item__modal-actions"
-        footer={
-          <React.Fragment>
-            <button onClick={submitFormatModalHandler}>SUBMIT</button>
-          </React.Fragment>
-        }
+        // footer={
+          // <React.Fragment>
+          //   <button onClick={submitFormatModalHandler}>SUBMIT</button>
+          // </React.Fragment>
+        // }
       >
         <FormControl>
           <FormLabel>Icon Size</FormLabel>
@@ -303,7 +303,7 @@ const ClassTitleMenu = (props) => {
         </FormControl>
 
         <FormControl>
-          <InputLabel>Amount in each group/row</InputLabel>
+          <InputLabel>Each {activeClass.styling.format === 'rows'?'row':'group'}</InputLabel>
 
           <Select
             className="select-form"

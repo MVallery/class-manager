@@ -10,6 +10,7 @@ import Modal from "../../general/components/Modal";
 
 import { checkActiveClass, colorPallet, randWhole, shuffleArray } from "../../app-files/general";
 import "./GeneralClassButtons.css";
+
 const ClassButtons = (props) => {
   const [randomStudentModal, setRandomStudentModal] = useState(false);
   const [randomStudent, setRandomStudent] = useState({ name: "" });

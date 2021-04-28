@@ -64,3 +64,23 @@
   text-align:center;
   font-size:25px;
 }
+.add-student-button-container{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+.add-student-button {
+  border:3.2px solid rgb(38, 38, 110);
+  color: rgb(34, 34, 94);
+  font-weight:bold;
+  outline:none;
+  background-image: linear-gradient(60deg, rgb(186, 215, 235), rgb(216, 213, 223)) ;
+  padding:10px;
+  border-radius:5px;
+
+}
+.add-student-button:hover{
+  cursor:pointer;
+  background-image:  linear-gradient(60deg, rgb(38, 38, 110),rgb(60, 60, 170)) ;
+  color:white;
+}
