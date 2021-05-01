@@ -197,12 +197,11 @@ const ClassTitleMenu = (props) => {
   return (
     <React.Fragment>
       <div className="classes-title-menu-container">
-        <div className="classes-chalkboard-border">
           <div className="classes-chalkboard-container">
             <div className="classes-chalkboard-title-menu">
+            
               <h1>{activeClass?activeClass.title:null}</h1>
-              <div className="classes-count">{activeClass?activeClass.count:null}</div>
-              <IconButton style={{ color: "white" }} onClick={handleClick}>
+              <IconButton style={{ color: "white", backgroundImage: 'linear-gradient(-20deg, transparent, #6d6b6b)', border: '3px ridge white'}} onClick={handleClick}>
                 <MenuIcon />
               </IconButton>
             </div>
@@ -224,7 +223,6 @@ const ClassTitleMenu = (props) => {
               <MenuItem onClick={handleDeleteMulti}>Delete Student(s)</MenuItem>
             </Menu>
           </div>
-        </div>
       </div>
 
       <Modal

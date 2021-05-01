@@ -11,7 +11,7 @@
 
 .modal__header {
   width: auto;
-
+  border-radius: 8px 8px 0px 0px;
   padding: 1rem 0.5rem;
   background: #2a006e;
   color: white;
@@ -23,6 +23,7 @@
 
 .modal__content {
   padding: 1rem 0.5rem;
+  justify-content: center;
 }
 
 .modal__footer {

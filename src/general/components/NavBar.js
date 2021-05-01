@@ -22,6 +22,7 @@ const NavBar = props => {
           <span/>
         </button> */}
         <nav className="navbar-navlinks">
+
           <NavLinks showAddNewClassHandler={props.showAddNewClassHandler}
                     handleState={props.handleState}
                     activeClass={props.activeClass}

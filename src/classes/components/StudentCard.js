@@ -117,7 +117,7 @@ const StudentCard = (props) => {
   let keyString = JSON.parse(JSON.stringify(key));
   var backgroundStyle = {
     backgroundColor: record.background,
-    filter: "brightness(90%)",
+    filter: "brightness(75%)",
   };
   var backgroundLightStyle = {
     backgroundColor: record.background,
@@ -192,6 +192,7 @@ const StudentCard = (props) => {
             className="drag"
             style={getStyle(provided.draggableProps.style, snapshot)}
           >
+            <div style={{display:'flex', flexDirection:'column', height:'100%', alignItems: 'center'}}>
             <div className="student-icon-container">
               <div className="student-head-button-container">
                 <div className="student-head"></div>
@@ -286,6 +287,7 @@ const StudentCard = (props) => {
                 </div>
                 {record.count}
               </div>
+            </div>
             </div>
           </div>
         </div>

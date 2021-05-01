@@ -19,11 +19,17 @@ const NavLinks = props => {
   return (
     <React.Fragment>
       <div className='navlinks-main-container'>
+
         {/* <Link className='navlinks-container-links' to='/'>
           <Logo style='navbar'/>
         </Link> */}
           <div style={{visibility: 'hidden', flex:1}}></div>
+          <div className="navbar-point-board">
+            <h5>Total Class Points:</h5>
+          <div className="classes-count">{props.activeClass?props.activeClass.count:null}</div>
+</div>
             {props.children}
+            <div className="navbar-button-board">
           <div className='navlinks-container'>
 
           <button className='navlinks-container-links'
@@ -68,7 +74,7 @@ const NavLinks = props => {
 
   
           </div>
-         
+          </div>
       </div>
     </React.Fragment>
   )
