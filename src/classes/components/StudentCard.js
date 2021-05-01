@@ -8,12 +8,22 @@ import ThumbDown from "@material-ui/icons/ThumbDown";
 import ThumbUp from "@material-ui/icons/ThumbUp";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { SketchPicker } from "react-color";
+import { makeStyles  } from "@material-ui/core/styles";
 
 // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd-aligned-rbd';
 import { checkActiveClass } from "../../app-files/general";
 import "../Classes.css";
 import "./StudentCard.css"
+// const useStyles = makeStyles({
+//   root: {
+//     color:'#065361',
+//     // color:'yellow'
+//   },
+// });
+
 const StudentCard = (props) => {
+  // const checkboxStyle = useStyles();
+
   const { record, index, getStyle, smallStyle, classList, activeClass } = props;
   const popover = {
     position: "absolute",
@@ -127,12 +137,14 @@ const StudentCard = (props) => {
     display: record.isChecked && "flex",
     justifyContent: record.isChecked && "end",
   };
+  var studentCountStyle = record.count>0?'student-count-style-positive':record.count<0?'student-count-style-negative':null
+
   var pointStyle =
     record.pointStyle === "positive"
       ? {
-          backgroundColor: "yellow",
+          backgroundColor: "#50f150",
           backgroundImage:
-            "radial-gradient(circle, transparent 40%, #fffac4, #fffde6, white)",
+            "radial-gradient(circle, transparent 40%, #e3f7e3, #c8fdc8, #7ef17e, transparent)",
           transition: "background 1s",
           transitionTimingFunction: "ease-in",
           borderRadius: "45%",
@@ -232,11 +244,11 @@ const StudentCard = (props) => {
               className={`desk ${smallStyle.smallFont}`}
               style={backgroundLightStyle}
             >
-              {smallStyle&& (<span className= {record.name.length<9?"name-small": record.name.length<15?"name-xsmall":"name-xxsmall"}> {record.name}</span>)}
-              {!smallStyle&&(<span className={record.name.length<9?"name-large":record.name.length<15?"name-medium":"name-small"}>{record.name}</span>)}
+              {smallStyle&& (<span className= {`name-style ${record.name.length<9?"name-small":"name-xsmall"}`}> {record.name}</span>)}
+              {!smallStyle&&(<span className={`name-style ${record.name.length<9?"name-large":"name-medium"}`}>{record.name}</span>)}
               <br />
 
-              <div className="desk-button-main-container">
+              <div className={`desk-button-main-container`}>
                 <div className="desk-button-container">
                   <div className={`desk-button ${smallStyle.smallButtons}`}>
                     <IconButton
@@ -272,12 +284,15 @@ const StudentCard = (props) => {
                         <FormControlLabel
                           control={
                             <Checkbox
+                              // className= {checkboxStyle.root}
                               label={key}
+                              // iconStyle={{fill: 'white'}}
                               checked={activeClass.students[index].isChecked}
                               onChange={() => {
                                 handleSelection(index);
                               }}
                               value={keyString}
+                              style={{color:'#065361'}}
                             ></Checkbox>
                           }
                         />
@@ -285,7 +300,9 @@ const StudentCard = (props) => {
                     </FormGroup>
                   </div>
                 </div>
+                <p className={studentCountStyle}>
                 {record.count}
+                </p>
               </div>
             </div>
             </div>

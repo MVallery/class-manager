@@ -1,26 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,100&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sue+Ellen+Francisco&display=swap');
+
 .navlinks-main-container{
   display:flex;
   justify-content:center;
   box-shadow:2px 2px 9px 3px grey;
-  padding:3px;
+  /* padding:3px; */
 }
 .navlinks-container-links{
   text-decoration: none;
   font-size:1.5rem;
-  background-color:white;
-  color:black;
+  /* background-color:white; */
+  /* color:black; */
   border:none;
   padding:10px 10px;
   margin:10px 0px;
+  background-color: #438e619e;
+  border: 2px ridge #28944f;
+  border-radius: 3px;
+  color: white;
+  border: none;
+    box-shadow: inset -2px -1px 5px rgb(16, 59, 16);
+    font-family:'Montserrat';
+    font-weight:bold;
 
+}
+.navlinks-container-links a{
+  font-size:1rem;
+  color:white;
+  border-radius: 10px;
+  /* background-color: #f1eaf352; */
+  border: none;
+
+}
+.logout-signup-button {
+  border-radius: 10px;
+  background-color: #f1eaf352;
+  box-shadow: inset -2px -1px 5px green
+}
+.logout-signup-button:hover{
+  cursor:pointer;
+  box-shadow: inset 2px 1px 5px green
 }
 .navlinks-container-links:hover{
   cursor:pointer;
-  border-bottom:5px solid rgb(96, 29, 112);
+  box-shadow: inset 2px 1px 5px rgb(16, 59, 16);
+
 }
+
 .navlinks-container-links:focus{
   outline:none;
 }
+
 .navlinks-container{
   width:auto;
   display:flex;
@@ -37,16 +68,21 @@
 
 .navbar-point-board{
   display:flex;
-  transform: skewX(15.7deg);
+  align-items: center;
+  justify-content: center;
+  transform: skewX(15deg);
   background-color:purple;
   width:25%;
   z-index: 1;
+  font-weight: 100;
   border: 8px inset rgb(117 182 187);
+  font-family: 'Sue Ellen Francisco';
   background-image: linear-gradient(45deg, transparent, #592167)
 }
 .navbar-point-board h5{
   color:white;
-  font-size:1.2rem;
+  font-size:2.5rem;
+  margin:0;
 
 }
 .navbar-button-board{
@@ -54,16 +90,16 @@
   width: 25%;
   border: 8px inset rgb(117 182 187);
   background-color: #5db162;
-  transform: skewX(-15.7deg)
+  transform: skewX(-15deg)
 }
 .classes-count {
   border-radius:50%;
-  width:45px;
-  height:45px;
+  width: auto;
+  min-width: 45px;
   margin-left:10px;
   /* border: 5px solid rgb(119 29 216); */
   border: 3px ridge rgb(241 237 245);
-  background-color: rgb(0 0 0);
+  background-color: rgb(0 0 0 / 33%);
   color:white;
   text-align:center;
   font-size:25px;

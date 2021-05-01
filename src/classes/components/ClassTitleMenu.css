@@ -1,18 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Finger+Paint&family=Fredericka+the+Great&family=Kranky&display=swap');
 .classes-title-menu-container{
   display:flex;
   background-color:white;
   justify-content:center;
   align-items:center;
-  min-width:50%
+  min-width:600px
   /* transform:skewX(10deg); */
 
 }
 .classes-title-menu-container h1{
-  font-size:45px;
-  margin-top:20px;
-  margin-bottom:20px;
   width: 100%;
+  margin: 10px;
+  font-size: 3.5rem;
   text-align: center;
+  font-family: 'Caveat'
 }
 .classes-chalkboard-border{
   /* position:absolute;

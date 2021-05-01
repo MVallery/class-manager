@@ -125,13 +125,15 @@ console.log(auth)
           <TextField
             variant="filled"
             id="filled-basic"
-            label={<span className="">Student Names:</span>}
+            label={
+              <span className="">Input student names, separated by a comma.</span>
+            }
             name="inputNames"
             value={props.inputNames}
             onChange={props.handleChange}
             error={inputNamesError}
             className="text-area-styles"
-            placeholder="Input student names, separated by a comma"
+            placeholder="John Smith, Jane Doe..."
             required
             multiline
             rows={4}

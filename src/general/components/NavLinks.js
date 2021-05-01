@@ -23,7 +23,7 @@ const NavLinks = props => {
         {/* <Link className='navlinks-container-links' to='/'>
           <Logo style='navbar'/>
         </Link> */}
-          <div style={{visibility: 'hidden', flex:1}}></div>
+          {/* <div style={{visibility: 'hidden', flex:1}}></div> */}
           <div className="navbar-point-board">
             <h5>Total Class Points:</h5>
           <div className="classes-count">{props.activeClass?props.activeClass.count:null}</div>
@@ -56,7 +56,7 @@ const NavLinks = props => {
 
           </Menu>
           {auth.isLoggedIn && (
-          <button className='navlinks-container-links'>
+          <button className='navlinks-container-links logout-signup-button'>
               <Link className='link-style' to='/authenticate'>
                 Sign out
               </Link>

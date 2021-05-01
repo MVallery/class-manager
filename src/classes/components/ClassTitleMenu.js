@@ -249,6 +249,16 @@ const ClassTitleMenu = (props) => {
           className="text-area-styles"
           placeholder="John Smith, Jane Doe..."
           required
+          style={{borderBottom: '2px solid purple !important',
+            color:'purple'}}
+          // style={{
+          //     backgroundColor: "yellow"
+          // }}
+          // InputProps={{
+          //     style: {
+          //         color: "red"
+          //     }
+          // }}
           multiline
           rows={2}
           rowsMax={3}
