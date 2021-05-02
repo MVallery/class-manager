@@ -137,7 +137,6 @@ console.log(auth)
             required
             multiline
             rows={4}
-            rowsMax={6}
           />
           <br />
         </div>

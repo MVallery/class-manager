@@ -8,6 +8,7 @@ import ThumbDown from "@material-ui/icons/ThumbDown";
 import ThumbUp from "@material-ui/icons/ThumbUp";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { SketchPicker } from "react-color";
+import {TwitterPicker } from 'react-color';
 import { makeStyles  } from "@material-ui/core/styles";
 
 // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd-aligned-rbd';
@@ -138,7 +139,7 @@ const StudentCard = (props) => {
     justifyContent: record.isChecked && "end",
   };
   var studentCountStyle = record.count>0?'student-count-style-positive':record.count<0?'student-count-style-negative':null
-
+  var darkDesks = activeClass.styling.theme === 'darkPurpleBlue'? {color:'white'}:null
   var pointStyle =
     record.pointStyle === "positive"
       ? {
@@ -160,31 +161,34 @@ const StudentCard = (props) => {
         }
       : null;
 
-      if (record.name==='blank'){ //if student record is blank - return an empty desk to allow swapping of students in seating arrangement
-        return <Draggable key={'blank'+index} draggableId={'blank'+index} index={index}>
-          {(provided, snapshot) => (
-            <div>
-          <div 
-          className={`student-card-container ${smallStyle.smallIcon} blank-student-card-container` }
-          {...provided.draggableProps}
-  
-          style={getStyle(provided.draggableProps.style, snapshot)} 
-          ref={provided.innerRef}
-          {...provided.dragHandleProps}
+      if (record.name === "blank") {
+        //if student record is blank - return an empty desk to allow swapping of students in seating arrangement
+        return (
+          <Draggable
+            key={"blank" + index}
+            draggableId={"blank" + index}
+            index={index}
           >
-            <div className="student-icon-container">
-  
-            </div>
-          <div className="desk-top blank-desk-top" style={backgroundStyle}></div>
-          <div
-            className={`desk blank-desk` } style={backgroundLightStyle}
-          >
-  
-          </div>
-          </div>
-          </div>
-          )}
-          </Draggable>;
+            {(provided, snapshot) => (
+              <div>
+                <div
+                  className={`student-card-container ${smallStyle.smallIcon} blank-student-card-container`}
+                  {...provided.draggableProps}
+                  style={getStyle(provided.draggableProps.style, snapshot)}
+                  ref={provided.innerRef}
+                  {...provided.dragHandleProps}
+                >
+                  <div className="student-icon-container"></div>
+                  <div
+                    className="desk-top blank-desk-top"
+                    style={backgroundStyle}
+                  ></div>
+                  <div className={`desk blank-desk`} style={backgroundLightStyle}></div>
+                </div>
+              </div>
+            )}
+          </Draggable>
+        );
       }
 
 
@@ -242,10 +246,10 @@ const StudentCard = (props) => {
             <div className="desk-top" style={backgroundStyle}></div>
             <div
               className={`desk ${smallStyle.smallFont}`}
-              style={backgroundLightStyle}
+              style={{...backgroundLightStyle, ...darkDesks}}
             >
-              {smallStyle&& (<span className= {`name-style ${record.name.length<9?"name-small":"name-xsmall"}`}> {record.name}</span>)}
-              {!smallStyle&&(<span className={`name-style ${record.name.length<9?"name-large":"name-medium"}`}>{record.name}</span>)}
+              {smallStyle&& (<span className= {record.name.length<9?"name-small":"name-xsmall"}> {record.name}</span>)}
+              {!smallStyle&&(<span className={record.name.length<9?"name-large":"name-medium"}>{record.name}</span>)}
               <br />
 
               <div className={`desk-button-main-container`}>
@@ -267,8 +271,9 @@ const StudentCard = (props) => {
                           handleClose(index);
                         }}
                       />
-                      <SketchPicker
-                        color={activeClass.students[index].background}
+                      <TwitterPicker
+                        // color={activeClass.students[index].background}
+                        // colors={[]}
                         onChange={(e) => {
                           handleColorSelect(index, e);
                         }}

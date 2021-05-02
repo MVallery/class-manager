@@ -15,12 +15,14 @@
   background-repeat: repeat;
   background-size: 100px 80px; */
 
-
 }
 .classes-container h1{
   text-align:center;
 }
-
+.droppable-container{
+  display: flex;
+  margin: 0px 50px 50px 50px;
+}
 
 .row-container {
   display:flex;
@@ -30,7 +32,8 @@
 .row-main-container {
   display:flex;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
+  padding-bottom: 70px;
   background-image:  linear-gradient( 
     45deg
      ,rgb(255 255 255 / 90%), rgb(255 255 255 / 90%), rgb(255 255 255 / 91%))
@@ -38,6 +41,7 @@
 }
 .group-main-container {
   height: calc(100vh - 121px);
+  padding-bottom: 70px;
   background-image:  linear-gradient( 
     45deg
      ,rgb(255 255 255 / 90%), rgb(255 255 255 / 90%), rgb(255 255 255 / 91%))
@@ -67,11 +71,7 @@
 .group4 {
   display:flex;
   flex-direction:column;
-  /* height:320px; */
-  /* margin:0px 40px; */
   padding:10px 0px 0px 0px;
-  /* width:300px; */
-  /* flex-wrap:wrap; */
   justify-content:flex-start;
   align-items:flex-start;
 }
@@ -85,12 +85,8 @@
 .group56 {
   display:flex;
   flex-direction:column;
-  /* height:500px; */
   min-width: 145px;
-
-  /* margin:0px 40px 10px 40px; */
   padding:10px 0px 0px 0px;
-  /* width:330px; */
   flex-wrap:wrap;
   justify-content:flex-start;
   align-items:flex-start;
@@ -157,15 +153,7 @@
 }
 
 
-
-
 /* studentCard */
-
-
-
- /* @keyframes positiveglow {
-  from
-} */
 .drag{
   width:100%;
   height:100%;
@@ -177,13 +165,8 @@
    justify-content:center;
    align-items:center;
    background-color: transparent;
-   /* transition: background-color 2s; */
    width:100%;
-   transition:'background 0.8s';
-   transition-timing-function: 'ease-out';
-   /* opacity:100%; */
-   transition: background-color 5s;
-   transition-timing-function: ease-out;
+
  }
 
 
@@ -221,7 +204,6 @@
    border-left: 3px outset #80808063;
    border-bottom: 3px outset #80808063;
    white-space: nowrap;
-   overflow: hidden;
    text-overflow: ellipsis;
    box-shadow:5px 3px 7px 2px grey;
    font-family:'Quicksand'
@@ -238,4 +220,38 @@
 
 .addNewStu-modal{
   display: flex;
+}
+
+
+
+@media(max-width:900px){
+  .droppable-container{
+    margin:0px 15px 15px;
+  }
+  .small-icon{
+    width:95px!important;
+    height:95px!important;
+  }
+  .group56{
+    min-width:100px;
+  }
+  .group7{
+    width:100px;
+    min-width:100px;
+    margin:0px;
+    height:415px;
+  }
+  .addNewStu-modal{
+    padding:0rem;
+  }
+  .group-container4{
+    padding-bottom:50px;
+  }
+  
+}
+
+@media(max-width:500px){
+  .classes-container{
+    width:fit-content;
+  }
 }

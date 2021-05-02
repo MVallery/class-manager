@@ -35,6 +35,7 @@
     left: calc(50% - 20rem);
     width: 40rem;
   }
+
 }
 
 .modal-enter {
@@ -57,4 +58,12 @@
   transform: translateY(-10rem);
   opacity: 0;
   transition: all 200ms;
+}
+@media(max-height:900px){
+  .modal{
+    top: 5vh;
+  }
+  .modal__footer{
+    margin-top:15px;
+  }
 }

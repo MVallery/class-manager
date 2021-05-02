@@ -85,7 +85,7 @@
 }
 .student-count-style-negative{
   /* text-shadow: 2px 2px 10px #d04a7a; */
-  background-image: radial-gradient(#d04a795c, transparent);
+  background-image: radial-gradient(#c38ea15c, transparent);
   color: #822b2b;
 }
 .student-count-style-neutral{
@@ -150,5 +150,40 @@
 }
 .name-xxsmall{
   font-size: 16px;
+
+}
+
+@media(max-width:900px){
+  .student-head-button-container{
+    width:120%
+  }
+  .name-large{
+    font-size: 17px;
+  }
+  .name-medium{
+    font-size: 16px;
+  
+  }
+  .name-small{
+    font-size:15px;
+  }
+  .name-xsmall{
+    font-size:14px;
+  }
+  .name-xxsmall{
+    font-size:13px;
+  }
+  .desk-button-main-container{
+    margin-bottom:32px;
+    margin-top:-10px;
+  }
+  .desk-button-main-container p{
+    margin-top:10px;
+    font-size: 14px;
+  }
+  .student-card-container{
+    height: 95px;
+    width:95px;
+  }
 
 }

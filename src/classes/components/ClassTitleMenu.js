@@ -335,12 +335,18 @@ const ClassTitleMenu = (props) => {
             style={{ width: "200px" }}
             value={activeClass?activeClass.styling.theme:null}
             onChange={props.handleThemeInput}
-            width={10}
+            width={20}
             displayEmpty
           >
             <MenuItem value="lightBlueGreen">Light Blue Green</MenuItem>
             <MenuItem value="lightBluePurple">Light Blue Purple</MenuItem>
-            <MenuItem value="darkBluePurple">Dark Blue Purple</MenuItem>
+            {/* <MenuItem value="darkPurpleBlue">Dark Blue Purple</MenuItem> */}
+            <MenuItem value="brightRainbow">Bright Rainbow</MenuItem>
+            <MenuItem value="pastelRainbow">Pastel Rainbow</MenuItem>
+            <MenuItem value="green">Shades of Green</MenuItem>
+
+
+
           </Select>
           {/* <FormHelperText>Color Theme</FormHelperText> */}
         </FormControl>

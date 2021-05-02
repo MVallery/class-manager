@@ -63,3 +63,13 @@
 .testing {
   background-color:rgb(50, 190, 200)
 }
+
+@media(max-width:900px){
+  .new-class-container{
+    max-height:300px;
+  }
+  .names-input-container{
+    height:110px;
+    margin-top:5px;
+  }
+}

@@ -251,7 +251,7 @@ const Classes = (props) => {
     console.log("formattedNameList:", formattedNameList);
     let newNameList = formattedNameList.map((array, index) => {
       return (
-        <div style={{ display: "flex", margin: "0px 50px 50px 50px" }}>
+        <div className="droppable-container">
           <Droppable
             droppableId={`group-${index}`}
             index={index}

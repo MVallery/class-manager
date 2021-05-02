@@ -78,3 +78,29 @@
   background-image:  linear-gradient(60deg, rgb(38, 38, 110),rgb(60, 60, 170)) ;
   color:white;
 }
+
+@media(max-width:1300px){
+  .classes-title-menu-container{
+    min-width:400px;
+  }
+}
+@media(max-width:900px){
+  .classes-title-menu-container{
+    min-width:300px;
+  }
+  .classes-title-menu-container h1{
+    font-size:2.4rem;
+
+  }
+}
+
+@media(max-width:500px){
+  .classes-title-menu-container{
+    min-width:180px;
+  }
+  .classes-title-menu-container h1{
+    font-size:1.7rem;
+    font-weight:200;
+
+  }
+}

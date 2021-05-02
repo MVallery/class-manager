@@ -32,9 +32,9 @@ const NavLinks = props => {
             <div className="navbar-button-board">
           <div className='navlinks-container'>
 
-          <button className='navlinks-container-links'
+          <button className='switch-classes-button'
               onClick={handleMainMenuClick}>
-            Classes
+            <span className="switch-classes-text">Classes</span>
           </button>
           <Menu
             id="simple-menu"
@@ -56,15 +56,15 @@ const NavLinks = props => {
 
           </Menu>
           {auth.isLoggedIn && (
-          <button className='navlinks-container-links logout-signup-button'>
-              <Link className='link-style' to='/authenticate'>
+          <button className='logout-signup-button'>
+              <Link className='link-style logout-signup-button' to='/authenticate'>
                 Sign out
               </Link>
 
           </button>
             )}
           {!auth.isLoggedIn && (
-              <button className='navlinks-container-links'>
+              <button className='logout-signup-button'>
                 <Link className='link-style' to='/authenticate'>
                   Sign in
                 </Link>
