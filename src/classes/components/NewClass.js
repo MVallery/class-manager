@@ -8,6 +8,7 @@ import {useHttpClient} from '../../general/http-hook';
 // import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import "./NewClass.css";
+import { connect } from 'react-redux';
 
 // const useStyles = makeStyles((theme) => ({
 //   formControl: {
@@ -27,10 +28,11 @@ console.log(auth)
   // const classes = useStyles();
 
   // console.log(props.names);
-  const handleSubmit = (props) => {
+  const handleNewClass = (props) => {
+    props.handleNewClass(props.inputNames, props.inputClassName, props.classList)
     console.log(props)
     props.cancelAddNewClassHandler();
-
+  
     console.log("inputNames:", props.inputNames);
     console.log("classList:", props.classList);
     const nameArray =  props.inputNames.replace(/,\s+/g, ',').replace(/\s+[^a-zA-Z]/,'').split(',')
@@ -42,7 +44,7 @@ console.log(auth)
         continue;
       }
       let [first, last] = nameArray[x].split(" ");
-
+  
       const id = cap(nameArray[x]) + Math.floor(Math.random() * 20);
       let initial = last ? " " + cap(last[0]) : "";
       let record = {
@@ -77,7 +79,7 @@ console.log(auth)
         console.log(tempClass);
       }
     }
-
+  
     tempClassList.push(tempClass);
     try {
      sendRequest('http://localhost:5000/api/users/'+auth.userId+'/create-class', "POST", 
@@ -91,18 +93,18 @@ console.log(auth)
         'Content-Type': 'application/json'
       }
       )
-
+  
     } catch(err) {
       console.log(err)
     }
-    props.handleState({
-      activeClass: tempClass,
-      classList: tempClassList,
-      inputClassName: "",
-      inputNames: "",
-    });
-    // }
-  };
+  props.handleUpdate(tempClass, tempClassList)
+  // props.handleState({
+    // activeClass: tempClass,
+    // classList: tempClassList,
+  //   inputClassName: "",
+  //   inputNames: "",
+  // });
+  }
   let inputClassNamesError = /[^a-zA-Z0-9 ]/.test(props.inputClassName)? true:false
   let inputNamesError = /[^a-zA-Z, ]/.test(props.inputNames)? true:false
   return (
@@ -145,7 +147,7 @@ console.log(auth)
           <Link className="new-class-link" to="/classes">
           <button
             onClick={() => {
-              handleSubmit(props);
+              handleNewClass(props);
             }}
           >
             Create Class
@@ -155,7 +157,7 @@ console.log(auth)
           <Link className="new-class-link" to="/classes">
           <button disabled
             onClick={() => {
-              handleSubmit(props);
+              handleNewClass(props);
             }}
           >
             Create Class
@@ -172,5 +174,16 @@ console.log(auth)
     </React.Fragment>
   );
 };
-
-export default NewClass;
+const mapStateToProps = (state) => {
+  return {
+    activeClass: state.activeClass,
+    classList: state.classList
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return{
+    handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp,tempClassList })}
+    
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(NewClass);

@@ -11,6 +11,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import IconButton from "@material-ui/core/IconButton";
 import FormLabel from "@material-ui/core/FormLabel";
 import TextField from "@material-ui/core/TextField";
+import { connect } from 'react-redux';
 
 import {
   cap,
@@ -53,8 +54,9 @@ const ClassTitleMenu = (props) => {
     temp.students = shuffledTemp;
     let newTempList = checkActiveClass(tempClassList, temp);
     props.handleDatabaseUpdate(temp);
+    props.handleUpdate(temp, newTempList)
 
-    props.handleState({ activeClass: temp, classList: newTempList });
+    // props.handleState({ activeClass: temp, classList: newTempList });
   };
 
   const [dropdownDisplay, setDropdownDisplay] = React.useState(null);
@@ -79,11 +81,12 @@ const ClassTitleMenu = (props) => {
       }
       let newTempList = checkActiveClass(tempClassList, temp);
       props.handleDatabaseUpdate(temp);
+      props.handleUpdate(temp, newTempList)
 
-      props.handleState({
-        activeClass: temp,
-        classList: newTempList,
-      });
+      // props.handleState({
+      //   activeClass: temp,
+      //   classList: newTempList,
+      // });
     }
   };
   const handleChange = (e) => {
@@ -138,11 +141,12 @@ const ClassTitleMenu = (props) => {
     }
     let newTempList = checkActiveClass(tempClassList, temp);
     props.handleDatabaseUpdate(temp);
+    props.handleUpdate(temp, newTempList)
 
-    props.handleState({
-      activeClass: temp,
-      classList: newTempList,
-    });
+    // props.handleState({
+    //   activeClass: temp,
+    //   classList: newTempList,
+    // });
     // handleFormatting()
   };
   const handleNewStu = () => {
@@ -188,9 +192,11 @@ const ClassTitleMenu = (props) => {
 
     setAddStudentModal(false);
     props.handleDatabaseUpdate(temp);
+    props.handleUpdate(temp, newTempList)
+
     props.handleState({
-      activeClass: temp,
-      classList: newTempList,
+      // activeClass: temp,
+      // classList: newTempList,
       inputNames: "",
     });
   };
@@ -355,5 +361,15 @@ const ClassTitleMenu = (props) => {
     </React.Fragment>
   );
 };
-
-export default ClassTitleMenu;
+const mapStateToProps = (state) => {
+  return {
+    activeClass: state.activeClass,
+    classList: state.classList
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return{
+    handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp,tempClassList })}
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ClassTitleMenu);

@@ -10,6 +10,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { SketchPicker } from "react-color";
 import {TwitterPicker } from 'react-color';
 import { makeStyles  } from "@material-ui/core/styles";
+import { connect } from 'react-redux';
 
 // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd-aligned-rbd';
 import { checkActiveClass } from "../../app-files/general";
@@ -48,18 +49,17 @@ const StudentCard = (props) => {
   const handleAdd = (index) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
-
+    // props.handleDatabaseUpdate(temp);
     temp.students[index].count = temp.students[index].count + 1;
     temp.count = temp.count + 1;
     temp.students[index].pointStyle = "positive";
     let newTempList = checkActiveClass(tempClassList, temp);
-    props.handleDatabaseUpdate(temp);
-
-    props.handleState({
-      activeClass: temp,
-      classList: newTempList,
-      // classDisplay:tempClassDisplay
-    });
+    // handleDatabaseUpdate(temp);
+    props.handleUpdate(temp, newTempList)
+    // props.handleState({
+    //   activeClass: temp,
+    //   classList: newTempList,
+    // });
   };
   const activeClassRef = useRef(activeClass);
   activeClassRef.current = activeClass;
@@ -72,10 +72,12 @@ const StudentCard = (props) => {
     temp.students[index].pointStyle = null;
     var newTempList = checkActiveClass(tempClassList, temp);
     // }
-    props.handleState({
-      activeClass: temp,
-      classList: newTempList,
-    });
+    props.handleUpdate(temp, newTempList)
+
+    // props.handleState({
+    //   activeClass: temp,
+    //   classList: newTempList,
+    // });
   };
   const handleSub = (index) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
@@ -87,11 +89,12 @@ const StudentCard = (props) => {
 
     let newTempList = checkActiveClass(tempClassList, temp);
     props.handleDatabaseUpdate(temp);
+    props.handleUpdate(temp, newTempList)
 
-    props.handleState({
-      activeClass: temp,
-      classList: newTempList,
-    });
+    // props.handleState({
+    //   activeClass: temp,
+    //   classList: newTempList,
+    // });
   };
   const handleColorClick = (index) => {
     let tempClassList = JSON.parse(JSON.stringify(classList));
@@ -100,8 +103,9 @@ const StudentCard = (props) => {
     temp.students[index].displayColorPicker = !temp.students[index]
       .displayColorPicker;
     let newTempList = checkActiveClass(tempClassList, temp);
+    props.handleUpdate(temp, newTempList)
 
-    props.handleState({ activeClass: temp, classList: newTempList });
+    // props.handleState({ activeClass: temp, classList: newTempList });
   };
   const handleClose = (index) => {
     let tempClassList = JSON.parse(JSON.stringify(classList));
@@ -110,8 +114,9 @@ const StudentCard = (props) => {
 
     temp.students[index].displayColorPicker = false;
     let newTempList = checkActiveClass(tempClassList, temp);
+    props.handleUpdate(temp, newTempList)
 
-    props.handleState({ activeClass: temp, classList: newTempList });
+    // props.handleState({ activeClass: temp, classList: newTempList });
   };
 
   const handleColorSelect = (index, e) => {
@@ -121,8 +126,9 @@ const StudentCard = (props) => {
     temp.students[index].background = e.hex;
     let newTempList = checkActiveClass(tempClassList, temp);
     props.handleDatabaseUpdate(temp);
+    props.handleUpdate(temp, newTempList)
 
-    props.handleState({ activeClass: temp, classList: newTempList });
+    // props.handleState({ activeClass: temp, classList: newTempList });
   };
   var key = record.key;
   let keyString = JSON.parse(JSON.stringify(key));
@@ -317,5 +323,16 @@ const StudentCard = (props) => {
     </Draggable>
   );
 };
-
-export default StudentCard;
+const mapStateToProps = (state) => {
+  return {
+    activeClass: state.activeClass,
+    classList: state.classList
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return{
+    handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp,tempClassList })}
+    
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(StudentCard);

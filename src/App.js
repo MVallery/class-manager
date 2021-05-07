@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
+import { connect } from 'react-redux';
 
 import Classes from "./classes/Classes";
 import NewClass from "./classes/components/NewClass";
@@ -218,4 +219,16 @@ class MyStudents extends React.Component {
 MyStudents.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(withRouter(MyStudents));
+
+const mapStateToProps = (state) => {
+  return {
+    activeClass: state.activeClass,
+    classList: state.classList
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return{
+    
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(withRouter(MyStudents)));

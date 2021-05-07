@@ -1,6 +1,7 @@
 import React from 'react'
 import './ClassButton.css'
 import MenuItem from "@material-ui/core/MenuItem";
+import { connect } from 'react-redux';
 
 const ClassButton = (props) => {
   const handleSwitchClass = () => {
@@ -8,6 +9,8 @@ const ClassButton = (props) => {
     props.handleCloseMainMenu()
     let temp = JSON.parse(JSON.stringify(props.classList))
     // temp = props.classList.students
+    props.handleUpdate(temp, props.classList)
+
     props.handleState({
       activeClass:temp
     })
@@ -19,5 +22,15 @@ return (
   </div>
 )
 }
-
-export default ClassButton
+const mapStateToProps = (state) => {
+  return {
+    activeClass: state.activeClass,
+    classList: state.classList
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return{
+    handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp,tempClassList })}
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ClassButton);

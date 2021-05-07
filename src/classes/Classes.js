@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { connect } from 'react-redux';
 import NavBar from "../general/components/NavBar";
 
 import StudentCard from "./components/StudentCard";
@@ -6,8 +7,7 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import {
   cap,
   checkActiveClass,
-  colorPallet,
-  shuffleArray,
+
 } from "../app-files/general";
 
 import {AuthContext} from '../users/auth-context'
@@ -137,11 +137,12 @@ const Classes = (props) => {
 
     let newTempList = checkActiveClass(tempClassList, temp);
     handleDatabaseUpdate(temp);
+    props.handleUpdate(temp, newTempList)
 
-    props.handleState({
-      activeClass: temp,
-      classList: newTempList,
-    });
+    // props.handleState({
+    //   activeClass: temp,
+    //   classList: newTempList,
+    // });
   };
   const handleOnDragStart = (result) => {};
 
@@ -356,4 +357,16 @@ const Classes = (props) => {
   );
 };
 
-export default Classes;
+const mapStateToProps = (state) => {
+  return {
+    activeClass: state.activeClass,
+    classList: state.classList
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return{
+    handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp,tempClassList })}
+    
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Classes);
