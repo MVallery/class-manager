@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { connect } from 'react-redux';
 import NavBar from "../general/components/NavBar";
 
 import StudentCard from "./components/StudentCard";
@@ -6,11 +7,9 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import {
   cap,
   checkActiveClass,
-  colorPallet,
-  shuffleArray,
+
 } from "../app-files/general";
 
-import {AuthContext} from '../users/auth-context'
 import {useHttpClient} from '../general/http-hook';
 import Modal from "../general/components/Modal";
 import ClassTitleMenu from "./components/ClassTitleMenu";
@@ -21,7 +20,6 @@ import "./Classes.css";
 const Classes = (props) => {
   const { activeClass, classList } = props;
   console.log("classList inside Classes:", props.classList);
-  const auth = useContext(AuthContext);
 
   const {isLoading, error, sendRequest, clearError } = useHttpClient();
   const [newNameListState, setNewNameListState] = useState([]);
@@ -49,7 +47,7 @@ const Classes = (props) => {
     console.log(activeClass)
     console.log('inside handledatabaseupdate', activeClass.id)
       try {
-        await sendRequest('http://localhost:5000/api/users/'+auth.userId+'/'+activeClass.id, "PATCH", 
+        await sendRequest('http://localhost:5000/api/users/'+props.userId+'/'+activeClass.id, "PATCH", 
          JSON.stringify({
            title: tempActiveClass.title,
            students: tempActiveClass.students,
@@ -137,11 +135,8 @@ const Classes = (props) => {
 
     let newTempList = checkActiveClass(tempClassList, temp);
     handleDatabaseUpdate(temp);
+    props.handleUpdate(temp, newTempList)
 
-    props.handleState({
-      activeClass: temp,
-      classList: newTempList,
-    });
   };
   const handleOnDragStart = (result) => {};
 
@@ -175,9 +170,6 @@ const Classes = (props) => {
         handleDatabaseUpdate={handleDatabaseUpdate}
         record={record}
         index={index}
-        handleState={props.handleState}
-        activeClass={activeClass}
-        classList={classList}
       />
     );
   }):null;
@@ -321,12 +313,10 @@ const Classes = (props) => {
         footerClass="worksheet-item__modal-actions"
         // footer={}
       >
-        <NewClass {...props} />
+        <NewClass {...props} cancelAddNewClassHandler={cancelAddNewClassHandler} />
       </Modal>
       <NavBar
         handleState={props.handleState}
-        activeClass={props.activeClass}
-        classList={props.classList}
         showAddNewClassHandler={showAddNewClassHandler}
       >
         <ClassTitleMenu {...props} handleDatabaseUpdate={handleDatabaseUpdate} handleSmallStyle={handleSmallStyle}/>
@@ -345,9 +335,6 @@ const Classes = (props) => {
         </DragDropContext>
 
             <GeneralClassButtons
-              activeClass={props.activeClass}
-              classList={props.classList}
-              handleState={props.handleState}
               handleDatabaseUpdate={handleDatabaseUpdate}
             />
 
@@ -356,4 +343,17 @@ const Classes = (props) => {
   );
 };
 
-export default Classes;
+const mapStateToProps = (state) => {
+  return {
+    activeClass: state.activeClass,
+    classList: state.classList,
+    userId:state.userId
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return{
+    handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp,tempClassList })}
+    
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Classes);

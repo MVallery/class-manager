@@ -1,5 +1,7 @@
 import React from 'react'
 import ClassButton from './ClassButton'
+import { connect } from 'react-redux';
+
 const ClassButtonList = (props) => {
 
   const classList = []
@@ -7,7 +9,7 @@ const ClassButtonList = (props) => {
     for (let i in props.classList) {
       if (JSON.stringify(props.classList[i]) !== JSON.stringify(props.activeClass)) {
         classList.push(
-          <ClassButton handleCloseMainMenu={props.handleCloseMainMenu} handleState={props.handleState} activeClass={props.activeClass} classList={props.classList[i]} />
+          <ClassButton handleCloseMainMenu={props.handleCloseMainMenu} loopClass={props.classList[i]} />
         )
       }
   
@@ -18,4 +20,10 @@ const ClassButtonList = (props) => {
   }
   return classNavBar()
 }
-export default ClassButtonList
+const mapStateToProps = (state) => {
+  return {
+    activeClass: state.activeClass,
+    classList: state.classList
+  }
+}
+export default connect(mapStateToProps)(ClassButtonList)

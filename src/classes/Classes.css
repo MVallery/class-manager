@@ -189,6 +189,7 @@
    /* border:2px solid grey; */
  }
  .desk {
+   display:block;
    height:45%;
    width:85%;
    /* opacity:80%; */
@@ -205,9 +206,12 @@
    border-bottom: 3px outset #80808063;
    white-space: nowrap;
    text-overflow: ellipsis;
+   overflow:hidden;
    box-shadow:5px 3px 7px 2px grey;
-   font-family:'Quicksand'
+   font-family:'Quicksand';
+
  }
+
  .blank-desk {
   background-color:rgb(248, 252, 255);
   /* border:2px solid grey; */

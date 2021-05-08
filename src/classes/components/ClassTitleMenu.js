@@ -11,6 +11,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import IconButton from "@material-ui/core/IconButton";
 import FormLabel from "@material-ui/core/FormLabel";
 import TextField from "@material-ui/core/TextField";
+import { connect } from 'react-redux';
 
 import {
   cap,
@@ -53,8 +54,8 @@ const ClassTitleMenu = (props) => {
     temp.students = shuffledTemp;
     let newTempList = checkActiveClass(tempClassList, temp);
     props.handleDatabaseUpdate(temp);
+    props.handleUpdate(temp, newTempList)
 
-    props.handleState({ activeClass: temp, classList: newTempList });
   };
 
   const [dropdownDisplay, setDropdownDisplay] = React.useState(null);
@@ -79,11 +80,8 @@ const ClassTitleMenu = (props) => {
       }
       let newTempList = checkActiveClass(tempClassList, temp);
       props.handleDatabaseUpdate(temp);
+      props.handleUpdate(temp, newTempList)
 
-      props.handleState({
-        activeClass: temp,
-        classList: newTempList,
-      });
     }
   };
   const handleChange = (e) => {
@@ -110,8 +108,6 @@ const ClassTitleMenu = (props) => {
         }
       }
     }
-
-    // temp.styling[name] = value;
     if (name === "format") {
       temp.styling.format = value;
     }
@@ -138,12 +134,8 @@ const ClassTitleMenu = (props) => {
     }
     let newTempList = checkActiveClass(tempClassList, temp);
     props.handleDatabaseUpdate(temp);
+    props.handleUpdate(temp, newTempList)
 
-    props.handleState({
-      activeClass: temp,
-      classList: newTempList,
-    });
-    // handleFormatting()
   };
   const handleNewStu = () => {
     const newNameArray = props.inputNames.replace(/ /g, "").split(",");
@@ -160,7 +152,6 @@ const ClassTitleMenu = (props) => {
         isChecked: false,
         displayColorPicker: false,
       };
-      // console.log(Object.values(temp.students).includes('blank'))
       if (temp.students.some((el) => el.name === "blank")) {
         for (let x in temp.students) {
           if (temp.students[x].name === "blank") {
@@ -188,9 +179,9 @@ const ClassTitleMenu = (props) => {
 
     setAddStudentModal(false);
     props.handleDatabaseUpdate(temp);
+    props.handleUpdate(temp, newTempList)
+
     props.handleState({
-      activeClass: temp,
-      classList: newTempList,
       inputNames: "",
     });
   };
@@ -251,14 +242,7 @@ const ClassTitleMenu = (props) => {
           required
           style={{borderBottom: '2px solid purple !important',
             color:'purple'}}
-          // style={{
-          //     backgroundColor: "yellow"
-          // }}
-          // InputProps={{
-          //     style: {
-          //         color: "red"
-          //     }
-          // }}
+
           multiline
           rows={2}
           rowsMax={3}
@@ -269,11 +253,6 @@ const ClassTitleMenu = (props) => {
         onCancel={submitFormatModalHandler}
         header={<div>Change the layout of {activeClass?activeClass.title:null} </div>}
         footerClass="worksheet-item__modal-actions"
-        // footer={
-          // <React.Fragment>
-          //   <button onClick={submitFormatModalHandler}>SUBMIT</button>
-          // </React.Fragment>
-        // }
       >
         <FormControl>
           <FormLabel>Icon Size</FormLabel>
@@ -348,12 +327,21 @@ const ClassTitleMenu = (props) => {
 
 
           </Select>
-          {/* <FormHelperText>Color Theme</FormHelperText> */}
         </FormControl>
       </Modal>
 
     </React.Fragment>
   );
 };
-
-export default ClassTitleMenu;
+const mapStateToProps = (state) => {
+  return {
+    activeClass: state.activeClass,
+    classList: state.classList
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return{
+    handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp,tempClassList })}
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ClassTitleMenu);
