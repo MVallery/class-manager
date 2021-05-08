@@ -1,5 +1,7 @@
 import React, { useRef } from "react";
 import { Draggable } from "react-beautiful-dnd";
+import { connect } from 'react-redux';
+
 import Checkbox from "@material-ui/core/Checkbox";
 import ColorLens from "@material-ui/icons/ColorLens";
 import FormGroup from "@material-ui/core/FormGroup";
@@ -7,25 +9,16 @@ import IconButton from "@material-ui/core/IconButton";
 import ThumbDown from "@material-ui/icons/ThumbDown";
 import ThumbUp from "@material-ui/icons/ThumbUp";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { makeStyles  } from "@material-ui/core/styles";
+
 import { SketchPicker } from "react-color";
 import {TwitterPicker } from 'react-color';
-import { makeStyles  } from "@material-ui/core/styles";
-import { connect } from 'react-redux';
-
-// import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd-aligned-rbd';
 import { checkActiveClass } from "../../app-files/general";
 import "../Classes.css";
 import "./StudentCard.css"
-// const useStyles = makeStyles({
-//   root: {
-//     color:'#065361',
-//     // color:'yellow'
-//   },
-// });
+
 
 const StudentCard = (props) => {
-  // const checkboxStyle = useStyles();
-
   const { record, index, getStyle, smallStyle, classList, activeClass } = props;
   const popover = {
     position: "absolute",
@@ -43,23 +36,20 @@ const StudentCard = (props) => {
     let tempClassList = JSON.parse(JSON.stringify(classList));
     temp.students[index].isChecked = !temp.students[index].isChecked;
     let newTempList = checkActiveClass(tempClassList, temp);
-    props.handleState({ activeClass: temp, classList: newTempList });
+    props.handleUpdate(temp, classList)
+    // props.handleState({ activeClass: temp, classList: newTempList });
   };
 
   const handleAdd = (index) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
-    // props.handleDatabaseUpdate(temp);
     temp.students[index].count = temp.students[index].count + 1;
     temp.count = temp.count + 1;
     temp.students[index].pointStyle = "positive";
     let newTempList = checkActiveClass(tempClassList, temp);
-    // handleDatabaseUpdate(temp);
+    props.handleDatabaseUpdate(temp);
     props.handleUpdate(temp, newTempList)
-    // props.handleState({
-    //   activeClass: temp,
-    //   classList: newTempList,
-    // });
+
   };
   const activeClassRef = useRef(activeClass);
   activeClassRef.current = activeClass;
@@ -71,13 +61,8 @@ const StudentCard = (props) => {
     let tempClassList = JSON.parse(JSON.stringify(classListRef.current));
     temp.students[index].pointStyle = null;
     var newTempList = checkActiveClass(tempClassList, temp);
-    // }
     props.handleUpdate(temp, newTempList)
 
-    // props.handleState({
-    //   activeClass: temp,
-    //   classList: newTempList,
-    // });
   };
   const handleSub = (index) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
@@ -91,10 +76,6 @@ const StudentCard = (props) => {
     props.handleDatabaseUpdate(temp);
     props.handleUpdate(temp, newTempList)
 
-    // props.handleState({
-    //   activeClass: temp,
-    //   classList: newTempList,
-    // });
   };
   const handleColorClick = (index) => {
     let tempClassList = JSON.parse(JSON.stringify(classList));
@@ -105,7 +86,6 @@ const StudentCard = (props) => {
     let newTempList = checkActiveClass(tempClassList, temp);
     props.handleUpdate(temp, newTempList)
 
-    // props.handleState({ activeClass: temp, classList: newTempList });
   };
   const handleClose = (index) => {
     let tempClassList = JSON.parse(JSON.stringify(classList));
@@ -116,7 +96,6 @@ const StudentCard = (props) => {
     let newTempList = checkActiveClass(tempClassList, temp);
     props.handleUpdate(temp, newTempList)
 
-    // props.handleState({ activeClass: temp, classList: newTempList });
   };
 
   const handleColorSelect = (index, e) => {
@@ -128,7 +107,6 @@ const StudentCard = (props) => {
     props.handleDatabaseUpdate(temp);
     props.handleUpdate(temp, newTempList)
 
-    // props.handleState({ activeClass: temp, classList: newTempList });
   };
   var key = record.key;
   let keyString = JSON.parse(JSON.stringify(key));

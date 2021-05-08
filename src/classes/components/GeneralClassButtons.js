@@ -32,15 +32,6 @@ const ClassButtons = (props) => {
     }
     var newTempList = checkActiveClass(tempClassList, temp);
     props.handleUpdate(temp, newTempList)
-
-    // props.handleState({
-    //   activeClass: temp,
-    //   classList: newTempList,
-    // });
-  };
-
-  const cancelRandomStudentHandler = () => {
-    setRandomStudentModal(false);
   };
 
   const handleSelectAll = () => {
@@ -53,9 +44,6 @@ const ClassButtons = (props) => {
     }
     props.handleUpdate(temp, props.classList)
 
-    // props.handleState({
-    //   activeClass: temp,
-    // });
   };
   const handleDeselectAll = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
@@ -66,10 +54,6 @@ const ClassButtons = (props) => {
       temp.students[x].isChecked = false;
     }
     props.handleUpdate(temp, props.classList)
-
-    // props.handleState({
-    //   activeClass: temp,
-    // });
   };
   const handleAddMulti = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
@@ -88,12 +72,8 @@ const ClassButtons = (props) => {
     let newTempList = checkActiveClass(tempClassList, temp);
     props.handleDatabaseUpdate();
     props.handleUpdate(temp, newTempList)
-
-    // props.handleState({
-    //   activeClass: temp,
-    //   classList: newTempList,
-    // });
   };
+
   const handleSubMulti = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
     let tempClassList = JSON.parse(JSON.stringify(props.classList));
@@ -112,10 +92,6 @@ const ClassButtons = (props) => {
     props.handleDatabaseUpdate(temp);
     props.handleUpdate(temp, newTempList)
 
-    // props.handleState({
-    //   activeClass: temp,
-    //   classList: newTempList,
-    // });
   };
 
   const handleResetMulti = () => {
@@ -134,13 +110,9 @@ const ClassButtons = (props) => {
     let newTempList = checkActiveClass(tempClassList, temp);
     props.handleDatabaseUpdate(temp);
     props.handleUpdate(temp, newTempList)
-
-    // props.handleState({
-    //   activeClass: temp,
-    //   classList: newTempList,
-    // });
   };
-  const handleShuffle = () => {
+
+  const handleSelectRandomStudent = () => {
     let filterBlank = props.activeClass.students.filter(
       (student) => student.name !== "blank"
     );
@@ -148,7 +120,9 @@ const ClassButtons = (props) => {
     setRandomStudent(randomStudent);
     setRandomStudentModal(true);
   };
-
+  const cancelRandomStudentHandler = () => {
+    setRandomStudentModal(false);
+  };
   return (
     <React.Fragment>
       <Modal
@@ -161,11 +135,11 @@ const ClassButtons = (props) => {
         footer={
           <React.Fragment>
             <div className="random-student-button">
-              <IconButton onClick={handleShuffle}>
+              <IconButton onClick={handleSelectRandomStudent}>
                 Get another random student <ShuffleIcon />
               </IconButton>
             </div>
-            {/* <button onClick={handleShuffle}></button> */}
+            {/* <button onClick={handleSelectRandomStudent}></button> */}
           </React.Fragment>
         }
       >
@@ -187,7 +161,7 @@ const ClassButtons = (props) => {
 
             <Delete />
           </IconButton> */}
-          <IconButton onClick={handleShuffle}>
+          <IconButton onClick={handleSelectRandomStudent}>
             <span className="icon-button-text">Random Student</span>
             <ShuffleIcon />
           </IconButton>

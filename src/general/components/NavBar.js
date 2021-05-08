@@ -25,8 +25,6 @@ const NavBar = props => {
 
           <NavLinks showAddNewClassHandler={props.showAddNewClassHandler}
                     handleState={props.handleState}
-                    activeClass={props.activeClass}
-                    classList={props.classList}
                     >
           {props.children}
           </NavLinks>

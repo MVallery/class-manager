@@ -3,7 +3,6 @@ import { cap, colorPallet } from "../../app-files/general";
 import FormHelperText from '@material-ui/core/FormHelperText';
 import TextField from "@material-ui/core/TextField";
 import { v4 as uuid } from 'uuid';
-import {AuthContext} from '../../users/auth-context';
 import {useHttpClient} from '../../general/http-hook';
 // import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
@@ -21,15 +20,9 @@ import { connect } from 'react-redux';
 // }));
 
 const NewClass = (props) => {
-const auth = useContext(AuthContext);
-console.log(auth)
   const {isLoading, error, sendRequest, clearError } = useHttpClient();
-  // let location=useLocation()
-  // const classes = useStyles();
 
-  // console.log(props.names);
   const handleNewClass = (props) => {
-    props.handleNewClass(props.inputNames, props.inputClassName, props.classList)
     console.log(props)
     props.cancelAddNewClassHandler();
   
@@ -37,7 +30,6 @@ console.log(auth)
     console.log("classList:", props.classList);
     const nameArray =  props.inputNames.replace(/,\s+/g, ',').replace(/\s+[^a-zA-Z]/,'').split(',')
     console.log("nameArray", nameArray);
-    // let nameOnlyResult = [];
     let result = [];
     for (let x = 0; x < nameArray.length; x++) {
       if (nameArray[x].length === 0) {
@@ -82,7 +74,7 @@ console.log(auth)
   
     tempClassList.push(tempClass);
     try {
-     sendRequest('http://localhost:5000/api/users/'+auth.userId+'/create-class', "POST", 
+     sendRequest('http://localhost:5000/api/users/'+props.userId+'/create-class', "POST", 
       JSON.stringify({
         title: tempClass.title,
         students: tempClass.students,
@@ -98,12 +90,7 @@ console.log(auth)
       console.log(err)
     }
   props.handleUpdate(tempClass, tempClassList)
-  // props.handleState({
-    // activeClass: tempClass,
-    // classList: tempClassList,
-  //   inputClassName: "",
-  //   inputNames: "",
-  // });
+
   }
   let inputClassNamesError = /[^a-zA-Z0-9 ]/.test(props.inputClassName)? true:false
   let inputNamesError = /[^a-zA-Z, ]/.test(props.inputNames)? true:false
@@ -166,10 +153,6 @@ console.log(auth)
         )
         
       }
-        
-        
-        
-
       </div>
     </React.Fragment>
   );
@@ -177,7 +160,8 @@ console.log(auth)
 const mapStateToProps = (state) => {
   return {
     activeClass: state.activeClass,
-    classList: state.classList
+    classList: state.classList,
+    userId:state.userId
   }
 }
 const mapDispatchToProps = (dispatch) => {

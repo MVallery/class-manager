@@ -9,7 +9,7 @@ const ClassButtonList = (props) => {
     for (let i in props.classList) {
       if (JSON.stringify(props.classList[i]) !== JSON.stringify(props.activeClass)) {
         classList.push(
-          <ClassButton handleCloseMainMenu={props.handleCloseMainMenu} handleState={props.handleState} activeClass={props.activeClass} classList={props.classList[i]} />
+          <ClassButton handleCloseMainMenu={props.handleCloseMainMenu} loopClass={props.classList[i]} />
         )
       }
   

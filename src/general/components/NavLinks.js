@@ -1,14 +1,11 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import {Link} from 'react-router-dom'
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import ClassButtonList from "../../classes/components/ClassButtonList";
-import {AuthContext} from '../../users/auth-context'
-
+import {connect} from 'react-redux';
 import './NavLinks.css'
 const NavLinks = props => {
-  const auth = useContext(AuthContext);
-
   const [mainDropdownDisplay, setMainDropdownDisplay] = React.useState(null);
   const handleMainMenuClick = (e) => {
     setMainDropdownDisplay(e.currentTarget);
@@ -20,14 +17,11 @@ const NavLinks = props => {
     <React.Fragment>
       <div className='navlinks-main-container'>
 
-        {/* <Link className='navlinks-container-links' to='/'>
-          <Logo style='navbar'/>
-        </Link> */}
-          {/* <div style={{visibility: 'hidden', flex:1}}></div> */}
+
           <div className="navbar-point-board">
             <h5>Total Class Points:</h5>
           <div className="classes-count">{props.activeClass?props.activeClass.count:null}</div>
-</div>
+          </div>
             {props.children}
             <div className="navbar-button-board">
           <div className='navlinks-container'>
@@ -47,23 +41,21 @@ const NavLinks = props => {
             
             <ClassButtonList
                         handleState={props.handleState}
-                        activeClass={props.activeClass}
-                        classList={props.classList}
                         handleCloseMainMenu={handleCloseMainMenu}
             />
             <MenuItem onClick={()=> {props.showAddNewClassHandler(); handleCloseMainMenu();}}>Add New Class</MenuItem>
 
 
           </Menu>
-          {auth.isLoggedIn && (
+          {props.isLoggedIn && (
           <button className='logout-signup-button'>
-              <Link className='link-style logout-signup-button' to='/authenticate'>
+              <Link className='link-style' to='/authenticate'>
                 Sign out
               </Link>
 
           </button>
             )}
-          {!auth.isLoggedIn && (
+          {!props.isLoggedIn && (
               <button className='logout-signup-button'>
                 <Link className='link-style' to='/authenticate'>
                   Sign in
@@ -79,5 +71,12 @@ const NavLinks = props => {
     </React.Fragment>
   )
 }
-
-export default NavLinks
+const mapStateToProps = (state) => {
+  return {
+    activeClass: state.activeClass,
+    classList: state.classList,
+    userId:state.userId,
+    isLoggedIn:state.isLoggedIn
+  }
+}
+export default connect(mapStateToProps)(NavLinks);

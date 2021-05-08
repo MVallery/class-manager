@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {useLocation} from 'react-router-dom';
 import Input from "./FormElements/Input";
 import Button from "./FormElements/Button";
@@ -12,11 +12,9 @@ import {
 import { useForm } from "./form-hook";
 import {useHttpClient} from '../general/http-hook'
 import "./Authenticate.css";
-import { AuthContext } from "./auth-context";
-import { PinDropSharp } from "@material-ui/icons";
+import {connect} from 'react-redux';
 
 const Authenticate = props => {
-  const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const {isLoading, error, sendRequest, clearError} = useHttpClient();  
   const [formState, inputHandler, setFormData] = useForm(
@@ -32,6 +30,7 @@ const Authenticate = props => {
     },
     false
   );
+  
   const switchModeHandler = () => {
     if (!isLoginMode) {
       setFormData(
@@ -66,8 +65,21 @@ const Authenticate = props => {
             
           }
         )
-        auth.login(responseData.userId, responseData.token);
-        props.handleState({classList:responseData.classList, activeClass:responseData.classList[0]})
+        console.log(responseData)
+        const tokenExpirationDate = new Date(new Date().getTime() + 1000 * 60 * 60);
+
+        localStorage.setItem(
+          "userData",
+          JSON.stringify({
+            userId: responseData.userId,
+            token: responseData.token,
+            expiration: tokenExpirationDate.toISOString(),
+          })
+        );
+        console.log(props)
+        props.login(responseData.userId, responseData.token);
+        props.handleUpdate(responseData.classList[0], responseData.classList)
+
       } catch (err) {
       }
 
@@ -91,11 +103,14 @@ const Authenticate = props => {
 
 
         );
+        console.log(responseData)
 
-        auth.login(responseData.userId, responseData.token);
+        props.login(responseData.userId, responseData.token);
       } catch (err) {
       }
     }
+    props.history.push("/classes");
+
   };
   let location = useLocation()
   useEffect(() => {
@@ -106,9 +121,7 @@ const Authenticate = props => {
       switchModeHandler()
     }
 }, [location])
-  // if (location.pathname==='/signup') {
-  //   switchModeHandler()
-  // }
+
   return (
     <React.Fragment>
       <div className="authenticate-container">
@@ -116,9 +129,7 @@ const Authenticate = props => {
     <Card className="authentication">
       {isLoading && <LoadingSpinner asOverlay />}
       {!isLoginMode ? <h2>Sign up</h2> :<h2>Login Required</h2>}
-      
-      {/* <h2>Login Required</h2> */}
-      <hr />
+            <hr />
 
       <form onSubmit={authSubmitHandler}>
         {/* {!isLoginMode && (
@@ -141,7 +152,6 @@ const Authenticate = props => {
           errorText="Please enter a valid email."
           onInput={inputHandler}
         />
-        {/* {!isLoginMode && <ImageUpload center id="image" onInput = {inputHandler} errorText="Please provide an image"/>} */}
         <Input
           id="password"
           element="input"
@@ -164,7 +174,20 @@ const Authenticate = props => {
     </React.Fragment>
   );
 };
+const mapStateToProps = (state) => {
+  return {
+    activeClass: state.activeClass,
+    classList: state.classList,
+    userId:state.userId,
+    token:state.token,
+    isLoggedIn:state.isLoggedIn
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return{
+    handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp, tempClassList })},
+    login: (userId, token) => {dispatch({type:'LOGIN', userId, token })},
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Authenticate);
 
-export default Authenticate;
-
-//include a useForm that renders email and password field, validation- util password at least 5 characters,
