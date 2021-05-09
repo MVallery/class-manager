@@ -74,7 +74,7 @@ const NewClass = (props) => {
   
     tempClassList.push(tempClass);
     try {
-     sendRequest('http://localhost:5000/api/users/'+props.userId+'/create-class', "POST", 
+     sendRequest('/api/users/'+props.userId+'/create-class', "POST", 
       JSON.stringify({
         title: tempClass.title,
         students: tempClass.students,
