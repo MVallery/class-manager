@@ -48,7 +48,7 @@ const Classes = (props) => {
     console.log(activeClass)
     console.log('inside handledatabaseupdate', activeClass.id)
       try {
-        await sendRequest(`/api/users/${props.userId}/${activeClass.id}`, "PATCH", 
+        await sendRequest(`https://classmanagerbackend.herokuapp.com/api/users/${props.userId}/${activeClass.id}`, "PATCH", 
          JSON.stringify({
            title: tempActiveClass.title,
            students: tempActiveClass.students,

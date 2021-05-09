@@ -52,7 +52,7 @@ const Authenticate = props => {
     if (isLoginMode) {
       try {
         const responseData = await sendRequest(
-          `/api/users/login`, 
+          `https://classmanagerbackend.herokuapp.com/api/users/login`, 
           "POST",
           JSON.stringify({
             email: formState.inputs.email.value,
@@ -88,7 +88,7 @@ const Authenticate = props => {
         console.log('formstate',formState)
 
         const responseData = await sendRequest(
-          `/api/users/signup`, 
+          `https://classmanagerbackend.herokuapp.com/api/users/signup`, 
           'POST', 
           JSON.stringify({
             email: formState.inputs.email.value,
