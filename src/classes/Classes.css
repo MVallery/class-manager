@@ -22,11 +22,7 @@
 .droppable-container{
   display: flex;
   margin: 0px 50px 50px 50px;
-  opacity:1;
-  /* opacity: 1; */
-  /* transition: opacity 200ms; */
 }
-
 
 .row-container {
   display:flex;
