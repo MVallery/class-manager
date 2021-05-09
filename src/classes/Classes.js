@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { connect } from 'react-redux';
 import NavBar from "../general/components/NavBar";
 
+import {CSSTransition} from 'react-transition-group';
 import StudentCard from "./components/StudentCard";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import {
@@ -323,6 +324,13 @@ const Classes = (props) => {
       </NavBar>
 
       <div className="classes-container">
+      <CSSTransition
+        in={true}
+        mountOnEnter
+        unmountOnExit
+        timeout={500}
+        classNames="transition-classes"
+      >
         <DragDropContext onDragEnd={handleOnDragEnd}>
           <Droppable droppableId="students">
             {(provided) => (
@@ -333,7 +341,7 @@ const Classes = (props) => {
             )}
           </Droppable>
         </DragDropContext>
-
+            </CSSTransition>
             <GeneralClassButtons
               handleDatabaseUpdate={handleDatabaseUpdate}
             />

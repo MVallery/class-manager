@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
+import { CSSTransition } from "react-transition-group";
 
 import Classes from "./classes/Classes";
 import NewClass from "./classes/components/NewClass";
@@ -132,7 +133,21 @@ class MyStudents extends React.Component {
             <Route
             path="/classes"
             exact
-            render={(props) => <Classes {...this} {...this.state} />}
+            render={(props) => {
+              return(
+                        <CSSTransition
+        in={true}
+        mountOnEnter
+        unmountOnExit
+        timeout={500}
+        classNames="transition-classes"
+      >
+            <Classes {...this} {...this.state} />
+
+                </CSSTransition>
+              )
+          
+            }}
           />
         :
         <Route

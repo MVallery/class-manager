@@ -30,3 +30,18 @@
   color: #0f0 !important;
   outline: solid #f00 1px !important;
 } */
+
+.transition-classes-enter {
+  opacity: 0;
+}
+.transition-classes-active {
+  opacity: 1;
+  transition: opacity 200ms;
+}
+.transition-classes-exit {
+  opacity: 1;
+}
+.transition-classes-exit-active {
+  opacity: 0;
+  transition: opacity 200ms;
+}

@@ -151,7 +151,6 @@ const ClassButtons = (props) => {
         </div>
       </Modal>
       <div className="gcb-container">
-        <div className="multi-select">
           <IconButton onClick={handleResetMulti}>
             <span className="icon-button-text">Reset Points</span>
             <Sync />
@@ -173,6 +172,7 @@ const ClassButtons = (props) => {
             <span className="icon-button-text">Select All</span>
             <LibraryAddCheckIcon />
           </IconButton>
+          <div style={{display:'flex'}}>
           <IconButton
             onClick={() => {
               handleAddMulti();
@@ -193,7 +193,7 @@ const ClassButtons = (props) => {
           >
             <ThumbDown />
           </IconButton>
-        </div>
+          </div>
       </div>
     </React.Fragment>
   );

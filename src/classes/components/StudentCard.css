@@ -157,6 +157,10 @@
   .student-head-button-container{
     width:120%
   }
+
+  .desk{
+    font-size:1rem;
+  }
   .name-large{
     font-size: 17px;
   }

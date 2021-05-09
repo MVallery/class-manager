@@ -21,7 +21,6 @@ const rootReducer = (state = initState, action) => {
         classList: action.tempClassList,
       }
     case 'LOGIN':
-      console.log('is this workingwhwwwwatt')
       return {
         ...state,
         token:action.token,
