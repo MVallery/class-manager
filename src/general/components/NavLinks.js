@@ -40,7 +40,6 @@ const NavLinks = props => {
           >
             
             <ClassButtonList
-                        handleState={props.handleState}
                         handleCloseMainMenu={handleCloseMainMenu}
             />
             <MenuItem onClick={()=> {props.showAddNewClassHandler(); handleCloseMainMenu();}}>Add New Class</MenuItem>

@@ -22,13 +22,11 @@ class MyStudents extends React.Component {
     this.state = {
       inputNames: "",
       inputClassName: "",
-      hideClass: false,
       showAddNewClassModal: false,
     };
   }
 
   componentDidUpdate(prevProps) {
-    // Typical usage (don't forget to compare props):
     const storedData = JSON.parse(localStorage.getItem("userData"));
     if (prevProps.isLoggedIn !== this.props.isLoggedIn) {
       if (!this.props.isLoggedIn) {
@@ -46,7 +44,7 @@ class MyStudents extends React.Component {
       }
     }
   }
-  handleState = (data, callback) => {
+  handleState = (data) => {
     this.setState(data);
   };
 
@@ -55,11 +53,6 @@ class MyStudents extends React.Component {
   };
   cancelAddNewClassHandler = () => {
     this.setState({ showAddNewClassModal: false });
-  };
-
-
-  handleHideClass = (e) => {
-    this.setState({ hideClass: true });
   };
 
   handleChange = (e) => {
@@ -135,16 +128,16 @@ class MyStudents extends React.Component {
             exact
             render={(props) => {
               return(
-                        <CSSTransition
-        in={true}
-        mountOnEnter
-        unmountOnExit
-        timeout={500}
-        classNames="transition-classes"
-      >
-            <Classes {...this} {...this.state} />
+            <CSSTransition
+              in={true}
+              mountOnEnter
+              unmountOnExit
+              timeout={500}
+              classNames="transition-classes"
+            >
+              <Classes {...this} {...this.state} />
 
-                </CSSTransition>
+            </CSSTransition>
               )
           
             }}

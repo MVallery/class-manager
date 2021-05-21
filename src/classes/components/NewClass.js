@@ -9,33 +9,21 @@ import { Link } from "react-router-dom";
 import "./NewClass.css";
 import { connect } from 'react-redux';
 
-// const useStyles = makeStyles((theme) => ({
-//   formControl: {
-//     margin: theme.spacing(1),
-//     minWidth: 100,
-//   },
-//   selectEmpty: {
-//     marginTop: theme.spacing(2),
-//   },
-// }));
-
+// Component that is used to create a new class both on the Home page, and in the add student modal in ClassTitleMenu
 const NewClass = (props) => {
   const {isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const handleNewClass = (props) => {
     console.log(props)
     props.cancelAddNewClassHandler();
-  
-    console.log("inputNames:", props.inputNames);
-    console.log("classList:", props.classList);
+    //replaces whitespace and splits into array of name elements.
     const nameArray =  props.inputNames.replace(/,\s+/g, ',').replace(/\s+[^a-zA-Z]/,'').split(',')
-    console.log("nameArray", nameArray);
     let result = [];
     for (let x = 0; x < nameArray.length; x++) {
-      if (nameArray[x].length === 0) {
+      if (nameArray[x].length === 0) { //ensure empty string doesn't make it through.
         continue;
       }
-      let [first, last] = nameArray[x].split(" ");
+      let [first, last] = nameArray[x].split(" "); 
   
       const id = cap(nameArray[x]) + Math.floor(Math.random() * 20);
       let initial = last ? " " + cap(last[0]) : "";
@@ -61,7 +49,7 @@ const NewClass = (props) => {
       classSnapShot: [],
       id: uuid()
     };
-    if (nameArray.length % 4 !== 0) {
+    if (nameArray.length % 4 !== 0) { //add blank students to ensure that all groups are full with default setting of 4 per group.
       for (let i = 0; i < 4 - (nameArray.length % 4); i++) {
         tempClass.students.push({
           name: "blank",

@@ -13,7 +13,7 @@ const Home = (props) => {
       <div className="home-main-container">
         <div className="home-container">
           <div className="home-container-gradient">
-          <Logo style='main-logo'/>
+          <Logo className='main-logo'/>
           <h3>
             Create new seating charts and track student behavior data with ease.
           </h3>

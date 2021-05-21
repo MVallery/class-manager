@@ -1,15 +1,11 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from 'react-redux';
 import NavBar from "../general/components/NavBar";
 
 import {CSSTransition} from 'react-transition-group';
 import StudentCard from "./components/StudentCard";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import {
-  cap,
-  checkActiveClass,
-
-} from "../app-files/general";
+import { checkActiveClass } from "../app-files/general";
 
 import {useHttpClient} from '../general/http-hook';
 import Modal from "../general/components/Modal";
@@ -18,15 +14,14 @@ import GeneralClassButtons from "./components/GeneralClassButtons";
 import NewClass from './components/NewClass'
 import "./Classes.css";
 
+// Connects all components in subfolder together and acts as the main display page.
+
 const Classes = (props) => {
   const { activeClass, classList } = props;
-  console.log("classList inside Classes:", props.classList);
-
   const {isLoading, error, sendRequest, clearError } = useHttpClient();
   const [newNameListState, setNewNameListState] = useState([]);
 
   const [showAddNewClassModal, setAddNewClassModal] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const cancelAddNewClassHandler = () => {
     setAddNewClassModal(false);
   };
@@ -36,7 +31,6 @@ const Classes = (props) => {
     smallButtons: null,
     smallFont: null,
   });
-  // const [container, setContainer] = useState('row-container')
 
   const showAddNewClassHandler = () => {
     setAddNewClassModal(true);
@@ -44,6 +38,7 @@ const Classes = (props) => {
   const handleSmallStyle = (state) => {
     setSmallStyle(state)
   }
+  //a generic database function that is used for any PATCH updates involving the activeClass 
   const handleDatabaseUpdate= async(tempActiveClass)=> {
     console.log(activeClass)
     console.log('inside handledatabaseupdate', activeClass.id)
@@ -64,86 +59,42 @@ const Classes = (props) => {
          console.log(err)
        }
     }
-  // useEffect(()=>{
-  //   if (mounted === true){
-  //     const updateClass = async () => {
-  //       try {
-  //         await sendRequest('http://localhost:5000/api/users/'+auth.userId+'/'+activeClass.id, "PATCH", 
-  //          JSON.stringify({
-  //            title: activeClass.title,
-  //            students: activeClass.students,
-  //            styling: activeClass.styling,
-  //            count: activeClass.count,
-     
-  //          }), {
-  //            'Content-Type': 'application/json'
-  //          }
-  //          )
-     
-  //        } catch(err) {
-  //          console.log(err)
-  //        }
-  //        updateClass();
-  //     }
 
-  //   } else {
-  //     setMounted(true)
-  //     return 
-  //   }
-
-
-  // }, [activeClass])
   const handleOnDragEnd = (result) => {
     console.log(result);
-    if (!result.destination) {
+    if (!result.destination) { //if outside draggable container do thing.
       return;
     }
-    console.log(activeClass);
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
-    console.log(temp);
 
     let draggedItem = activeClass.students[result.source.index];
-    let swap = activeClass.students[result.destination.index];
+    let swappedItem = activeClass.students[result.destination.index];
     console.log(result.source.index, result.destination.index);
-    // console.log(draggedItem,swap)
-    if (draggedItem === swap) {
+    if (draggedItem === swappedItem) {
       return;
     }
     temp.students = activeClass.students.filter(
-      (item) => item !== draggedItem && item !== swap
+      item => item !== draggedItem && item !== swappedItem
     );
-    if (
-      result.destination.index > temp.length - 1 ||
-      result.destination.index
-    ) {
-      if (result.source.index > result.destination.index) {
+    //ensuring that the splice does not change the index of the swapped/dragged item.
+      if (result.source.index > result.destination.index) { 
         temp.students.splice(result.destination.index, 0, draggedItem);
-        temp.students.splice(result.source.index, 0, swap);
+        temp.students.splice(result.source.index, 0, swappedItem);
       } else {
-        temp.students.splice(result.source.index, 0, swap);
+        temp.students.splice(result.source.index, 0, swappedItem);
         temp.students.splice(result.destination.index, 0, draggedItem);
       }
-    } else {
-      if (result.source.index > result.destination.index) {
-        temp.students.splice(result.destination.index, 0, draggedItem);
-        temp.students.splice(result.source.index, 0, swap);
-      } else {
-        temp.students.splice(result.source.index, 0, swap);
-        temp.students.splice(result.destination.index, 0, draggedItem);
-      }
-    }
 
     let newTempList = checkActiveClass(tempClassList, temp);
     handleDatabaseUpdate(temp);
     props.handleUpdate(temp, newTempList)
 
   };
-  const handleOnDragStart = (result) => {};
 
   const studentCards = activeClass?props.activeClass.students.map((record, index) => {
     function getStyle(style, snapshot) {
-      //ensures that icons do not shift when moving other ones since we are swapping versus reordering all students.
+      //ensures that icons do not shift up when moving other ones since we are swapping versus reordering all students.
       if (!snapshot.isDragging) {
         if (record.name === "blank") {
           return { display: "flex" };
@@ -163,7 +114,6 @@ const Classes = (props) => {
       };
     }
 
-    // console.log('record:',record)
     return (
       <StudentCard
         smallStyle={smallStyle}
@@ -221,6 +171,7 @@ const Classes = (props) => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
     let tempClassList = JSON.parse(JSON.stringify(props.classList));
 
+    //splitting studentCards into separate groups based on amount in each group to make formatting easier later.
     for (let i = 0; i < studentCards.length; i += activeClass.styling.groups) {
       let [newArray, newArray2] = [[], []];
       if (activeClass.styling.groups === 4) {
@@ -240,8 +191,6 @@ const Classes = (props) => {
       formattedNameList.push(combinedArray);
     }
 
-    console.log("studentCards:", studentCards);
-    console.log("formattedNameList:", formattedNameList);
     let newNameList = formattedNameList.map((array, index) => {
       return (
         <div className="droppable-container">
@@ -284,7 +233,6 @@ const Classes = (props) => {
     });
     newNameList = (
       <DragDropContext
-        onDragStart={handleOnDragStart}
         onDragEnd={handleOnDragEnd}
       >
         <div className={mainGroupContainer}>
@@ -299,7 +247,6 @@ const Classes = (props) => {
   };
 
   useEffect(() => {
-    console.log("useEffect");
     handleGroupStyling();
     handleFormatting();
   }, [props.activeClass]); //props.generalSelection.groups
@@ -307,15 +254,15 @@ const Classes = (props) => {
   return (
     <React.Fragment>
         <Modal
-        show={showAddNewClassModal}
-        onCancel={cancelAddNewClassHandler}
-        header={<div>Create a new class: </div>}
-        contentClass="addNewStu-modal"
-        footerClass="worksheet-item__modal-actions"
-        // footer={}
-      >
-        <NewClass {...props} cancelAddNewClassHandler={cancelAddNewClassHandler} />
-      </Modal>
+          show={showAddNewClassModal}
+          onCancel={cancelAddNewClassHandler}
+          header={<div>Create a new class: </div>}
+          contentClass="addNewStu-modal"
+          footerClass="worksheet-item__modal-actions"
+          // footer={}
+        >
+          <NewClass {...props} cancelAddNewClassHandler={cancelAddNewClassHandler} />
+        </Modal>
       <NavBar
         handleState={props.handleState}
         showAddNewClassHandler={showAddNewClassHandler}
@@ -324,24 +271,24 @@ const Classes = (props) => {
       </NavBar>
 
       <div className="classes-container">
-      <CSSTransition
-        in={true}
-        mountOnEnter
-        unmountOnExit
-        timeout={500}
-        classNames="transition-classes"
-      >
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-          <Droppable droppableId="students">
-            {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
-                {newNameListState}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-            </CSSTransition>
+        <CSSTransition
+          in={true}
+          mountOnEnter
+          unmountOnExit
+          timeout={500}
+          classNames="transition-classes"
+        >
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            <Droppable droppableId="students">
+              {(provided) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {newNameListState}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </CSSTransition>
             <GeneralClassButtons
               handleDatabaseUpdate={handleDatabaseUpdate}
             />

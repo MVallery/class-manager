@@ -23,31 +23,35 @@ import {
 import Modal from "../../general/components/Modal";
 
 import "./ClassTitleMenu.css";
+
+// Rendered by Classes component, used to display general class buttons including:
+// adding/removing students, changing class formatting and styling, and shuffling the class.
+
 const ClassTitleMenu = (props) => {
   const { activeClass, classList } = props;
   const [showAddStudentModal, setAddStudentModal] = useState(false);
-  const [formatModal, setFormatModal] = useState(false);
+  const [showFormatModal, setShowFormatModal] = useState(false);
+  const [classMenuDisplay, setClassMenuDisplay] = React.useState(null);
 
-  const handleCloseMenu = () => {
-    setDropdownDisplay(null);
+  const handleCloseClassMenuDislay = () => {
+    setClassMenuDisplay(null);
   };
-  const showAddStudentHandler = () => {
+  const showAddStudentModalHandler = () => {
     setAddStudentModal(true);
-    handleCloseMenu();
+    handleCloseClassMenuDislay();
   };
-  const cancelAddStudentHandler = () => {
+  const cancelAddStudentModalHandler = () => {
     setAddStudentModal(false);
   };
 
-
   const showFormatModalHandler = () => {
-    setFormatModal(true);
-    handleCloseMenu();
+    setShowFormatModal(true);
+    handleCloseClassMenuDislay();
   };
-  const submitFormatModalHandler = () => setFormatModal(false);
+  const submitshowFormatModalHandler = () => setShowFormatModal(false);
 
   const handleShuffleClass = () => {
-    handleCloseMenu();
+    handleCloseClassMenuDislay();
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
     let shuffledTemp = shuffleArray(temp.students);
@@ -58,16 +62,15 @@ const ClassTitleMenu = (props) => {
 
   };
 
-  const [dropdownDisplay, setDropdownDisplay] = React.useState(null);
 
-  const handleClick = (e) => {
-    setDropdownDisplay(e.currentTarget);
+  const handleClassMenuDisplay = (e) => {
+    setClassMenuDisplay(e.currentTarget);
   };
+
   const handleDeleteMulti = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
     let tempClassList = JSON.parse(JSON.stringify(props.classList));
-    console.log(temp)
-    console.log(tempClassList)
+
     if (window.confirm("Are you sure you want to delete these students?")) {
       for (let x = temp.students.length - 1; x >= 0; x--) {
         if (temp.students[x].name === "blank") {
@@ -84,19 +87,21 @@ const ClassTitleMenu = (props) => {
 
     }
   };
-  const handleChange = (e) => {
+
+  
+  const handleClassChange = (e) => { //handles any general class changes based on e.target name. 
     const { name, value } = e.target;
 
     let temp = JSON.parse(JSON.stringify(activeClass));
     console.log(temp);
     let tempClassList = JSON.parse(JSON.stringify(classList));
     if (name === "groups") {
-      let filteredTemp = temp.students.filter(
+      let filteredTemp = temp.students.filter( //filter out old blank desks so that the change to the group amount does not cause any left over desks.
         (student) => student.name !== "blank"
       );
       temp.students = filteredTemp;
       console.log(temp);
-      let blankDesks = value - (temp.students.length % value); //value - remainder= number of empty desks needed to fill the group
+      let blankDesks = value - (temp.students.length % value); //value - remainder = number of empty desks needed to fill the group
       temp.styling.groups = Number(value);
       if (temp.students.length % value > 0) {
         for (let i = 0; i < blankDesks; i++) {
@@ -137,7 +142,7 @@ const ClassTitleMenu = (props) => {
     props.handleUpdate(temp, newTempList)
 
   };
-  const handleNewStu = () => {
+  const handleAddStudents = () => {
     const newNameArray = props.inputNames.replace(/ /g, "").split(",");
     let temp = JSON.parse(JSON.stringify(props.activeClass));
     let tempClassList = JSON.parse(JSON.stringify(props.classList));
@@ -152,7 +157,8 @@ const ClassTitleMenu = (props) => {
         isChecked: false,
         displayColorPicker: false,
       };
-      if (temp.students.some((el) => el.name === "blank")) {
+      //removes blank students from the list so that the new students can be added and blank students can be recalculated below.
+      if (temp.students.some((el) => el.name === "blank")) { 
         for (let x in temp.students) {
           if (temp.students[x].name === "blank") {
             temp.students.splice(x, 1, record);
@@ -166,7 +172,7 @@ const ClassTitleMenu = (props) => {
 
     let remainder = temp.students.length % temp.styling.groups;
     if (remainder !== 0) {
-      for (let i = 0; i < temp.styling.groups - remainder; i++) {
+      for (let i = 0; i < temp.styling.groups - remainder; i++) { //add blank students based on the students needed to fill in empty seats.
         temp.students.push({
           name: "blank",
           background: colorPallet(activeClass.styling.theme),
@@ -192,20 +198,25 @@ const ClassTitleMenu = (props) => {
             <div className="classes-chalkboard-title-menu">
             
               <h1>{activeClass?activeClass.title:null}</h1>
-              <IconButton style={{ color: "white", backgroundImage: 'linear-gradient(-20deg, transparent, #6d6b6b)', border: '3px ridge white'}} onClick={handleClick}>
+              <IconButton style={{ 
+                            color: "white", 
+                            backgroundImage: 'linear-gradient(-20deg, transparent, #6d6b6b)', 
+                            border: '3px ridge white'
+                          }} 
+                            onClick={handleClassMenuDisplay}>
                 <MenuIcon />
               </IconButton>
             </div>
 
             <Menu
               id="simple-menu"
-              anchorEl={dropdownDisplay}
+              anchorEl={classMenuDisplay}
               keepMounted
-              open={Boolean(dropdownDisplay)}
-              onClose={handleCloseMenu}
+              open={Boolean(classMenuDisplay)}
+              onClose={handleCloseClassMenuDislay}
               getContentAnchorEl={null}
             >
-              <MenuItem onClick={showAddStudentHandler}>Add Student</MenuItem>
+              <MenuItem onClick={showAddStudentModalHandler}>Add Student</MenuItem>
               <MenuItem onClick={showFormatModalHandler}>
                 Change Layout
               </MenuItem>
@@ -216,14 +227,16 @@ const ClassTitleMenu = (props) => {
           </div>
       </div>
 
+
+      {/* Add students modal */}
       <Modal
         show={showAddStudentModal}
-        onCancel={cancelAddStudentHandler}
+        onCancel={cancelAddStudentModalHandler}
         header={<div>Add students to {activeClass?activeClass.title:null} </div>}
         footerClass="worksheet-item__modal-actions"
         footer={
           <div className="add-student-button-container">
-            <button className="add-student-button" onClick={handleNewStu}>ADD STUDENT(S)</button>
+            <button className="add-student-button" onClick={handleAddStudents}>ADD STUDENT(S)</button>
             </div>
         }
       >
@@ -248,9 +261,11 @@ const ClassTitleMenu = (props) => {
           rowsMax={3}
         />
       </Modal>
+
+      {/* Format modal */}
       <Modal
-        show={formatModal}
-        onCancel={submitFormatModalHandler}
+        show={showFormatModal}
+        onCancel={submitshowFormatModalHandler}
         header={<div>Change the layout of {activeClass?activeClass.title:null} </div>}
         footerClass="worksheet-item__modal-actions"
       >
@@ -261,7 +276,7 @@ const ClassTitleMenu = (props) => {
             aria-label="size"
             name="size"
             value={props.value}
-            onChange={handleChange}
+            onChange={handleClassChange}
           >
             <FormControlLabel value="small" control={<Radio />} label="Small" />
             <FormControlLabel
@@ -271,6 +286,8 @@ const ClassTitleMenu = (props) => {
             />
           </RadioGroup>
         </FormControl>
+
+
         <FormControl>
           <FormLabel>Layout</FormLabel>
 
@@ -278,7 +295,7 @@ const ClassTitleMenu = (props) => {
             aria-label="format"
             name="format"
             value={props.value}
-            onChange={handleChange}
+            onChange={handleClassChange}
           >
             <FormControlLabel
               value="groups"
@@ -289,6 +306,7 @@ const ClassTitleMenu = (props) => {
           </RadioGroup>
         </FormControl>
 
+
         <FormControl>
           <InputLabel>Each {activeClass.styling.format === 'rows'?'row':'group'}</InputLabel>
 
@@ -296,7 +314,7 @@ const ClassTitleMenu = (props) => {
             className="select-form"
             value={activeClass?activeClass.styling.groups:null}
             name="groups"
-            onChange={handleChange}
+            onChange={handleClassChange}
             displayEmpty
           >
             <MenuItem value={4}>4</MenuItem>
@@ -306,6 +324,8 @@ const ClassTitleMenu = (props) => {
           </Select>
           {/* <FormHelperText>Without label</FormHelperText> */}
         </FormControl>
+
+
         <FormControl>
           <InputLabel>Color Theme</InputLabel>
 
@@ -323,13 +343,9 @@ const ClassTitleMenu = (props) => {
             <MenuItem value="brightRainbow">Bright Rainbow</MenuItem>
             <MenuItem value="pastelRainbow">Pastel Rainbow</MenuItem>
             <MenuItem value="green">Shades of Green</MenuItem>
-
-
-
           </Select>
         </FormControl>
       </Modal>
-
     </React.Fragment>
   );
 };

@@ -11,11 +11,17 @@ import { connect } from 'react-redux';
 
 import { checkActiveClass, colorPallet, randWhole, shuffleArray } from "../../app-files/general";
 import "./GeneralClassButtons.css";
+// Button bar that is displayed at the bottom of the Classes page. 
+// This handles general button functionality that involves the entire class and
+// would be more commonly used and therefore needs to be more accessible.
 
 const ClassButtons = (props) => {
-  const [randomStudentModal, setRandomStudentModal] = useState(false);
+  const [showRandomStudentModal, setShowRandomStudentModal] = useState(false);
   const [randomStudent, setRandomStudent] = useState({ name: "" });
 
+  // created refs to use with handleClearPointStyle because it needs to always maintain the 
+  // most current state since the styles get applied and removed while new points may be added at the same time.
+  // without the refs the handleClearPointStyle was resetting the state back to where it was when the setTimeout on the handleClick started.
   const activeClassRef = useRef(props.activeClass);
   activeClassRef.current = props.activeClass;
   const classListRef = useRef(props.classList);
@@ -118,19 +124,18 @@ const ClassButtons = (props) => {
     );
     let randomStudent = shuffleArray(filterBlank)[0];
     setRandomStudent(randomStudent);
-    setRandomStudentModal(true);
+    setShowRandomStudentModal(true);
   };
   const cancelRandomStudentHandler = () => {
-    setRandomStudentModal(false);
+    setShowRandomStudentModal(false);
   };
   return (
     <React.Fragment>
       <Modal
-        show={randomStudentModal}
+        show={showRandomStudentModal}
         onCancel={cancelRandomStudentHandler}
         header={<div>Randomly Selected: </div>}
         footerClass="worksheet-item__modal-actions"
-        // headerClass="random-student-header"
         contentClass="random-student-content-modal"
         footer={
           <React.Fragment>
@@ -139,7 +144,6 @@ const ClassButtons = (props) => {
                 Get another random student <ShuffleIcon />
               </IconButton>
             </div>
-            {/* <button onClick={handleSelectRandomStudent}></button> */}
           </React.Fragment>
         }
       >
@@ -155,11 +159,6 @@ const ClassButtons = (props) => {
             <span className="icon-button-text">Reset Points</span>
             <Sync />
           </IconButton>
-          {/* <IconButton onClick={handleDeleteMulti}>
-            <span className="icon-button-text">Delete Student(s)</span>
-
-            <Delete />
-          </IconButton> */}
           <IconButton onClick={handleSelectRandomStudent}>
             <span className="icon-button-text">Random Student</span>
             <ShuffleIcon />

@@ -9,14 +9,15 @@ import IconButton from "@material-ui/core/IconButton";
 import ThumbDown from "@material-ui/icons/ThumbDown";
 import ThumbUp from "@material-ui/icons/ThumbUp";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { makeStyles  } from "@material-ui/core/styles";
 
-import { SketchPicker } from "react-color";
 import {TwitterPicker } from 'react-color';
 import { checkActiveClass } from "../../app-files/general";
 import "../Classes.css";
 import "./StudentCard.css"
 
+// Gets mapped onto each student in the activeClass props from Classes component. 
+// Handles all functionality involving student icons including selection, 
+// adding/removing points, color picker, dynamic styling based on points, and icon draggability.
 
 const StudentCard = (props) => {
   const { record, index, getStyle, smallStyle, classList, activeClass } = props;
@@ -51,12 +52,16 @@ const StudentCard = (props) => {
     props.handleUpdate(temp, newTempList)
 
   };
+
+  // created refs to use with handleClearPointStyle because it needs to always maintain the 
+  // most current state since the styles get applied and removed while new points may be added at the same time.
+  // without the refs the handleClearPointStyle was resetting the state back to where it was when the setTimeout on the handleClick started.
   const activeClassRef = useRef(activeClass);
   activeClassRef.current = activeClass;
   const classListRef = useRef(classList);
   classListRef.current = classList;
 
-  const handleClearPointStyle = (index) => {
+  const handleClearPointStyle = (index) => { //removes the point style after a setTimeout is triggered so that when a point is added a glow appears for a short time.
     let temp = JSON.parse(JSON.stringify(activeClassRef.current));
     let tempClassList = JSON.parse(JSON.stringify(classListRef.current));
     temp.students[index].pointStyle = null;
@@ -77,7 +82,7 @@ const StudentCard = (props) => {
     props.handleUpdate(temp, newTempList)
 
   };
-  const handleColorClick = (index) => {
+  const handleOpenColorPicker = (index) => {
     let tempClassList = JSON.parse(JSON.stringify(classList));
 
     let temp = JSON.parse(JSON.stringify(activeClass));
@@ -87,9 +92,8 @@ const StudentCard = (props) => {
     props.handleUpdate(temp, newTempList)
 
   };
-  const handleClose = (index) => {
+  const handleCloseColorPicker = (index) => {
     let tempClassList = JSON.parse(JSON.stringify(classList));
-
     let temp = JSON.parse(JSON.stringify(activeClass));
 
     temp.students[index].displayColorPicker = false;
@@ -145,8 +149,8 @@ const StudentCard = (props) => {
         }
       : null;
 
+        //return an empty desk to allow swapping of students in seating arrangement
       if (record.name === "blank") {
-        //if student record is blank - return an empty desk to allow swapping of students in seating arrangement
         return (
           <Draggable
             key={"blank" + index}
@@ -241,7 +245,7 @@ const StudentCard = (props) => {
                   <div className={`desk-button ${smallStyle.smallButtons}`}>
                     <IconButton
                       onClick={() => {
-                        handleColorClick(index);
+                        handleOpenColorPicker(index);
                       }}
                     >
                       <ColorLens />
@@ -252,7 +256,7 @@ const StudentCard = (props) => {
                       <div
                         style={cover}
                         onClick={() => {
-                          handleClose(index);
+                          handleCloseColorPicker(index);
                         }}
                       />
                       <TwitterPicker
