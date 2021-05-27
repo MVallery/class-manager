@@ -48,7 +48,7 @@ const ClassTitleMenu = (props) => {
     setShowFormatModal(true);
     handleCloseClassMenuDislay();
   };
-  const submitshowFormatModalHandler = () => setShowFormatModal(false);
+  const submitShowFormatModalHandler = () => setShowFormatModal(false);
 
   const handleShuffleClass = () => {
     handleCloseClassMenuDislay();
@@ -112,12 +112,14 @@ const ClassTitleMenu = (props) => {
           });
         }
       }
-    }
+    } 
     if (name === "format") {
       temp.styling.format = value;
     }
 
     if (name === "size") {
+      temp.styling.size = value
+
       if (value === "regular") {
         console.log(props)
         props.handleSmallStyle({
@@ -266,7 +268,7 @@ const ClassTitleMenu = (props) => {
       {/* Format modal */}
       <Modal
         show={showFormatModal}
-        onCancel={submitshowFormatModalHandler}
+        onCancel={submitShowFormatModalHandler}
         header={<div>Change the layout of {activeClass?activeClass.title:null} </div>}
         footerClass="worksheet-item__modal-actions"
       >
@@ -276,7 +278,7 @@ const ClassTitleMenu = (props) => {
           <RadioGroup
             aria-label="size"
             name="size"
-            value={props.activeClass.styling.size}
+            value={activeClass.styling.size}
             onChange={handleClassChange}
           >
             <FormControlLabel value="small" control={<Radio />} label="Small" />
@@ -295,7 +297,7 @@ const ClassTitleMenu = (props) => {
           <RadioGroup
             aria-label="format"
             name="format"
-            value={props.activeClass.styling.format}
+            value={activeClass.styling.format}
             onChange={handleClassChange}
           >
             <FormControlLabel
