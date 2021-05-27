@@ -26,10 +26,9 @@ const Classes = (props) => {
     setAddNewClassModal(false);
   };
   const [smallStyle, setSmallStyle] = useState({
-    smallGroup: null,
-    smallIcon: null,
-    smallButtons: null,
-    smallFont: null,
+    smallIcon: "small-icon",
+    smallButtons: "small-buttons",
+    smallFont: "small-font",
   });
 
   const showAddNewClassHandler = () => {

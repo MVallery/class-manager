@@ -31,7 +31,7 @@ const ClassTitleMenu = (props) => {
   const { activeClass, classList } = props;
   const [showAddStudentModal, setAddStudentModal] = useState(false);
   const [showFormatModal, setShowFormatModal] = useState(false);
-  const [classMenuDisplay, setClassMenuDisplay] = React.useState(null);
+  const [classMenuDisplay, setClassMenuDisplay] = useState(null);
 
   const handleCloseClassMenuDislay = () => {
     setClassMenuDisplay(null);
@@ -215,6 +215,7 @@ const ClassTitleMenu = (props) => {
               open={Boolean(classMenuDisplay)}
               onClose={handleCloseClassMenuDislay}
               getContentAnchorEl={null}
+              disableScrollLock={true}
             >
               <MenuItem onClick={showAddStudentModalHandler}>Add Student</MenuItem>
               <MenuItem onClick={showFormatModalHandler}>
@@ -275,7 +276,7 @@ const ClassTitleMenu = (props) => {
           <RadioGroup
             aria-label="size"
             name="size"
-            value={props.value}
+            value={props.activeClass.styling.size}
             onChange={handleClassChange}
           >
             <FormControlLabel value="small" control={<Radio />} label="Small" />
@@ -294,7 +295,7 @@ const ClassTitleMenu = (props) => {
           <RadioGroup
             aria-label="format"
             name="format"
-            value={props.value}
+            value={props.activeClass.styling.format}
             onChange={handleClassChange}
           >
             <FormControlLabel

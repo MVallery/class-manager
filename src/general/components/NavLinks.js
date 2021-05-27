@@ -37,6 +37,7 @@ const NavLinks = props => {
             open={Boolean(mainDropdownDisplay)}
             onClose={handleCloseMainMenu}
             getContentAnchorEl={null}
+            disableScrollLock={true}
           >
             
             <ClassButtonList

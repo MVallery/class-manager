@@ -45,7 +45,7 @@ const NewClass = (props) => {
       title: props.inputClassName,
       students: result,
       count: 0,
-      styling: { groups: 4, format: "groups", theme: "lightBlueGreen" },
+      styling: { groups: 4, format: "groups", theme: "lightBlueGreen", size:'small'},
       classSnapShot: [],
       id: uuid()
     };
@@ -78,7 +78,7 @@ const NewClass = (props) => {
       console.log(err)
     }
   props.handleUpdate(tempClass, tempClassList)
-
+  props.handleState({inputNames:'', inputClassName:''})
   }
   let inputClassNamesError = /[^a-zA-Z0-9 ]/.test(props.inputClassName)? true:false
   let inputNamesError = /[^a-zA-Z, ]/.test(props.inputNames)? true:false

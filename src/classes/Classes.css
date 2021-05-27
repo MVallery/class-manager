@@ -275,7 +275,5 @@
 }
 
 @media(max-width:500px){
-  .classes-container{
-    width:fit-content;
-  }
+
 }

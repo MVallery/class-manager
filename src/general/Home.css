@@ -11,7 +11,9 @@
   background: #68114e;
   background: url("../app-files/images/desks2.jpg");
   /* background-image: linear-gradient(transparent, #662a61); */
-  background-size:100% auto;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position:50%;
   width:100vw;
   height:100vh;
   /* background-image:linear-gradient(45deg,rgb(46, 80, 60), black, #905590); */
@@ -107,5 +109,12 @@
   100% {
      opacity:1;
      transform: translate(0);
+  }
+}
+
+@media(max-width:600px){
+  .home-container{
+    background-size: cover;
+    background-repeat: no-repeat;
   }
 }

@@ -1,5 +1,7 @@
 .logo-container {
   display:flex;
+  width: 140px;
+  height: 140px;
   align-items:flex-end;
   border-radius: 50%;
   background:white;
@@ -9,7 +11,7 @@
   box-shadow: 2px 3px 7px 3px rgb(5, 51, 33); 
   padding-right:18px;
   padding-left:18px;
-  padding-bottom:20px;
+  padding-bottom:30px;
   margin-right:15px;
   /* width:120px;
   height: 120px; */
@@ -96,3 +98,16 @@
    border-bottom-right-radius:3px;
    box-shadow:5px 3px 7px 2px grey;
  }
+
+@media(max-width:800px){
+  .logo-end{
+    font-size: 3rem;
+    line-height: 1.4em;
+   }
+   .logo-container{
+    width: 100px;
+    height: 100px;
+    padding-bottom: 20px;
+    margin-left: 20px;
+   }
+}

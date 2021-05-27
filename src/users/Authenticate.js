@@ -163,11 +163,11 @@ const Authenticate = props => {
         />
 
         <Button type="submit" disabled={!formState.isValid}>
-          {isLoginMode ? "LOGIN" : "SIGNUP"}
+          {isLoginMode ? "LOGIN" : "SIGN UP"}
         </Button>
       </form>
       <Button inverse onClick={switchModeHandler}>
-        SWITCH TO {isLoginMode ? "SIGNUP" : "LOGIN"}
+        SWITCH TO {isLoginMode ? "SIGN UP" : "LOGIN"}
       </Button>
     </Card>
     </div>
