@@ -118,7 +118,7 @@ const ClassTitleMenu = (props) => {
     }
 
     if (name === "size") {
-      temp.styling.size = value
+      temp.styling.size = value;
 
       if (value === "regular") {
         console.log(props)

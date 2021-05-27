@@ -132,7 +132,13 @@
 .student-card-container:hover .desk-button{
  display:inline;
 }
-
+.student-name{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  padding-bottom: 0;
+  overflow: hidden;
+}
 .name-large{
   font-size: 24px;
 }

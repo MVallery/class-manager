@@ -11,6 +11,7 @@ import ThumbUp from "@material-ui/icons/ThumbUp";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 import {TwitterPicker } from 'react-color';
+import {HuePicker} from 'react-color';
 import { checkActiveClass } from "../../app-files/general";
 import "../Classes.css";
 import "./StudentCard.css"
@@ -24,6 +25,8 @@ const StudentCard = (props) => {
   const popover = {
     position: "absolute",
     zIndex: "2",
+    top:'950%',
+    left: '0%'
   };
   const cover = {
     position: "fixed",
@@ -182,7 +185,7 @@ const StudentCard = (props) => {
 
 
   return (
-    <Draggable key={record.key} draggableId={record.key} index={index}>
+    <Draggable key={record.key} draggableId={record.key} index={index} isDragDisabled = {activeClass.students[index].displayColorPicker}>
       {(provided, snapshot) => (
         <div
           className={`student-card-container ${smallStyle.smallIcon}`}
@@ -236,9 +239,8 @@ const StudentCard = (props) => {
               className={`desk ${smallStyle.smallFont}`}
               style={{...backgroundLightStyle, ...darkDesks}}
             >
-              {smallStyle&& (<span className= {record.name.length<9?"name-small":"name-xsmall"}> {record.name}</span>)}
-              {!smallStyle&&(<span className={record.name.length<9?"name-large":"name-medium"}>{record.name}</span>)}
-              <br />
+              {smallStyle&& (<span className= {record.name.length<9?"student-name name-small":"student-name name-xsmall"}> {record.name}</span>)}
+              {!smallStyle&&(<span className={record.name.length<9?"student-name name-large":"student-name name-medium"}>{record.name}</span>)}
 
               <div className={`desk-button-main-container`}>
                 <div className="desk-button-container">
@@ -262,6 +264,7 @@ const StudentCard = (props) => {
                       <TwitterPicker
                         // color={activeClass.students[index].background}
                         // colors={[]}
+                        style={{zIndex:200, position:'absolute'}}
                         onChange={(e) => {
                           handleColorSelect(index, e);
                         }}
