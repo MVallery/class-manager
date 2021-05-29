@@ -82,13 +82,15 @@
    width:100%;
    /* opacity:130%; */
    border-radius:5px;
-   background-color:rgb(62, 126, 96)
+   background-color:rgb(62, 126, 96);
+   background-color: #44e69a;
  }
  .logo-desk {
    height:40%;
    width:82%;
    /* opacity:80%; */
    background-color:rgb(145, 85, 173);
+   background-color:#383cab;
    color:white;
    text-align:center;
    font-weight:bold;

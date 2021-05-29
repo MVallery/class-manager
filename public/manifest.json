@@ -1,14 +1,14 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Class Manager",
+  "name": "Class Manager",
   "icons": [
     {
-      "src": "cmfavicon.png",
+      "src": "cmfaviconblue.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "icon192.png",
+      "src": "icon-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
