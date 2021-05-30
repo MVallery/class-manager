@@ -108,7 +108,7 @@ const ClassTitleMenu = (props) => {
           temp.students.push({
             name: "blank",
             key: Math.floor(Math.random()),
-            background: colorPallet(activeClass.styling.theme),
+            background: colorPallet(activeClass?activeClass.styling.theme:null),
           });
         }
       }
@@ -144,6 +144,29 @@ const ClassTitleMenu = (props) => {
     props.handleUpdate(temp, newTempList)
 
   };
+
+  const handleDeleteClass = () => {
+    let temp = JSON.parse(JSON.stringify(props.activeClass));
+    let tempClassList = JSON.parse(JSON.stringify(props.classList));
+    console.log(tempClassList)
+    let filteredClassList = tempClassList.filter(item => item.title !== temp.title)
+    console.log(filteredClassList)
+    console.log(filteredClassList[0], temp)
+    if (window.confirm("Are you sure you want to delete this class?")) {
+      props.handleDatabaseDelete();
+      let newActiveClass = filteredClassList.length>0? filteredClassList[0]:{
+        title: "",
+        students: [],
+        styling: { groups: 4, format: "groups", theme: "" },
+        classSnapshot: {},
+        count: 0,
+        
+      }
+    props.handleUpdate(newActiveClass, filteredClassList)
+
+    }
+
+  }
   const handleAddStudents = () => {
     const newNameArray = props.inputNames.replace(/ /g, "").split(",");
     let temp = JSON.parse(JSON.stringify(props.activeClass));
@@ -154,7 +177,7 @@ const ClassTitleMenu = (props) => {
       let record = {
         name: cap(newNameArray[i]),
         count: 0,
-        background: colorPallet(activeClass.styling.theme),
+        background: colorPallet(activeClass?activeClass.styling.theme:null),
         key: id,
         isChecked: false,
         displayColorPicker: false,
@@ -177,7 +200,7 @@ const ClassTitleMenu = (props) => {
       for (let i = 0; i < temp.styling.groups - remainder; i++) { //add blank students based on the students needed to fill in empty seats.
         temp.students.push({
           name: "blank",
-          background: colorPallet(activeClass.styling.theme),
+          background: colorPallet(activeClass?activeClass.styling.theme:null),
           key: Math.floor(Math.random()),
         });
       }
@@ -219,13 +242,14 @@ const ClassTitleMenu = (props) => {
               getContentAnchorEl={null}
               disableScrollLock={true}
             >
-              <MenuItem onClick={showAddStudentModalHandler}>Add Student</MenuItem>
               <MenuItem onClick={showFormatModalHandler}>
                 Change Layout
               </MenuItem>
               <MenuItem onClick={handleShuffleClass}>Shuffle Class</MenuItem>
-
+              <MenuItem onClick={showAddStudentModalHandler}>Add Student</MenuItem>
               <MenuItem onClick={handleDeleteMulti}>Delete Student(s)</MenuItem>
+              <MenuItem onClick={handleDeleteClass}>Delete Class</MenuItem>
+
             </Menu>
           </div>
       </div>
@@ -278,7 +302,7 @@ const ClassTitleMenu = (props) => {
           <RadioGroup
             aria-label="size"
             name="size"
-            value={activeClass.styling.size}
+            value={activeClass?activeClass.styling.size:null}
             onChange={handleClassChange}
           >
             <FormControlLabel value="small" control={<Radio />} label="Small" />
@@ -297,7 +321,7 @@ const ClassTitleMenu = (props) => {
           <RadioGroup
             aria-label="format"
             name="format"
-            value={activeClass.styling.format}
+            value={activeClass?activeClass.styling.format:null}
             onChange={handleClassChange}
           >
             <FormControlLabel
@@ -311,7 +335,7 @@ const ClassTitleMenu = (props) => {
 
 
         <FormControl>
-          <InputLabel>Each {activeClass.styling.format === 'rows'?'row':'group'}</InputLabel>
+          <InputLabel>Each {activeClass?activeClass.styling.format === 'rows'?'row':'group':null}</InputLabel>
 
           <Select
             className="select-form"

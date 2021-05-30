@@ -59,6 +59,17 @@ const Classes = (props) => {
        }
     }
 
+    const handleDatabaseDelete = async()=> {
+      try{
+        await sendRequest(`https://classmanagerbackend.herokuapp.com/api/users/${props.userId}/${activeClass.id}`, 'DELETE',
+        null,
+        { Authorization: "Bearer " + props.token }
+  
+        )
+      } catch(err) {
+        console.log(err)
+      }
+    }
   const handleOnDragEnd = (result) => {
     console.log(result);
     if (!result.destination) { //if outside draggable container do thing.
@@ -251,7 +262,9 @@ const Classes = (props) => {
   }, [props.activeClass]); //props.generalSelection.groups
 
   return (
-    <React.Fragment>
+    activeClass?
+      <React.Fragment>
+
         <Modal
           show={showAddNewClassModal}
           onCancel={cancelAddNewClassHandler}
@@ -262,38 +275,49 @@ const Classes = (props) => {
         >
           <NewClass {...props} cancelAddNewClassHandler={cancelAddNewClassHandler} />
         </Modal>
-      <NavBar
-        handleState={props.handleState}
-        showAddNewClassHandler={showAddNewClassHandler}
-      >
-        <ClassTitleMenu {...props} handleDatabaseUpdate={handleDatabaseUpdate} handleSmallStyle={handleSmallStyle}/>
-      </NavBar>
 
+        <NavBar
+                handleState={props.handleState}
+                showAddNewClassHandler={showAddNewClassHandler}
+              >
+                <ClassTitleMenu {...props} handleDatabaseUpdate={handleDatabaseUpdate} handleDatabaseDelete= {handleDatabaseDelete} handleSmallStyle={handleSmallStyle}/>
+              </NavBar>
       <div className="classes-container">
-        <CSSTransition
-          in={true}
-          mountOnEnter
-          unmountOnExit
-          timeout={500}
-          classNames="transition-classes"
-        >
-          <DragDropContext onDragEnd={handleOnDragEnd}>
-            <Droppable droppableId="students">
-              {(provided) => (
-                <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {newNameListState}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
-        </CSSTransition>
-            <GeneralClassButtons
-              handleDatabaseUpdate={handleDatabaseUpdate}
-            />
+
+        
+        <React.Fragment>
+
+                <CSSTransition
+                in={true}
+                mountOnEnter
+                unmountOnExit
+                timeout={500}
+                classNames="transition-classes"
+              >
+                <DragDropContext onDragEnd={handleOnDragEnd}>
+                  <Droppable droppableId="students">
+                    {(provided) => (
+                      <div {...provided.droppableProps} ref={provided.innerRef}>
+                        {newNameListState}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              </CSSTransition>
+              <GeneralClassButtons
+                    handleDatabaseUpdate={handleDatabaseUpdate}
+                  />
+        </React.Fragment>
+      
+      
+      
+
 
       </div>
     </React.Fragment>
+    :
+    <NewClass {...this} {...props} />
   );
 };
 

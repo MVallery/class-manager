@@ -122,7 +122,6 @@ class MyStudents extends React.Component {
               exact
               render={(props) => <NewClass {...this} {...this.state} />}
             />
-          {this.props.activeClass?
             <Route
             path="/classes"
             exact
@@ -138,17 +137,21 @@ class MyStudents extends React.Component {
               <Classes {...this} {...this.state} />
 
             </CSSTransition>
-              )
-          
-            }}
-          />
-        :
-        <Route
-        path="/classes"
-        exact
-        render={(props) => <React.Fragment><div style={{padding:'200px'}}><div><h2>You have no classes yet, please add your first class now!</h2></div><NewClass {...this} {...this.state} /></div></React.Fragment>}
-      />
-        }
+              )}}
+              />
+
+          {/* {this.props.activeClass? */}
+
+{/*           
+      //       }}
+      //     />
+      //   :
+      //   <Route
+      //   path="/classes"
+      //   exact
+      //   render={(props) => <React.Fragment><div style={{padding:'200px'}}><div><h2>You have no classes yet, please add your first class now!</h2></div><NewClass {...this} {...this.state} /></div></React.Fragment>}
+      // />
+      //   } */}
 
           </Switch>
       </React.Fragment>
