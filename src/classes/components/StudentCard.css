@@ -80,13 +80,16 @@
 
 .student-count-style-positive{
   color: #082308;
-  /* text-shadow: 2px 2px 10px #0cea0c; */
-  background-image: radial-gradient(#59ff5973, transparent)
+  background-image: radial-gradient(#8ee28e, #8ee28e45, transparent);
+  border-radius: 50%;
+  width: 30px;
 }
 .student-count-style-negative{
-  /* text-shadow: 2px 2px 10px #d04a7a; */
-  background-image: radial-gradient(#c38ea15c, transparent);
-  color: #822b2b;
+
+  background-image: radial-gradient(#ff7a70, #ff7a7080, transparent);
+  color: black;
+  border-radius: 50%;
+  width: 30px
 }
 .student-count-style-neutral{
   /* text-shadow: 2px 2px 10px #a7aba76b; */

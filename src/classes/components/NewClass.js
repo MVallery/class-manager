@@ -118,7 +118,7 @@ const NewClass = (props) => {
           <br />
         </div>
         {inputNamesError ? <div>Input only names separated by commas</div>:<div style={{height:'21.89px'}}></div>}
-        {!inputNamesError && !inputClassNamesError ? (
+        {!inputNamesError && !inputClassNamesError && props.inputNames.length>0 && props.inputClassName.length>0 ? (
           <Link className="new-class-link" to="/classes">
           <button
             onClick={() => {

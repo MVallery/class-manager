@@ -246,7 +246,7 @@ const ClassTitleMenu = (props) => {
                 Change Layout
               </MenuItem>
               <MenuItem onClick={handleShuffleClass}>Shuffle Class</MenuItem>
-              <MenuItem onClick={showAddStudentModalHandler}>Add Student</MenuItem>
+              <MenuItem onClick={showAddStudentModalHandler}>Add Student(s)</MenuItem>
               <MenuItem onClick={handleDeleteMulti}>Delete Student(s)</MenuItem>
               <MenuItem onClick={handleDeleteClass}>Delete Class</MenuItem>
 
@@ -305,11 +305,12 @@ const ClassTitleMenu = (props) => {
             value={activeClass?activeClass.styling.size:null}
             onChange={handleClassChange}
           >
-            <FormControlLabel value="small" control={<Radio />} label="Small" />
+            <FormControlLabel value="small" control={<Radio color="primary" />} label="Small" />
             <FormControlLabel
               value="regular"
-              control={<Radio />}
+              control={<Radio color="primary"/>}
               label="Regular"
+              
             />
           </RadioGroup>
         </FormControl>
@@ -326,10 +327,10 @@ const ClassTitleMenu = (props) => {
           >
             <FormControlLabel
               value="groups"
-              control={<Radio />}
+              control={<Radio color="primary"/>}
               label="Groups"
             />
-            <FormControlLabel value="rows" control={<Radio />} label="Rows" />
+            <FormControlLabel value="rows" control={<Radio color="primary" />} label="Rows" />
           </RadioGroup>
         </FormControl>
 

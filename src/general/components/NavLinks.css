@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,100&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Sue+Ellen+Francisco&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
 
 .navlinks-main-container{
   display:flex;
@@ -18,8 +19,8 @@
   border:none;
   border-radius: 3px;
 
-  background-color: #438e619e;
-  /* border: 2px ridge #28944f; */
+  background-color: #3f51b514;
+    /* border: 2px ridge #28944f; */
   color: white;
   box-shadow: inset -2px -1px 5px rgb(16, 59, 16);
 }
@@ -33,20 +34,31 @@
   border:none;
   background-color: #f1eaf352;
   padding:8px;
-  box-shadow: inset -2px -1px 5px green
+  box-shadow: inset -2px -1px 5px green;
+  border-radius: 50%;
+  width: 55px;
+  border: 3px solid green;
+  background-color: rgb(38 38 110);
+  height: 55px;
+  font-family: 'Quicksand';
+  font-weight:600;
+  padding: 10px;
+  transform: skewX( 
+10deg
+)
 }
 .logout-signup-button a{
-  font-size:1rem;
+  font-size: 0.8rem;
   color:white;
   border-radius: 10px;
   /* background-color: #f1eaf352; */
   border: none;
   display:block;
-  transform: skewX(15deg)
 }
 .logout-signup-button:hover{
   cursor:pointer;
-  box-shadow: inset 2px 1px 5px green
+  box-shadow: inset 2px 1px 5px green;
+  background-color: rgb(60, 60, 170);
 }
 .switch-classes-button:hover{
   cursor:pointer;
@@ -76,13 +88,13 @@
   align-items: center;
   justify-content: center;
   transform: skewX(15deg);
-  background-color:purple;
+  background-color:rgb(60, 60, 170);
   width:25%;
   z-index: 1;
   font-weight: 100;
   border: 8px inset rgb(117 182 187);
   font-family: 'Sue Ellen Francisco';
-  background-image: linear-gradient(45deg, transparent, #592167)
+  background-image: linear-gradient(45deg, transparent, rgb(34, 34, 94))
 }
 .navbar-point-board h5{
   color:white;
