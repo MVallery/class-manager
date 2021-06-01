@@ -242,7 +242,7 @@
 
 @media(max-width:900px){
   .droppable-container{
-    margin:0px 15px 15px;
+    margin: 0px 5px 15px 5px
   }
   .small-icon{
     width:95px!important;
@@ -263,7 +263,9 @@
   .group-container4{
     padding-bottom:50px;
   }
-  
+  .classes-container{
+    padding-bottom: 50px;
+  }
 }
 
 @media(max-width:500px){

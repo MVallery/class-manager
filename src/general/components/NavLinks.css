@@ -162,9 +162,17 @@
 }
 
 @media(max-width:680px){
-
+  .logout-signup-button{
+    transform:none;
+    height: 40px;
+    width: 40px;
+    padding: 3px;
+    align-self: flex-end;
+  }
+  .link-style{
+    font-size:0.6rem;
+  }
   .navbar-button-board{
-    transform:skewX(-5deg)
     
   }
   .navbar-point-board{
@@ -178,7 +186,7 @@
     transform:skewX(-1deg)
   }
   .classes-count{
-    transform:skewX(5deg)
+    transform:skewX(1deg)
   }
   .navlinks-main-container{
     height:100px
