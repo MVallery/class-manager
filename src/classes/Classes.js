@@ -39,8 +39,6 @@ const Classes = (props) => {
   }
   //a generic database function that is used for any PATCH updates involving the activeClass 
   const handleDatabaseUpdate= async(tempActiveClass)=> {
-    console.log(activeClass)
-    console.log('inside handledatabaseupdate', activeClass.id)
       try {
         await sendRequest(`https://classmanagerbackend.herokuapp.com/api/users/${props.userId}/${activeClass.id}`, "PATCH", 
          JSON.stringify({
@@ -71,7 +69,6 @@ const Classes = (props) => {
       }
     }
   const handleOnDragEnd = (result) => {
-    console.log(result);
     if (!result.destination) { //if outside draggable container do thing.
       return;
     }
@@ -80,7 +77,6 @@ const Classes = (props) => {
 
     let draggedItem = activeClass.students[result.source.index];
     let swappedItem = activeClass.students[result.destination.index];
-    console.log(result.source.index, result.destination.index);
     if (draggedItem === swappedItem) {
       return;
     }
@@ -97,7 +93,9 @@ const Classes = (props) => {
       }
 
     let newTempList = checkActiveClass(tempClassList, temp);
-    handleDatabaseUpdate(temp);
+    if (props.userId) {
+      handleDatabaseUpdate(temp);
+    }
     props.handleUpdate(temp, newTempList)
 
   };
@@ -140,8 +138,6 @@ const Classes = (props) => {
   let mainGroupContainer;
   let smallGroup;
   const handleGroupStyling = () => {
-    console.log(activeClass.styling.size);
-    console.log("handleGroupStyling", activeClass);
     mainGroupContainer = "group-main-container";
 
     if (activeClass.styling.format === "rows") {
@@ -175,7 +171,6 @@ const Classes = (props) => {
   };
 
   const handleFormatting = () => {
-    console.log(activeClass.styling.groups);
     let remainder = activeClass.length % activeClass.styling.groups;
     let formattedNameList = [];
     let temp = JSON.parse(JSON.stringify(props.activeClass));
@@ -252,7 +247,6 @@ const Classes = (props) => {
     );
     let newTempList = checkActiveClass(tempClassList, temp);
 
-    console.log(newNameList);
     setNewNameListState(newNameList);
   };
 
@@ -271,7 +265,6 @@ const Classes = (props) => {
           header={<div>Create a new class: </div>}
           contentClass="addNewStu-modal"
           footerClass="worksheet-item__modal-actions"
-          // footer={}
         >
           <NewClass {...props} cancelAddNewClassHandler={cancelAddNewClassHandler} />
         </Modal>

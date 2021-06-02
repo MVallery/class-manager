@@ -77,7 +77,6 @@ class MyStudents extends React.Component {
 
   handleThemeInput = (e) => {
     const { name, value } = e.target;
-    console.log(this.props)
     let temp = JSON.parse(JSON.stringify(this.props.activeClass));
     let tempClassList = JSON.parse(JSON.stringify(this.props.classList));
     temp.styling.theme = value;
@@ -90,8 +89,6 @@ class MyStudents extends React.Component {
   };
 
   render() {
-    console.log(this);
-
     return (
       <React.Fragment>
 
@@ -139,19 +136,6 @@ class MyStudents extends React.Component {
             </CSSTransition>
               )}}
               />
-
-          {/* {this.props.activeClass? */}
-
-{/*           
-      //       }}
-      //     />
-      //   :
-      //   <Route
-      //   path="/classes"
-      //   exact
-      //   render={(props) => <React.Fragment><div style={{padding:'200px'}}><div><h2>You have no classes yet, please add your first class now!</h2></div><NewClass {...this} {...this.state} /></div></React.Fragment>}
-      // />
-      //   } */}
 
           </Switch>
       </React.Fragment>

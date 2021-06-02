@@ -1,10 +1,9 @@
-import React, {useContext} from "react";
+import React from "react";
 import { cap, colorPallet } from "../../app-files/general";
 import FormHelperText from '@material-ui/core/FormHelperText';
 import TextField from "@material-ui/core/TextField";
 import { v4 as uuid } from 'uuid';
 import {useHttpClient} from '../../general/http-hook';
-// import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import "./NewClass.css";
 import { connect } from 'react-redux';
@@ -14,7 +13,6 @@ const NewClass = (props) => {
   const {isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const handleNewClass = (props) => {
-    console.log(props)
     props.cancelAddNewClassHandler();
     //replaces whitespace and splits into array of name elements.
     const nameArray =  props.inputNames.replace(/,\s+/g, ',').replace(/\s+[^a-zA-Z]/,'').split(',')
@@ -56,7 +54,6 @@ const NewClass = (props) => {
           background: colorPallet("lightBlueGreen"),
           key: Math.floor(Math.random()),
         });
-        console.log(tempClass);
       }
     }
   

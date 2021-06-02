@@ -51,7 +51,9 @@ const StudentCard = (props) => {
     temp.count = temp.count + 1;
     temp.students[index].pointStyle = "positive";
     let newTempList = checkActiveClass(tempClassList, temp);
-    props.handleDatabaseUpdate(temp);
+    if (props.userId) {
+      props.handleDatabaseUpdate(temp);
+    }
     props.handleUpdate(temp, newTempList)
 
   };
@@ -81,7 +83,9 @@ const StudentCard = (props) => {
     temp.students[index].pointStyle = "negative";
 
     let newTempList = checkActiveClass(tempClassList, temp);
-    props.handleDatabaseUpdate(temp);
+    if (props.userId) {
+      props.handleDatabaseUpdate(temp);
+    }
     props.handleUpdate(temp, newTempList)
 
   };
@@ -111,7 +115,9 @@ const StudentCard = (props) => {
 
     temp.students[index].background = e.hex;
     let newTempList = checkActiveClass(tempClassList, temp);
-    props.handleDatabaseUpdate(temp);
+    if (props.userId) {
+      props.handleDatabaseUpdate(temp);
+    }
     props.handleUpdate(temp, newTempList)
 
   };
@@ -262,8 +268,6 @@ const StudentCard = (props) => {
                         }}
                       />
                       <TwitterPicker
-                        // color={activeClass.students[index].background}
-                        // colors={[]}
                         style={{zIndex:200, position:'absolute'}}
                         onChange={(e) => {
                           handleColorSelect(index, e);
@@ -280,9 +284,7 @@ const StudentCard = (props) => {
                         <FormControlLabel
                           control={
                             <Checkbox
-                              // className= {checkboxStyle.root}
                               label={key}
-                              // iconStyle={{fill: 'white'}}
                               checked={activeClass.students[index].isChecked}
                               onChange={() => {
                                 handleSelection(index);
@@ -311,7 +313,8 @@ const StudentCard = (props) => {
 const mapStateToProps = (state) => {
   return {
     activeClass: state.activeClass,
-    classList: state.classList
+    classList: state.classList,
+    userId: state.userId
   }
 }
 const mapDispatchToProps = (dispatch) => {

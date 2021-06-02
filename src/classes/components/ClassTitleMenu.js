@@ -57,7 +57,9 @@ const ClassTitleMenu = (props) => {
     let shuffledTemp = shuffleArray(temp.students);
     temp.students = shuffledTemp;
     let newTempList = checkActiveClass(tempClassList, temp);
-    props.handleDatabaseUpdate(temp);
+    if (props.userId) {
+      props.handleDatabaseUpdate(temp);
+    }
     props.handleUpdate(temp, newTempList)
 
   };
@@ -82,7 +84,9 @@ const ClassTitleMenu = (props) => {
         }
       }
       let newTempList = checkActiveClass(tempClassList, temp);
-      props.handleDatabaseUpdate(temp);
+      if (props.userId) {
+        props.handleDatabaseUpdate(temp);
+      }
       props.handleUpdate(temp, newTempList)
 
     }
@@ -93,14 +97,12 @@ const ClassTitleMenu = (props) => {
     const { name, value } = e.target;
 
     let temp = JSON.parse(JSON.stringify(activeClass));
-    console.log(temp);
     let tempClassList = JSON.parse(JSON.stringify(classList));
     if (name === "groups") {
       let filteredTemp = temp.students.filter( //filter out old blank desks so that the change to the group amount does not cause any left over desks.
         (student) => student.name !== "blank"
       );
       temp.students = filteredTemp;
-      console.log(temp);
       let blankDesks = value - (temp.students.length % value); //value - remainder = number of empty desks needed to fill the group
       temp.styling.groups = Number(value);
       if (temp.students.length % value > 0) {
@@ -121,7 +123,6 @@ const ClassTitleMenu = (props) => {
       temp.styling.size = value;
 
       if (value === "regular") {
-        console.log(props)
         props.handleSmallStyle({
           smallGroup: null,
           smallIcon: null,
@@ -130,7 +131,6 @@ const ClassTitleMenu = (props) => {
         });
       }
       if (value === "small") {
-        console.log(props)
         props.handleSmallStyle({
           ...props.smallStyle,
           smallIcon: "small-icon",
@@ -140,7 +140,9 @@ const ClassTitleMenu = (props) => {
       }
     }
     let newTempList = checkActiveClass(tempClassList, temp);
-    props.handleDatabaseUpdate(temp);
+    if (props.userId) {
+      props.handleDatabaseUpdate(temp);
+    }
     props.handleUpdate(temp, newTempList)
 
   };
@@ -148,10 +150,7 @@ const ClassTitleMenu = (props) => {
   const handleDeleteClass = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
     let tempClassList = JSON.parse(JSON.stringify(props.classList));
-    console.log(tempClassList)
     let filteredClassList = tempClassList.filter(item => item.title !== temp.title)
-    console.log(filteredClassList)
-    console.log(filteredClassList[0], temp)
     if (window.confirm("Are you sure you want to delete this class?")) {
       props.handleDatabaseDelete();
       let newActiveClass = filteredClassList.length>0? filteredClassList[0]:{
@@ -209,7 +208,9 @@ const ClassTitleMenu = (props) => {
     let newTempList = checkActiveClass(tempClassList, temp);
 
     setAddStudentModal(false);
-    props.handleDatabaseUpdate(temp);
+    if (props.userId) {
+      props.handleDatabaseUpdate(temp);
+    }
     props.handleUpdate(temp, newTempList)
 
     props.handleState({
@@ -255,7 +256,7 @@ const ClassTitleMenu = (props) => {
       </div>
 
 
-      {/* Add students modal */}
+      {/******Add students modal *******/}
       <Modal
         show={showAddStudentModal}
         onCancel={cancelAddStudentModalHandler}
@@ -274,7 +275,6 @@ const ClassTitleMenu = (props) => {
             <span className="">Input student names, separated by a comma.</span>
           }
           name="inputNames"
-          // type="number"
           value={props.inputNames}
           onChange={props.handleChange}
           className="text-area-styles"
@@ -289,7 +289,7 @@ const ClassTitleMenu = (props) => {
         />
       </Modal>
 
-      {/* Format modal */}
+      {/***** Format modal *****/}
       <Modal
         show={showFormatModal}
         onCancel={submitShowFormatModalHandler}
@@ -350,7 +350,6 @@ const ClassTitleMenu = (props) => {
             <MenuItem value={6}>6</MenuItem>
             <MenuItem value={7}>7</MenuItem>
           </Select>
-          {/* <FormHelperText>Without label</FormHelperText> */}
         </FormControl>
 
 
@@ -367,7 +366,6 @@ const ClassTitleMenu = (props) => {
           >
             <MenuItem value="lightBlueGreen">Light Blue Green</MenuItem>
             <MenuItem value="lightBluePurple">Light Blue Purple</MenuItem>
-            {/* <MenuItem value="darkPurpleBlue">Dark Blue Purple</MenuItem> */}
             <MenuItem value="brightRainbow">Bright Rainbow</MenuItem>
             <MenuItem value="pastelRainbow">Pastel Rainbow</MenuItem>
             <MenuItem value="green">Shades of Green</MenuItem>
@@ -380,7 +378,8 @@ const ClassTitleMenu = (props) => {
 const mapStateToProps = (state) => {
   return {
     activeClass: state.activeClass,
-    classList: state.classList
+    classList: state.classList,
+    userId: state.userId
   }
 }
 const mapDispatchToProps = (dispatch) => {

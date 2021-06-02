@@ -21,9 +21,6 @@ const Home = (props) => {
             <Link className="link" to="/signup">
               Sign up
             </Link>
-            {/* <Link className="link" to="/auth">
-              Login
-            </Link> */}
           </div>
           <h5>
             OR

@@ -25,11 +25,6 @@
 .cb-container-button:active {
   color: lightgrey;
 }
-/* .cb-container-button:focus{
-  color:rgb(0, 0, 0);
-  font-weight: bold;
-
-} */
 
 .cb-count {
   border-radius:50%;

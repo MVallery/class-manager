@@ -47,8 +47,6 @@ const Authenticate = props => {
   };
   const authSubmitHandler = async (event) => {
     event.preventDefault();
-
-
     if (isLoginMode) {
       try {
         const responseData = await sendRequest(
@@ -60,12 +58,10 @@ const Authenticate = props => {
           }),
           {
             'Accept': 'application/json',
-
             'Content-Type': 'application/json'
             
           }
         )
-        console.log(responseData)
         const tokenExpirationDate = new Date(new Date().getTime() + 1000 * 60 * 60);
 
         localStorage.setItem(
@@ -76,7 +72,6 @@ const Authenticate = props => {
             expiration: tokenExpirationDate.toISOString(),
           })
         );
-        console.log(props)
         props.login(responseData.userId, responseData.token);
         props.handleUpdate(responseData.classList[0], responseData.classList)
 
@@ -85,8 +80,6 @@ const Authenticate = props => {
 
     } else {
       try {
-        console.log('formstate',formState)
-
         const responseData = await sendRequest(
           `https://classmanagerbackend.herokuapp.com/api/users/signup`, 
           'POST', 
@@ -100,10 +93,7 @@ const Authenticate = props => {
 
           'Content-Type': 'application/json'
           }
-
-
         );
-        console.log(responseData)
 
         props.login(responseData.userId, responseData.token);
       } catch (err) {
@@ -125,52 +115,41 @@ const Authenticate = props => {
   return (
     <React.Fragment>
       <div className="authenticate-container">
-      <ErrorModal error= {error} onClear={clearError}/>
-    <Card className="authentication">
-      {isLoading && <LoadingSpinner asOverlay />}
-      {!isLoginMode ? <h2>Sign up</h2> :<h2>Login Required</h2>}
-            <hr />
+        <ErrorModal error= {error} onClear={clearError}/>
+        <Card className="authentication">
+          {isLoading && <LoadingSpinner asOverlay />}
+          {!isLoginMode ? <h2>Sign up</h2> :<h2>Login Required</h2>}
+                <hr />
 
-      <form onSubmit={authSubmitHandler}>
-        {/* {!isLoginMode && (
-          <Input
-            element="input"
-            id="name"
-            type="text"
-            label="Name"
-            validators={[VALIDATOR_REQUIRE()]}
-            errorText="Please enter a name"
-            onInput={inputHandler}
-          />
-        )} */}
-        <Input
-          id="email"
-          element="input"
-          type="text"
-          label="Email"
-          validators={[VALIDATOR_EMAIL()]}
-          errorText="Please enter a valid email."
-          onInput={inputHandler}
-        />
-        <Input
-          id="password"
-          element="input"
-          type="text"
-          label="Password"
-          validators={[VALIDATOR_MINLENGTH(6)]}
-          errorText="Please enter a valid password at least 6 characters."
-          onInput={inputHandler}
-        />
+          <form onSubmit={authSubmitHandler}>
+            <Input
+              id="email"
+              element="input"
+              type="text"
+              label="Email"
+              validators={[VALIDATOR_EMAIL()]}
+              errorText="Please enter a valid email."
+              onInput={inputHandler}
+            />
+            <Input
+              id="password"
+              element="input"
+              type="text"
+              label="Password"
+              validators={[VALIDATOR_MINLENGTH(6)]}
+              errorText="Please enter a valid password at least 6 characters."
+              onInput={inputHandler}
+            />
 
-        <Button type="submit" disabled={!formState.isValid}>
-          {isLoginMode ? "LOGIN" : "SIGN UP"}
+            <Button type="submit" disabled={!formState.isValid}>
+              {isLoginMode ? "LOGIN" : "SIGN UP"}
+            </Button>
+          </form>
+        <Button inverse onClick={switchModeHandler}>
+          SWITCH TO {isLoginMode ? "SIGN UP" : "LOGIN"}
         </Button>
-      </form>
-      <Button inverse onClick={switchModeHandler}>
-        SWITCH TO {isLoginMode ? "SIGN UP" : "LOGIN"}
-      </Button>
-    </Card>
-    </div>
+        </Card>
+      </div>
     </React.Fragment>
   );
 };

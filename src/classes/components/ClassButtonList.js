@@ -14,7 +14,6 @@ const ClassButtonList = (props) => {
       )
     }
   }
-  console.log(classList)
   return classList
 
   

@@ -5,7 +5,7 @@ Node, Express, and MongoDB was used to build user authentication which allows us
 ![](/src/app-files/images/RMClass.png)
 
 # Motivation
-While working as an educator I often used an application called class dojo to track student behavior. There were many features I wish the application had to make it more useful such as a way to actually arrange students in a seating chart, or be able to give points and switch classes more easily. With class manager I aimed to create an application that would incorporate all these features into one. 
+While working as a teacher I often used an application called class dojo to track student behavior. There were many features I wish the application had to make it more useful such as a way to actually arrange students in a seating chart, or be able to give points and switch classes more easily. With class manager I aimed to create an application that would incorporate all these features into one. 
 
 # Features
 * Create a class of students by inputting a class name, and a comma separated list of students to add to your class.

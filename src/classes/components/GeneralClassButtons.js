@@ -19,7 +19,7 @@ const ClassButtons = (props) => {
   const [showRandomStudentModal, setShowRandomStudentModal] = useState(false);
   const [randomStudent, setRandomStudent] = useState({ name: "" });
 
-  // created refs to use with handleClearPointStyle because it needs to always maintain the 
+  // Created refs to use with handleClearPointStyle because it needs to always maintain the 
   // most current state since the styles get applied and removed while new points may be added at the same time.
   // without the refs the handleClearPointStyle was resetting the state back to where it was when the setTimeout on the handleClick started.
   const activeClassRef = useRef(props.activeClass);
@@ -76,7 +76,9 @@ const ClassButtons = (props) => {
       }
     }
     let newTempList = checkActiveClass(tempClassList, temp);
-    props.handleDatabaseUpdate();
+    if (props.userId) {
+      props.handleDatabaseUpdate(temp);
+    }
     props.handleUpdate(temp, newTempList)
   };
 
@@ -95,7 +97,9 @@ const ClassButtons = (props) => {
       }
     }
     let newTempList = checkActiveClass(tempClassList, temp);
-    props.handleDatabaseUpdate(temp);
+    if (props.userId) {
+      props.handleDatabaseUpdate(temp);
+    }
     props.handleUpdate(temp, newTempList)
 
   };
@@ -114,7 +118,9 @@ const ClassButtons = (props) => {
       }
     }
     let newTempList = checkActiveClass(tempClassList, temp);
-    props.handleDatabaseUpdate(temp);
+    if (props.userId) {
+      props.handleDatabaseUpdate(temp);
+    }
     props.handleUpdate(temp, newTempList)
   };
 
@@ -200,7 +206,8 @@ const ClassButtons = (props) => {
 const mapStateToProps = (state) => {
   return {
     activeClass: state.activeClass,
-    classList: state.classList
+    classList: state.classList,
+    userId: state.userId
   }
 }
 const mapDispatchToProps = (dispatch) => {

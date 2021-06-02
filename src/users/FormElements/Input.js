@@ -1,6 +1,5 @@
 import React, { useReducer, useEffect } from "react";
 //useReducer manage more complex state, write logic that runs when you change state rather than just change value. good when have interconnected state.
-// import Checkbox from '@material-ui/core/Checkbox';
 
 import { validate } from "../validators";
 import "./Input.css";
