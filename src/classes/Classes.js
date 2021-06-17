@@ -40,8 +40,7 @@ const Classes = (props) => {
   //a generic database function that is used for any PATCH updates involving the activeClass 
   const handleDatabaseUpdate= async(tempActiveClass)=> {
       try {
-        // await sendRequest(`https://classmanagerbackend.herokuapp.com/api/users/${props.userId}/${activeClass.id}`, "PATCH", 
-        await sendRequest(`http://localhost:5000/api/users/${props.userId}/${activeClass.id}`, "PATCH", 
+        await sendRequest(`https://classmanagerbackend.herokuapp.com/api/users/${props.userId}/${activeClass.id}`, "PATCH", 
 
          JSON.stringify({
            title: tempActiveClass.title,
@@ -61,8 +60,7 @@ const Classes = (props) => {
 
     const handleDatabaseDelete = async()=> {
       try{
-        // await sendRequest(`https://classmanagerbackend.herokuapp.com/api/users/${props.userId}/${activeClass.id}`, 'DELETE',
-        await sendRequest(`http://localhost:5000/api/users/${props.userId}/${activeClass.id}`, 'DELETE',
+        await sendRequest(`https://classmanagerbackend.herokuapp.com/api/users/${props.userId}/${activeClass.id}`, 'DELETE',
 
         null,
         { Authorization: "Bearer " + props.token }
@@ -144,30 +142,30 @@ const Classes = (props) => {
   const handleGroupStyling = () => {
     mainGroupContainer = "group-main-container";
 
-    if (activeClass?.styling.format === "rows") {
+    if (activeClass.styling.format === "rows") {
       group = "row";
       groupContainer = "row-container";
       mainGroupContainer = "row-main-container";
     } else {
-      if (activeClass?.styling.groups === 4) {
+      if (activeClass.styling.groups === 4) {
         group = "group4";
         groupContainer = "group-container4";
         if (activeClass.styling.size === "small") {
           smallGroup = "small-group4";
         }
       } else if (
-        activeClass?.styling.groups === 5 ||
-        activeClass?.styling.groups === 6
+        activeClass.styling.groups === 5 ||
+        activeClass.styling.groups === 6
       ) {
         group = "group56";
         groupContainer = "group-container56";
-        if (activeClass?.styling.size === "small") {
+        if (activeClass.styling.size === "small") {
           smallGroup = "small-group56";
         }
-      } else if (activeClass?.styling.groups === 7) {
+      } else if (activeClass.styling.groups === 7) {
         group = "group7";
         groupContainer = "group-container7";
-        if (activeClass?.styling.size === "small") {
+        if (activeClass.styling.size === "small") {
           smallGroup = "small-group7";
         }
       }

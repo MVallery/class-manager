@@ -17,7 +17,6 @@ import { GoogleLogin } from 'react-google-login';
 import GoogleIcon from './FormElements/GoogleIcon';
 import "./Authenticate.css";
 import {connect} from 'react-redux';
-import { render } from "@testing-library/react";
 
 const Authenticate = props => {
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -55,8 +54,7 @@ const Authenticate = props => {
     if (isLoginMode) {
       try {
         const responseData = await sendRequest(
-          // `https://classmanagerbackend.herokuapp.com/api/users/login`, 
-          'http://localhost:5000/api/users/login',
+          `https://classmanagerbackend.herokuapp.com/api/users/login`, 
           "POST",
           JSON.stringify({
             email: formState.inputs.email.value,
@@ -87,8 +85,7 @@ const Authenticate = props => {
     } else {
       try {
         const responseData = await sendRequest(
-          // `https://classmanagerbackend.herokuapp.com/api/users/signup`, 
-          'http://localhost:5000/api/users/signup',
+          `https://classmanagerbackend.herokuapp.com/api/users/signup`, 
 
           'POST', 
           JSON.stringify({
@@ -121,14 +118,10 @@ const Authenticate = props => {
 }, [location])
   const googleSuccess =async(res)=>{
     const result = res?.profileObj;
-    const token = res?.tokenId;
     var id_token = res.getAuthResponse().id_token;
-    console.log(result, token)
     try{
       const responseData = await sendRequest(
-        'http://localhost:5000/api/users/googlelogin',
-
-        // `https://classmanagerbackend.herokuapp.com/api/users/googlelogin`, 
+        `https://classmanagerbackend.herokuapp.com/api/users/googlelogin`, 
         "POST",
         JSON.stringify({
           email:result.email,
@@ -141,9 +134,7 @@ const Authenticate = props => {
           
         }
       )
-      console.log(responseData)
       const tokenExpirationDate = new Date(new Date().getTime() + 1000 * 60 * 60);
-      console.log(responseData.token,id_token)
       localStorage.setItem(
         "userData",
         JSON.stringify({
@@ -154,7 +145,6 @@ const Authenticate = props => {
       );
       props.login(responseData.userId, id_token);
       props.handleUpdate(responseData.classList[0], responseData.classList);
-      console.log('responseData',responseData)
     }catch(error){
       console.log(error)
     }
