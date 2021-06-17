@@ -91,7 +91,6 @@ class MyStudents extends React.Component {
   render() {
     return (
       <React.Fragment>
-
           <Modal
             show={this.state.showAddNewClassModal}
             onCancel={this.cancelAddNewClassHandler}

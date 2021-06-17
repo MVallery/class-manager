@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 
 // Component that is used to create a new class both on the Home page, and in the add student modal in ClassTitleMenu
 const NewClass = (props) => {
-  const {isLoading, error, sendRequest, clearError } = useHttpClient();
+  const {sendRequest} = useHttpClient();
 
   const handleNewClass = (props) => {
     props.cancelAddNewClassHandler();
@@ -59,7 +59,9 @@ const NewClass = (props) => {
   
     tempClassList.push(tempClass);
     try {
-     sendRequest('https://classmanagerbackend.herokuapp.com/api/users/'+props.userId+'/create-class', "POST", 
+    //  sendRequest('https://classmanagerbackend.herokuapp.com/api/users/'+props.userId+'/create-class', "POST", 
+     sendRequest('http://localhost:5000/api/users/'+props.userId+'/create-class', "POST", 
+
       JSON.stringify({
         title: tempClass.title,
         students: tempClass.students,

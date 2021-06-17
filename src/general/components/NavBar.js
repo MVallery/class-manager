@@ -1,12 +1,10 @@
-import React, {useState} from 'react'
+import React from 'react'
 import NavLinks from './NavLinks'
 
 const NavBar = props => {
-  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
-
-  const openDrawerHandler = () => setDrawerIsOpen(true);
-  
-  const closeDrawerHandler = () => setDrawerIsOpen(false);
+  // const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+  // const openDrawerHandler = () => setDrawerIsOpen(true);
+    // const closeDrawerHandler = () => setDrawerIsOpen(false);
   return (
     <React.Fragment>
       {/* {drawerIsOpen && <Backdrop onClick={closeDrawerHandler}/>} */}

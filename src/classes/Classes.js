@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from 'react-redux';
 import NavBar from "../general/components/NavBar";
-
+import Logo from "../general/components/Logo";
 import {CSSTransition} from 'react-transition-group';
 import StudentCard from "./components/StudentCard";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
@@ -18,7 +18,7 @@ import "./Classes.css";
 
 const Classes = (props) => {
   const { activeClass, classList } = props;
-  const {isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { sendRequest } = useHttpClient();
   const [newNameListState, setNewNameListState] = useState([]);
 
   const [showAddNewClassModal, setAddNewClassModal] = useState(false);
@@ -40,7 +40,9 @@ const Classes = (props) => {
   //a generic database function that is used for any PATCH updates involving the activeClass 
   const handleDatabaseUpdate= async(tempActiveClass)=> {
       try {
-        await sendRequest(`https://classmanagerbackend.herokuapp.com/api/users/${props.userId}/${activeClass.id}`, "PATCH", 
+        // await sendRequest(`https://classmanagerbackend.herokuapp.com/api/users/${props.userId}/${activeClass.id}`, "PATCH", 
+        await sendRequest(`http://localhost:5000/api/users/${props.userId}/${activeClass.id}`, "PATCH", 
+
          JSON.stringify({
            title: tempActiveClass.title,
            students: tempActiveClass.students,
@@ -59,7 +61,9 @@ const Classes = (props) => {
 
     const handleDatabaseDelete = async()=> {
       try{
-        await sendRequest(`https://classmanagerbackend.herokuapp.com/api/users/${props.userId}/${activeClass.id}`, 'DELETE',
+        // await sendRequest(`https://classmanagerbackend.herokuapp.com/api/users/${props.userId}/${activeClass.id}`, 'DELETE',
+        await sendRequest(`http://localhost:5000/api/users/${props.userId}/${activeClass.id}`, 'DELETE',
+
         null,
         { Authorization: "Bearer " + props.token }
   
@@ -140,30 +144,30 @@ const Classes = (props) => {
   const handleGroupStyling = () => {
     mainGroupContainer = "group-main-container";
 
-    if (activeClass.styling.format === "rows") {
+    if (activeClass?.styling.format === "rows") {
       group = "row";
       groupContainer = "row-container";
       mainGroupContainer = "row-main-container";
     } else {
-      if (activeClass.styling.groups === 4) {
+      if (activeClass?.styling.groups === 4) {
         group = "group4";
         groupContainer = "group-container4";
         if (activeClass.styling.size === "small") {
           smallGroup = "small-group4";
         }
       } else if (
-        activeClass.styling.groups === 5 ||
-        activeClass.styling.groups === 6
+        activeClass?.styling.groups === 5 ||
+        activeClass?.styling.groups === 6
       ) {
         group = "group56";
         groupContainer = "group-container56";
-        if (activeClass.styling.size === "small") {
+        if (activeClass?.styling.size === "small") {
           smallGroup = "small-group56";
         }
-      } else if (activeClass.styling.groups === 7) {
+      } else if (activeClass?.styling.groups === 7) {
         group = "group7";
         groupContainer = "group-container7";
-        if (activeClass.styling.size === "small") {
+        if (activeClass?.styling.size === "small") {
           smallGroup = "small-group7";
         }
       }
@@ -171,15 +175,11 @@ const Classes = (props) => {
   };
 
   const handleFormatting = () => {
-    let remainder = activeClass.length % activeClass.styling.groups;
     let formattedNameList = [];
-    let temp = JSON.parse(JSON.stringify(props.activeClass));
-    let tempClassList = JSON.parse(JSON.stringify(props.classList));
-
     //splitting studentCards into separate groups based on amount in each group to make formatting easier later.
-    for (let i = 0; i < studentCards.length; i += activeClass.styling.groups) {
+    for (let i = 0; i < studentCards.length; i += activeClass?.styling.groups) {
       let [newArray, newArray2] = [[], []];
-      if (activeClass.styling.groups === 4) {
+      if (activeClass?.styling.groups === 4) {
         newArray = studentCards.slice(i, i + 2);
         newArray2 = studentCards.slice(i + 2, i + 4);
       } else if (activeClass.styling.groups === 5) {
@@ -203,7 +203,7 @@ const Classes = (props) => {
             droppableId={`group-${index}`}
             index={index}
             direction={
-              activeClass.styling.format === "rows" ? "horizontal" : "vertical"
+              activeClass?.styling.format === "rows" ? "horizontal" : "vertical"
             }
           >
             {(provided) => (
@@ -220,7 +220,7 @@ const Classes = (props) => {
             droppableId={`group-${index}-a`}
             index={index * 20}
             direction={
-              activeClass.styling.format === "rows" ? "horizontal" : "vertical"
+              activeClass?.styling.format === "rows" ? "horizontal" : "vertical"
             }
           >
             {(provided) => (
@@ -245,14 +245,16 @@ const Classes = (props) => {
         </div>
       </DragDropContext>
     );
-    let newTempList = checkActiveClass(tempClassList, temp);
 
     setNewNameListState(newNameList);
   };
 
   useEffect(() => {
-    handleGroupStyling();
-    handleFormatting();
+    if(activeClass){
+      handleGroupStyling();
+      handleFormatting();
+    }
+    
   }, [props.activeClass]); //props.generalSelection.groups
 
   return (
@@ -310,7 +312,15 @@ const Classes = (props) => {
       </div>
     </React.Fragment>
     :
-    <NewClass {...this} {...props} />
+    <React.Fragment>
+      <div className="no-classes-container">
+        <div className="no-classes-logo-container"><Logo logoStyle="navbar"/></div>
+
+        <h1>Please create a class to get started!</h1>
+        <NewClass {...this} {...props} />
+
+      </div>
+    </React.Fragment>
   );
 };
 

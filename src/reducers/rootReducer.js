@@ -21,6 +21,7 @@ const rootReducer = (state = initState, action) => {
         classList: action.tempClassList,
       }
     case 'LOGIN':
+      console.log(action)
       return {
         ...state,
         token:action.token,

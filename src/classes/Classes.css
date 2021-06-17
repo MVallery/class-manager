@@ -19,6 +19,19 @@
 .classes-container h1{
   text-align:center;
 }
+.no-classes-container{
+  margin-top:100px;
+
+
+}
+.no-classes-container h1{
+  text-align:center;
+}
+.no-classes-logo-container{
+  display:flex;
+  justify-content:center;
+  width:100vw;
+}
 .droppable-container{
   display: flex;
   margin: 0px 50px 50px 50px;

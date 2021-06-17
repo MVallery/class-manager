@@ -2,17 +2,22 @@ import React, { useState, useEffect } from "react";
 import {useLocation} from 'react-router-dom';
 import Input from "./FormElements/Input";
 import Button from "./FormElements/Button";
+import MaterialButton from '@material-ui/core/Button';
+
 import Card from "../general/components/Card";
-import LoadingSpinner from '../general/components/LoadingSpinner'
-import ErrorModal from '../general/components/ErrorModal'
+import LoadingSpinner from '../general/components/LoadingSpinner';
+import ErrorModal from '../general/components/ErrorModal';
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_EMAIL,
 } from "./validators";
 import { useForm } from "./form-hook";
-import {useHttpClient} from '../general/http-hook'
+import {useHttpClient} from '../general/http-hook';
+import { GoogleLogin } from 'react-google-login';
+import GoogleIcon from './FormElements/GoogleIcon';
 import "./Authenticate.css";
 import {connect} from 'react-redux';
+import { render } from "@testing-library/react";
 
 const Authenticate = props => {
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -50,7 +55,8 @@ const Authenticate = props => {
     if (isLoginMode) {
       try {
         const responseData = await sendRequest(
-          `https://classmanagerbackend.herokuapp.com/api/users/login`, 
+          // `https://classmanagerbackend.herokuapp.com/api/users/login`, 
+          'http://localhost:5000/api/users/login',
           "POST",
           JSON.stringify({
             email: formState.inputs.email.value,
@@ -73,7 +79,7 @@ const Authenticate = props => {
           })
         );
         props.login(responseData.userId, responseData.token);
-        props.handleUpdate(responseData.classList[0], responseData.classList)
+        props.handleUpdate(responseData.classList[0], responseData.classList);
 
       } catch (err) {
       }
@@ -81,7 +87,9 @@ const Authenticate = props => {
     } else {
       try {
         const responseData = await sendRequest(
-          `https://classmanagerbackend.herokuapp.com/api/users/signup`, 
+          // `https://classmanagerbackend.herokuapp.com/api/users/signup`, 
+          'http://localhost:5000/api/users/signup',
+
           'POST', 
           JSON.stringify({
             email: formState.inputs.email.value,
@@ -111,7 +119,51 @@ const Authenticate = props => {
       switchModeHandler()
     }
 }, [location])
+  const googleSuccess =async(res)=>{
+    const result = res?.profileObj;
+    const token = res?.tokenId;
+    var id_token = res.getAuthResponse().id_token;
+    console.log(result, token)
+    try{
+      const responseData = await sendRequest(
+        'http://localhost:5000/api/users/googlelogin',
 
+        // `https://classmanagerbackend.herokuapp.com/api/users/googlelogin`, 
+        "POST",
+        JSON.stringify({
+          email:result.email,
+          token:id_token,
+          password:'google'
+        }),
+        {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+          
+        }
+      )
+      console.log(responseData)
+      const tokenExpirationDate = new Date(new Date().getTime() + 1000 * 60 * 60);
+      console.log(responseData.token,id_token)
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          userId: responseData.userId,
+          token: id_token,
+          expiration: tokenExpirationDate.toISOString(),
+        })
+      );
+      props.login(responseData.userId, id_token);
+      props.handleUpdate(responseData.classList[0], responseData.classList);
+      console.log('responseData',responseData)
+    }catch(error){
+      console.log(error)
+    }
+    props.history.push("/classes");
+
+  } 
+  const googleFailure =()=>{
+
+  }
   return (
     <React.Fragment>
       <div className="authenticate-container">
@@ -144,9 +196,28 @@ const Authenticate = props => {
             <Button type="submit" disabled={!formState.isValid}>
               {isLoginMode ? "LOGIN" : "SIGN UP"}
             </Button>
+            <GoogleLogin
+              clientId="247069627752-hhs6nq2317fetlg46vjo70jvf3ced6nu.apps.googleusercontent.com"
+              render={(renderProps)=>(
+                <MaterialButton
+                  // className={className.googleButton}
+                  color="primary"
+                  fullWidth
+                  onClick={renderProps.onClick}
+                  disabled={renderProps.disabled}
+                  startIcon={<GoogleIcon/>}
+                  varient="contained"
+                  >
+                    Google Login
+                  </MaterialButton>
+              )}
+              onSuccess={googleSuccess}
+              onFailure={googleFailure}
+              cookiepolicy="single_host_origin"
+              />
           </form>
         <Button inverse onClick={switchModeHandler}>
-          SWITCH TO {isLoginMode ? "SIGN UP" : "LOGIN"}
+          {isLoginMode ? "Don't have an account? Sign Up" : "Already have an account? Login"}
         </Button>
         </Card>
       </div>

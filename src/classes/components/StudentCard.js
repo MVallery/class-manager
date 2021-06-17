@@ -37,11 +37,8 @@ const StudentCard = (props) => {
   };
   const handleSelection = (index) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
-    let tempClassList = JSON.parse(JSON.stringify(classList));
     temp.students[index].isChecked = !temp.students[index].isChecked;
-    let newTempList = checkActiveClass(tempClassList, temp);
     props.handleUpdate(temp, classList)
-    // props.handleState({ activeClass: temp, classList: newTempList });
   };
 
   const handleAdd = (index) => {

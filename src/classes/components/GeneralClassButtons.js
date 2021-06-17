@@ -9,7 +9,7 @@ import ShuffleIcon from "@material-ui/icons/Shuffle";
 import Modal from "../../general/components/Modal";
 import { connect } from 'react-redux';
 
-import { checkActiveClass, colorPallet, randWhole, shuffleArray } from "../../app-files/general";
+import { checkActiveClass, shuffleArray } from "../../app-files/general";
 import "./GeneralClassButtons.css";
 // Button bar that is displayed at the bottom of the Classes page. 
 // This handles general button functionality that involves the entire class and

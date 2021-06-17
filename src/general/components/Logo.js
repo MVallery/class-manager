@@ -5,12 +5,12 @@ const Logo = props => {
   let iconStyle
   let containerStyle
   let logoEnd
-  if (props.style==='main-logo'){
+  if (props.logoStyle==='main-logo'){
     containerStyle={height:'120px', animation: 'moveInLeft 2s ease-out'}
     iconStyle={width:'120px', height:'120px'}
     logoEnd={lineHeight:'180px', fontSize:'4rem'}
-  } else if (props.style==='navbar') {
-    containerStyle={width:'500px', height:'50px'}
+  } else if (props.logoStyle==='navbar') {
+    containerStyle={height:'50px'}
     iconStyle={width:'40px', height:'40px', border:'0.5px solid black', boxShadow: '1px 1px 5px 2px grey', padding:'1px 5px 7px 5px'}
     logoEnd={lineHeight:'50px', fontSize:'1.5rem'}
     
