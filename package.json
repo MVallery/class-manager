@@ -10,6 +10,7 @@
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "dotenv": "^10.0.0",
     "googleapis": "^76.0.0",
     "react": "^17.0.1",
     "react-beautiful-dnd": "npm:aligned-rbd@^13.0.0-aligned0.0.3mod",

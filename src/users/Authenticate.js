@@ -54,7 +54,7 @@ const Authenticate = props => {
     if (isLoginMode) {
       try {
         const responseData = await sendRequest(
-          `https://classmanagerbackend.herokuapp.com/api/users/login`, 
+          `${process.env.REACT_APP_API}/api/users/login`, 
           "POST",
           JSON.stringify({
             email: formState.inputs.email.value,
@@ -85,7 +85,7 @@ const Authenticate = props => {
     } else {
       try {
         const responseData = await sendRequest(
-          `https://classmanagerbackend.herokuapp.com/api/users/signup`, 
+          `${process.env.REACT_APP_API}/api/users/signup`, 
 
           'POST', 
           JSON.stringify({
@@ -121,7 +121,7 @@ const Authenticate = props => {
     var id_token = res.getAuthResponse().id_token;
     try{
       const responseData = await sendRequest(
-        `https://classmanagerbackend.herokuapp.com/api/users/googlelogin`, 
+        `${process.env.REACT_APP_API}/api/users/googlelogin`, 
         "POST",
         JSON.stringify({
           email:result.email,

@@ -59,7 +59,7 @@ const NewClass = (props) => {
   
     tempClassList.push(tempClass);
     try {
-     sendRequest('https://classmanagerbackend.herokuapp.com/api/users/'+props.userId+'/create-class', "POST", 
+     sendRequest(`${process.env.REACT_APP_API}/api/users/${props.userId}/create-class`, "POST", 
 
       JSON.stringify({
         title: tempClass.title,

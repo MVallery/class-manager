@@ -7,8 +7,10 @@ import { BrowserRouter} from 'react-router-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import rootReducer from './reducers/rootReducer';
-const store = createStore(rootReducer);
+import dotenv from 'dotenv'
 
+dotenv.config()
+const store = createStore(rootReducer);
 ReactDOM.render(
   <BrowserRouter>
   

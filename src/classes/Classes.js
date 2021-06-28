@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from 'react-redux';
-import NavBar from "../general/components/NavBar";
+import NavBar from "./components/NavBar";
 import Logo from "../general/components/Logo";
 import {CSSTransition} from 'react-transition-group';
 import StudentCard from "./components/StudentCard";
@@ -40,7 +40,7 @@ const Classes = (props) => {
   //a generic database function that is used for any PATCH updates involving the activeClass 
   const handleDatabaseUpdate= async(tempActiveClass)=> {
       try {
-        await sendRequest(`https://classmanagerbackend.herokuapp.com/api/users/${props.userId}/${activeClass.id}`, "PATCH", 
+        await sendRequest(`${process.env.REACT_APP_API}/api/users/${props.userId}/${activeClass.id}`, "PATCH", 
 
          JSON.stringify({
            title: tempActiveClass.title,
@@ -60,7 +60,7 @@ const Classes = (props) => {
 
     const handleDatabaseDelete = async()=> {
       try{
-        await sendRequest(`https://classmanagerbackend.herokuapp.com/api/users/${props.userId}/${activeClass.id}`, 'DELETE',
+        await sendRequest(`${process.env.REACT_APP_API}/api/users/${props.userId}/${activeClass.id}`, 'DELETE',
 
         null,
         { Authorization: "Bearer " + props.token }
