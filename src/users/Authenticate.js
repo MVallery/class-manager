@@ -187,7 +187,7 @@ const Authenticate = props => {
               {isLoginMode ? "LOGIN" : "SIGN UP"}
             </Button>
             <GoogleLogin
-              clientId="247069627752-hhs6nq2317fetlg46vjo70jvf3ced6nu.apps.googleusercontent.com"
+              clientId={process.env.REACT_APP_GOOGLE_API}
               render={(renderProps)=>(
                 <MaterialButton
                   // className={className.googleButton}
