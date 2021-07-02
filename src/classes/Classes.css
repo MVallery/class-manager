@@ -96,7 +96,7 @@
   padding-bottom:10px;
 
 }
-.group56 {
+.group5, .group6 {
   display:flex;
   flex-direction:column;
   min-width: 145px;
@@ -105,7 +105,7 @@
   justify-content:flex-start;
   align-items:flex-start;
 }
-.group-container56 {
+.group-container5, .group-container6 {
   display:flex;
   justify-content:center;
   flex-wrap:wrap;
@@ -131,7 +131,7 @@
   /* width:250px !important; */
   /* margin:0px 30px !important; */
 }
-.small-group56 {
+.small-group5, .small-group6 {
   height:390px !important;
   /* width:250px !important; */
   /* margin:0px 30px 30px 30px !important; */

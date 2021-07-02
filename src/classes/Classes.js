@@ -71,7 +71,7 @@ const Classes = (props) => {
       }
     }
   const handleOnDragEnd = (result) => {
-    if (!result.destination) { //if outside draggable container do thing.
+    if (!result.destination) { //if outside draggable container dont swap.
       return;
     }
     let temp = JSON.parse(JSON.stringify(activeClass));
@@ -131,6 +131,7 @@ const Classes = (props) => {
         handleDatabaseUpdate={handleDatabaseUpdate}
         record={record}
         index={index}
+        
       />
     );
   }):null;
@@ -141,62 +142,36 @@ const Classes = (props) => {
   let smallGroup;
   const handleGroupStyling = () => {
     mainGroupContainer = "group-main-container";
-
+    
     if (activeClass.styling.format === "rows") {
       group = "row";
       groupContainer = "row-container";
       mainGroupContainer = "row-main-container";
     } else {
-      if (activeClass.styling.groups === 4) {
-        group = "group4";
-        groupContainer = "group-container4";
-        if (activeClass.styling.size === "small") {
-          smallGroup = "small-group4";
-        }
-      } else if (
-        activeClass.styling.groups === 5 ||
-        activeClass.styling.groups === 6
-      ) {
-        group = "group56";
-        groupContainer = "group-container56";
-        if (activeClass.styling.size === "small") {
-          smallGroup = "small-group56";
-        }
-      } else if (activeClass.styling.groups === 7) {
-        group = "group7";
-        groupContainer = "group-container7";
-        if (activeClass.styling.size === "small") {
-          smallGroup = "small-group7";
-        }
+      group = `group${activeClass.styling.groups}`
+      groupContainer = `group-container${activeClass.styling.groups}`
+      if(activeClass.styling.size === 'small'){
+        smallGroup = `small-group${activeClass.styling.groups}`
       }
     }
   };
 
   const handleFormatting = () => {
+    let groups = activeClass?.styling.groups
     let formattedNameList = [];
     //splitting studentCards into separate groups based on amount in each group to make formatting easier later.
-    for (let i = 0; i < studentCards.length; i += activeClass?.styling.groups) {
-      let [newArray, newArray2] = [[], []];
-      if (activeClass?.styling.groups === 4) {
-        newArray = studentCards.slice(i, i + 2);
-        newArray2 = studentCards.slice(i + 2, i + 4);
-      } else if (activeClass.styling.groups === 5) {
-        newArray = studentCards.slice(i, i + 3);
-        newArray2 = studentCards.slice(i + 3, i + 5);
-      } else if (activeClass.styling.groups === 6) {
-        newArray = studentCards.slice(i, i + 3);
-        newArray2 = studentCards.slice(i + 3, i + 6);
-      } else if (activeClass.styling.groups === 7) {
-        newArray = studentCards.slice(i, i + 4);
-        newArray2 = studentCards.slice(i + 4, i + 7);
-      }
+    for (let i = 0; i < studentCards.length; i += groups) {
+      let half = Math.ceil(groups/2)
+      let newArray = studentCards.slice(i, i + half);
+      let newArray2 = studentCards.slice(i + half, i + groups)
       let combinedArray = [newArray, newArray2];
+
       formattedNameList.push(combinedArray);
     }
 
     let newNameList = formattedNameList.map((array, index) => {
       return (
-        <div className="droppable-container">
+        <div className="droppable-container" key={index}>
           <Droppable
             droppableId={`group-${index}`}
             index={index}
@@ -277,9 +252,7 @@ const Classes = (props) => {
               </NavBar>
       <div className="classes-container">
 
-        
         <React.Fragment>
-
                 <CSSTransition
                 in={true}
                 mountOnEnter
@@ -302,11 +275,7 @@ const Classes = (props) => {
                     handleDatabaseUpdate={handleDatabaseUpdate}
                   />
         </React.Fragment>
-      
-      
-      
-
-
+    
       </div>
     </React.Fragment>
     :

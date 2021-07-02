@@ -58,22 +58,24 @@ const NewClass = (props) => {
     }
   
     tempClassList.push(tempClass);
-    try {
-     sendRequest(`${process.env.REACT_APP_API}/api/users/${props.userId}/create-class`, "POST", 
-
-      JSON.stringify({
-        title: tempClass.title,
-        students: tempClass.students,
-        styling: tempClass.styling,
-        count: tempClass.count,
-        id: tempClass.id
-      }), {
-        'Content-Type': 'application/json'
-      }
-      )
+    if (props.userId){
+      try {
+       sendRequest(`${process.env.REACT_APP_API}/api/users/${props.userId}/create-class`, "POST", 
   
-    } catch(err) {
-      console.log(err)
+        JSON.stringify({
+          title: tempClass.title,
+          students: tempClass.students,
+          styling: tempClass.styling,
+          count: tempClass.count,
+          id: tempClass.id
+        }), {
+          'Content-Type': 'application/json'
+        }
+        )
+    
+      } catch(err) {
+        console.log(err)
+      }
     }
   props.handleUpdate(tempClass, tempClassList)
   props.handleState({inputNames:'', inputClassName:''})
