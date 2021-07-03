@@ -78,10 +78,12 @@ const NewClass = (props) => {
       }
     }
   props.handleUpdate(tempClass, tempClassList)
-  props.handleState({inputNames:'', inputClassName:''})
+  props.handleInputNames('');
+  props.handleInputClassName('');
+  // props.handleState({inputNames:'', inputClassName:''})
   }
-  let inputClassNamesError = /[^a-zA-Z0-9 ]/.test(props.inputClassName)? true:false
-  let inputNamesError = /[^a-zA-Z, ]/.test(props.inputNames)? true:false
+  let inputClassNamesError = props.inputClassName.length>0&&/[^a-zA-Z0-9 ]/.test(props.inputClassName)? true:false
+  let inputNamesError = props.inputNames&&/[^a-zA-Z, ]/.test(props.inputNames)? true:false
   return (
     <React.Fragment>
       <div className="new-class-container">
@@ -149,12 +151,18 @@ const mapStateToProps = (state) => {
   return {
     activeClass: state.activeClass,
     classList: state.classList,
-    userId:state.userId
+    userId:state.userId,
+    inputClassName: state.inputClassName,
+    inputNames: state.inputNames
+
   }
 }
 const mapDispatchToProps = (dispatch) => {
   return{
-    handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp,tempClassList })}
+    handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp,tempClassList })},
+    handleInputClassName: (inputClassName) => {dispatch({type:'INPUT_CLASS_NAME', inputClassName})},
+    handleInputNames: (inputNames) => {dispatch({type:'INPUT_NAMES', inputNames})},
+
     
   }
 }

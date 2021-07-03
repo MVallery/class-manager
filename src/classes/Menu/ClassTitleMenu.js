@@ -212,10 +212,10 @@ const ClassTitleMenu = (props) => {
       props.handleDatabaseUpdate(temp);
     }
     props.handleUpdate(temp, newTempList)
-
-    props.handleState({
-      inputNames: "",
-    });
+    props.handleInputNames('')
+    // props.handleState({
+    //   inputNames: "",
+    // });
   };
   return (
     <React.Fragment>
@@ -384,7 +384,9 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
   return{
-    handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp,tempClassList })}
+    handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp,tempClassList })},
+    handleInputClassName: (inputClassName) => {dispatch({type:'INPUT_CLASS_NAME', inputClassName})},
+    handleInputNames: (inputNames) => {dispatch({type:'INPUT_NAMES', inputNames})},
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ClassTitleMenu);

@@ -10,10 +10,22 @@ const initState = {
   classList:[],
   token:null,
   userId:null,
-  isLoggedIn:false
+  isLoggedIn:false,
+  inputClassName:'',
+  inputNames:'',
 }
 const rootReducer = (state = initState, action) => {
   switch (action.type) {
+    case 'INPUT_NAMES':
+      return{
+        ...state,
+        inputNames: action.inputNames,
+      }
+    case 'INPUT_CLASS_NAME':
+      return{
+        ...state,
+        inputClassName: action.inputClassName
+      }
     case 'UPDATE_CLASS':
       return {
         ...state,

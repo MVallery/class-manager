@@ -168,7 +168,7 @@ const StudentCard = (props) => {
                 <div
                   className={`student-card-container ${smallStyle.smallIcon} blank-student-card-container`}
                   {...provided.draggableProps}
-                  style={getStyle(provided.draggableProps.style, snapshot)}
+                  style={getStyle(record, provided.draggableProps.style, snapshot)}
                   ref={provided.innerRef}
                   {...provided.dragHandleProps}
                 >
@@ -200,7 +200,7 @@ const StudentCard = (props) => {
             {...provided.dragHandleProps}
             key={record.key}
             className="drag"
-            style={getStyle(provided.draggableProps.style, snapshot)}
+            style={getStyle(record, provided.draggableProps.style, snapshot)}
           >
             <div style={{display:'flex', flexDirection:'column', height:'100%', alignItems: 'center'}}>
             <div className="student-icon-container">

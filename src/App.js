@@ -8,7 +8,7 @@ import NewClass from "./classes/components/NewClass";
 import Home from "./general/Home";
 import Authenticate from "./users/Authenticate";
 import { styles } from "./AppStyles";
-import { colorPallet, checkActiveClass } from "./app-files/general";
+import { colorPallet, checkActiveClass, cap } from "./app-files/general";
 
 import Modal from "./general/components/Modal";
 import PropTypes from "prop-types";
@@ -20,8 +20,6 @@ class MyStudents extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputNames: "",
-      inputClassName: "",
       showAddNewClassModal: false,
     };
   }
@@ -57,9 +55,8 @@ class MyStudents extends React.Component {
 
   handleChange = (e) => {
     const { name, value } = e.target;
-    this.setState({
-      [name]: value,
-    });
+    this.props['handle'+cap(name)](value)
+
   };
 
   handleInput = (e) => {
@@ -150,6 +147,8 @@ const mapStateToProps = (state) => {
   return {
     activeClass: state.activeClass,
     classList: state.classList,
+    inputNames: state.inputNames,
+    inputClassName: state.inputClassName,
     isLoggedIn:state.isLoggedIn,
     token:state.token,
     userId:state.userId
@@ -159,6 +158,8 @@ const mapDispatchToProps = (dispatch) => {
   return{
     login: (userId, token) => {dispatch({type:'LOGIN', userId,token })},
     logout: ()=> {dispatch({type:'LOGOUT'})},
+    handleInputNames: (inputNames) => {dispatch({type:'INPUT_NAMES', inputNames})},
+    handleInputClassName: (inputClassName) => {dispatch({type:'INPUT_CLASS_NAME', inputClassName})},
     handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp,tempClassList })}
   }
 }
