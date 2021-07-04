@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import MainMenu from "./Menu/MainMenu";
 import Logo from "../general/components/Logo";
-import StudentCard from "./components/StudentCard";
+import StudentCard from "./class-display/student-card/StudentCard";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { checkActiveClass } from "../app-files/general";
 
 import { useHttpClient } from "../general/http-hook";
 import ClassTitleMenu from "./Menu/ClassTitleMenu";
 import GeneralClassButtons from "./components/GeneralClassButtons";
-import StudentCardsDisplay from './class-display/StudentCardsDisplay'
-import StudentContainer from './class-display/StudentContainer'
+import StudentCardsDisplay from "./class-display/StuCardsDisplay";
+import StudentContainer from "./class-display/StudentContainer";
 import NewClass from "./components/NewClass";
 import "./Classes.css";
-import {getStyle} from './util'
+import { getStyle } from "./util";
 // Connects all components in subfolder together and acts as the main display page.
 
 const Classes = (props) => {
@@ -66,7 +66,6 @@ const Classes = (props) => {
     }
   };
 
-
   const studentCards = activeClass
     ? props.activeClass.students.map((record, index) => {
         return (
@@ -117,8 +116,18 @@ const Classes = (props) => {
     let newNameList = formattedNameList.map((array, index) => {
       return (
         <div className="droppable-container" key={index}>
-          <StudentContainer index={index} group={group} smallGroup={smallGroup} array={array[0]}/>
-          <StudentContainer index={index} group={group} smallGroup={smallGroup} array={array[1]}/>
+          <StudentContainer
+            index={index}
+            group={group}
+            smallGroup={smallGroup}
+            array={array[0]}
+          />
+          <StudentContainer
+            index={index}
+            group={group}
+            smallGroup={smallGroup}
+            array={array[1]}
+          />
         </div>
       );
     });
@@ -146,7 +155,7 @@ const Classes = (props) => {
     }
     let temp = JSON.parse(JSON.stringify(activeClass));
     let tempClassList = JSON.parse(JSON.stringify(classList));
-  
+
     let draggedItem = activeClass.students[result.source.index];
     let swappedItem = activeClass.students[result.destination.index];
     if (draggedItem === swappedItem) {
@@ -163,7 +172,7 @@ const Classes = (props) => {
       temp.students.splice(result.source.index, 0, swappedItem);
       temp.students.splice(result.destination.index, 0, draggedItem);
     }
-  
+
     let newTempList = checkActiveClass(tempClassList, temp);
     if (props.userId) {
       props.handleDatabaseUpdate(temp);
@@ -172,8 +181,10 @@ const Classes = (props) => {
   };
   return activeClass ? (
     <React.Fragment>
-
-      <MainMenu handleChange={props.handleChange} handleState={props.handleState}>
+      <MainMenu
+        handleChange={props.handleChange}
+        handleState={props.handleState}
+      >
         <ClassTitleMenu
           {...props}
           handleDatabaseUpdate={handleDatabaseUpdate}
@@ -182,12 +193,12 @@ const Classes = (props) => {
         />
       </MainMenu>
       <div className="classes-container">
-          <StudentCardsDisplay 
-            handleOnDragEnd={handleOnDragEnd}
-            handleDatabaseUpdate={handleDatabaseUpdate} 
-            newNameListState={newNameListState} />
-          <GeneralClassButtons 
-            handleDatabaseUpdate={handleDatabaseUpdate} />
+        <StudentCardsDisplay
+          handleOnDragEnd={handleOnDragEnd}
+          handleDatabaseUpdate={handleDatabaseUpdate}
+          newNameListState={newNameListState}
+        />
+        <GeneralClassButtons handleDatabaseUpdate={handleDatabaseUpdate} />
       </div>
     </React.Fragment>
   ) : (

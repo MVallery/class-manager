@@ -213,9 +213,7 @@ const ClassTitleMenu = (props) => {
     }
     props.handleUpdate(temp, newTempList)
     props.handleInputNames('')
-    // props.handleState({
-    //   inputNames: "",
-    // });
+
   };
   return (
     <React.Fragment>
@@ -379,7 +377,9 @@ const mapStateToProps = (state) => {
   return {
     activeClass: state.activeClass,
     classList: state.classList,
-    userId: state.userId
+    userId: state.userId,
+    inputClassName: state.inputClassName,
+    inputNames:state.inputNames
   }
 }
 const mapDispatchToProps = (dispatch) => {

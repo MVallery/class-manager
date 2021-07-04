@@ -10,7 +10,7 @@ import rootReducer from './reducers/rootReducer';
 import dotenv from 'dotenv'
 
 dotenv.config()
-const store = createStore(rootReducer);
+export const store = createStore(rootReducer);
 ReactDOM.render(
   <BrowserRouter>
   
