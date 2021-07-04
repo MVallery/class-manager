@@ -11,7 +11,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import IconButton from "@material-ui/core/IconButton";
 import FormLabel from "@material-ui/core/FormLabel";
 import TextField from "@material-ui/core/TextField";
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
   cap,
@@ -28,7 +28,9 @@ import "./ClassTitleMenu.css";
 // adding/removing students, changing class formatting and styling, and shuffling the class.
 
 const ClassTitleMenu = (props) => {
-  const { activeClass, classList } = props;
+  const activeClass = useSelector((state) => state.activeClass);
+  const classList = useSelector((state) => state.classList);
+  const dispatch = useDispatch()
   const [showAddStudentModal, setAddStudentModal] = useState(false);
   const [showFormatModal, setShowFormatModal] = useState(false);
   const [classMenuDisplay, setClassMenuDisplay] = useState(null);
@@ -56,11 +58,11 @@ const ClassTitleMenu = (props) => {
     let tempClassList = JSON.parse(JSON.stringify(classList));
     let shuffledTemp = shuffleArray(temp.students);
     temp.students = shuffledTemp;
-    let newTempList = checkActiveClass(tempClassList, temp);
+    tempClassList = checkActiveClass(tempClassList, temp);
     if (props.userId) {
       props.handleDatabaseUpdate(temp);
     }
-    props.handleUpdate(temp, newTempList)
+    dispatch({type:"UPDATE_CLASS",temp, tempClassList})
 
   };
 
@@ -83,11 +85,11 @@ const ClassTitleMenu = (props) => {
           temp.students.splice(x, 1, { name: "blank", background:temp.students[x].background, key:randWhole(2,1000)});
         }
       }
-      let newTempList = checkActiveClass(tempClassList, temp);
+      tempClassList = checkActiveClass(tempClassList, temp);
       if (props.userId) {
         props.handleDatabaseUpdate(temp);
       }
-      props.handleUpdate(temp, newTempList)
+      dispatch({type:"UPDATE_CLASS",temp, tempClassList})
 
     }
   };
@@ -139,21 +141,21 @@ const ClassTitleMenu = (props) => {
         });
       }
     }
-    let newTempList = checkActiveClass(tempClassList, temp);
+    tempClassList = checkActiveClass(tempClassList, temp);
     if (props.userId) {
       props.handleDatabaseUpdate(temp);
     }
-    props.handleUpdate(temp, newTempList)
+    dispatch({type:"UPDATE_CLASS",temp, tempClassList})
 
   };
 
   const handleDeleteClass = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
     let tempClassList = JSON.parse(JSON.stringify(props.classList));
-    let filteredClassList = tempClassList.filter(item => item.title !== temp.title)
+    tempClassList = tempClassList.filter(item => item.title !== temp.title)
     if (window.confirm("Are you sure you want to delete this class?")) {
       props.handleDatabaseDelete();
-      let newActiveClass = filteredClassList.length>0? filteredClassList[0]:{
+      temp = tempClassList.length>0? tempClassList[0]:{
         title: "",
         students: [],
         styling: { groups: 4, format: "groups", theme: "" },
@@ -161,7 +163,7 @@ const ClassTitleMenu = (props) => {
         count: 0,
         
       }
-    props.handleUpdate(newActiveClass, filteredClassList)
+    dispatch({type:"UPDATE_CLASS",temp, tempClassList})
 
     }
 
@@ -205,14 +207,14 @@ const ClassTitleMenu = (props) => {
       }
     }
 
-    let newTempList = checkActiveClass(tempClassList, temp);
+    tempClassList = checkActiveClass(tempClassList, temp);
 
     setAddStudentModal(false);
     if (props.userId) {
       props.handleDatabaseUpdate(temp);
     }
-    props.handleUpdate(temp, newTempList)
-    props.handleInputNames('')
+    dispatch({type:"UPDATE_CLASS", temp, tempClassList});
+    dispatch({type:"INPUT_NAMES", inputNames:''});
 
   };
   return (
@@ -373,20 +375,5 @@ const ClassTitleMenu = (props) => {
     </React.Fragment>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    activeClass: state.activeClass,
-    classList: state.classList,
-    userId: state.userId,
-    inputClassName: state.inputClassName,
-    inputNames:state.inputNames
-  }
-}
-const mapDispatchToProps = (dispatch) => {
-  return{
-    handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp,tempClassList })},
-    handleInputClassName: (inputClassName) => {dispatch({type:'INPUT_CLASS_NAME', inputClassName})},
-    handleInputNames: (inputNames) => {dispatch({type:'INPUT_NAMES', inputNames})},
-  }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(ClassTitleMenu);
+
+export default ClassTitleMenu;

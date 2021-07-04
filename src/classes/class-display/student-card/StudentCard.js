@@ -5,7 +5,7 @@ import StuIconPoints from "./StuIconPoints";
 import Desk from "./desk/Desk";
 import BlankStudentCard from "./BlankStudentCard";
 import { getPointStyle } from "../../util";
-import "../Classes.css";
+import "../../Classes.css";
 import "./StudentCard.css";
 
 // Gets mapped onto each student in the activeClass props from Classes component.
@@ -66,7 +66,7 @@ const StudentCard = (props) => {
                 alignItems: "center",
               }}
             >
-              <StuIconPoints index={index} />
+              <StuIconPoints index={index} handleDatabaseUpdate={props.handleDatabaseUpdate} />
               <Desk
                 smallStyle={smallStyle}
                 backgroundStyle={backgroundStyle}

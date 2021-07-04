@@ -7,7 +7,7 @@ import SelectAll from "@material-ui/icons/SelectAll";
 import LibraryAddCheckIcon from "@material-ui/icons/LibraryAddCheck";
 import ShuffleIcon from "@material-ui/icons/Shuffle";
 import Modal from "../../general/components/Modal";
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { checkActiveClass, shuffleArray } from "../../app-files/general";
 import "./GeneralClassButtons.css";
@@ -16,6 +16,9 @@ import "./GeneralClassButtons.css";
 // would be more commonly used and therefore needs to be more accessible.
 
 const ClassButtons = (props) => {
+  const activeClass = useSelector(state=>state.activeClass)
+  const classList = useSelector(state=>state.classList)
+  const dispatch = useDispatch();
   const [showRandomStudentModal, setShowRandomStudentModal] = useState(false);
   const [randomStudent, setRandomStudent] = useState({ name: "" });
 
@@ -36,8 +39,8 @@ const ClassButtons = (props) => {
       }
       temp.students[i].pointStyle = null;
     }
-    var newTempList = checkActiveClass(tempClassList, temp);
-    props.handleUpdate(temp, newTempList)
+    tempClassList = checkActiveClass(tempClassList, temp);
+    dispatch({type:"UPDATE_CLASS", temp, tempClassList})
   };
 
   const handleSelectAll = () => {
@@ -48,7 +51,7 @@ const ClassButtons = (props) => {
       }
       temp.students[x].isChecked = true;
     }
-    props.handleUpdate(temp, props.classList)
+    dispatch({type:"UPDATE_CLASS", temp, classList})
 
   };
   const handleDeselectAll = () => {
@@ -59,7 +62,7 @@ const ClassButtons = (props) => {
       }
       temp.students[x].isChecked = false;
     }
-    props.handleUpdate(temp, props.classList)
+    dispatch({type:"UPDATE_CLASS", temp, classList})
   };
   const handleAddMulti = () => {
     let temp = JSON.parse(JSON.stringify(props.activeClass));
@@ -75,11 +78,11 @@ const ClassButtons = (props) => {
         temp.students[x].pointStyle = "positive";
       }
     }
-    let newTempList = checkActiveClass(tempClassList, temp);
+    tempClassList = checkActiveClass(tempClassList, temp);
     if (props.userId) {
       props.handleDatabaseUpdate(temp);
     }
-    props.handleUpdate(temp, newTempList)
+    dispatch({type:"UPDATE_CLASS", temp, tempClassList})
   };
 
   const handleSubMulti = () => {
@@ -96,11 +99,11 @@ const ClassButtons = (props) => {
         temp.students[x].pointStyle = "negative";
       }
     }
-    let newTempList = checkActiveClass(tempClassList, temp);
+    tempClassList = checkActiveClass(tempClassList, temp);
     if (props.userId) {
       props.handleDatabaseUpdate(temp);
     }
-    props.handleUpdate(temp, newTempList)
+    dispatch({type:"UPDATE_CLASS", temp, tempClassList})
 
   };
 
@@ -117,11 +120,11 @@ const ClassButtons = (props) => {
         temp.students[x].count = 0;
       }
     }
-    let newTempList = checkActiveClass(tempClassList, temp);
+    tempClassList = checkActiveClass(tempClassList, temp);
     if (props.userId) {
       props.handleDatabaseUpdate(temp);
     }
-    props.handleUpdate(temp, newTempList)
+    dispatch({type:"UPDATE_CLASS", temp, tempClassList})
   };
 
   const handleSelectRandomStudent = () => {
@@ -203,17 +206,5 @@ const ClassButtons = (props) => {
     </React.Fragment>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    activeClass: state.activeClass,
-    classList: state.classList,
-    userId: state.userId
-  }
-}
-const mapDispatchToProps = (dispatch) => {
-  return{
-    handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp,tempClassList })}
-    
-  }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(ClassButtons);
+
+export default ClassButtons;

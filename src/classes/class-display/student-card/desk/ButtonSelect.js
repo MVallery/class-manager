@@ -2,13 +2,13 @@ import React from 'react';
 import Checkbox from "@material-ui/core/Checkbox";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { useSelector, connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 const ButtonSelect = props => {
   const {smallStyle, record, index} = props;
   const activeClass = useSelector((state)=>state.activeClass)
   const classList = useSelector((state)=>state.classList)
-
+  const dispatch = useDispatch()
   var selectStyle = {
     display: record.isChecked && "flex",
     justifyContent: record.isChecked && "end",
@@ -20,7 +20,7 @@ const ButtonSelect = props => {
   const handleSelection = (index) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
     temp.students[index].isChecked = !temp.students[index].isChecked;
-    props.handleUpdate(temp, classList);
+    dispatch({ type: "UPDATE_CLASS", temp, classList });
   };
 
   return(
@@ -48,11 +48,5 @@ const ButtonSelect = props => {
     </div>
   )
 }
-const mapDispatchToProps = (dispatch) => {
-  return {
-    handleUpdate: (temp, tempClassList) => {
-      dispatch({ type: "UPDATE_CLASS", temp, tempClassList });
-    },
-  };
-};
-export default connect(null, mapDispatchToProps)(ButtonSelect);
+
+export default ButtonSelect;

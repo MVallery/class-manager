@@ -6,16 +6,20 @@ import { v4 as uuid } from 'uuid';
 import {useHttpClient} from '../../general/http-hook';
 import { Link } from "react-router-dom";
 import "./NewClass.css";
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 // Component that is used to create a new class both on the Home page, and in the add student modal in ClassTitleMenu
 const NewClass = (props) => {
   const {sendRequest} = useHttpClient();
-
+  const inputNames = useSelector(state=>state.inputNames);
+  const inputClassName = useSelector(state=>state.inputClassName);
+  const classList = useSelector(state=>state.classList);
+  const userId = useSelector(state=>state.userId);
+  const dispatch = useDispatch();
   const handleNewClass = (props) => {
     props.cancelAddNewClassHandler();
     //replaces whitespace and splits into array of name elements.
-    const nameArray =  props.inputNames.replace(/,\s+/g, ',').replace(/\s+[^a-zA-Z]/,'').split(',')
+    const nameArray =  inputNames.replace(/,\s+/g, ',').replace(/\s+[^a-zA-Z]/,'').split(',')
     let result = [];
     for (let x = 0; x < nameArray.length; x++) {
       if (nameArray[x].length === 0) { //ensure empty string doesn't make it through.
@@ -38,9 +42,9 @@ const NewClass = (props) => {
       };
       result.push(record);
     }
-    let tempClassList = JSON.parse(JSON.stringify(props.classList));
-    let tempClass = {
-      title: props.inputClassName,
+    let tempClassList = JSON.parse(JSON.stringify(classList));
+    let temp = {
+      title: inputClassName,
       students: result,
       count: 0,
       styling: { groups: 4, format: "groups", theme: "lightBlueGreen", size:'small'},
@@ -49,7 +53,7 @@ const NewClass = (props) => {
     };
     if (nameArray.length % 4 !== 0) { //add blank students to ensure that all groups are full with default setting of 4 per group.
       for (let i = 0; i < 4 - (nameArray.length % 4); i++) {
-        tempClass.students.push({
+        temp.students.push({
           name: "blank",
           background: colorPallet("lightBlueGreen"),
           key: Math.floor(Math.random()),
@@ -57,17 +61,16 @@ const NewClass = (props) => {
       }
     }
   
-    tempClassList.push(tempClass);
-    if (props.userId){
+    tempClassList.push(temp);
+    if (userId){
       try {
-       sendRequest(`${process.env.REACT_APP_API}/api/users/${props.userId}/create-class`, "POST", 
-  
+       sendRequest(`${process.env.REACT_APP_API}/api/users/${userId}/create-class`, "POST", 
         JSON.stringify({
-          title: tempClass.title,
-          students: tempClass.students,
-          styling: tempClass.styling,
-          count: tempClass.count,
-          id: tempClass.id
+          title: temp.title,
+          students: temp.students,
+          styling: temp.styling,
+          count: temp.count,
+          id: temp.id
         }), {
           'Content-Type': 'application/json'
         }
@@ -77,10 +80,9 @@ const NewClass = (props) => {
         console.log(err)
       }
     }
-  props.handleUpdate(tempClass, tempClassList)
-  props.handleInputNames('');
-  props.handleInputClassName('');
-  // props.handleState({inputNames:'', inputClassName:''})
+    dispatch({type:"UPDATE_CLASS", temp, tempClassList})
+    dispatch({type:"INPUT_NAMES", inputNames:""})
+    dispatch({type:"INPUT_CLASS_NAMES", inputClassName:""})
   }
   let inputClassNamesError = props.inputClassName.length>0&&/[^a-zA-Z0-9 ]/.test(props.inputClassName)? true:false
   let inputNamesError = props.inputNames&&/[^a-zA-Z, ]/.test(props.inputNames)? true:false
@@ -147,23 +149,5 @@ const NewClass = (props) => {
     </React.Fragment>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    activeClass: state.activeClass,
-    classList: state.classList,
-    userId:state.userId,
-    inputClassName: state.inputClassName,
-    inputNames: state.inputNames
 
-  }
-}
-const mapDispatchToProps = (dispatch) => {
-  return{
-    handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp,tempClassList })},
-    handleInputClassName: (inputClassName) => {dispatch({type:'INPUT_CLASS_NAME', inputClassName})},
-    handleInputNames: (inputNames) => {dispatch({type:'INPUT_NAMES', inputNames})},
-
-    
-  }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(NewClass);
+export default NewClass;

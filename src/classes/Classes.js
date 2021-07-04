@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import MainMenu from "./Menu/MainMenu";
 import Logo from "../general/components/Logo";
 import StudentCard from "./class-display/student-card/StudentCard";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { DragDropContext } from "react-beautiful-dnd";
 import { checkActiveClass } from "../app-files/general";
 
 import { useHttpClient } from "../general/http-hook";
@@ -17,7 +17,10 @@ import { getStyle } from "./util";
 // Connects all components in subfolder together and acts as the main display page.
 
 const Classes = (props) => {
-  const { activeClass, classList } = props;
+  const activeClass = useSelector((state) => state.activeClass);
+  const classList = useSelector((state) => state.classList);
+  const userId = useSelector(state=>state.userId)
+  const dispatch = useDispatch()
   const { sendRequest } = useHttpClient();
   const [newNameListState, setNewNameListState] = useState([]);
 
@@ -34,7 +37,7 @@ const Classes = (props) => {
   const handleDatabaseUpdate = async (tempActiveClass) => {
     try {
       await sendRequest(
-        `${process.env.REACT_APP_API}/api/users/${props.userId}/${activeClass.id}`,
+        `${process.env.REACT_APP_API}/api/users/${userId}/${activeClass.id}`,
         "PATCH",
 
         JSON.stringify({
@@ -55,7 +58,7 @@ const Classes = (props) => {
   const handleDatabaseDelete = async () => {
     try {
       await sendRequest(
-        `${process.env.REACT_APP_API}/api/users/${props.userId}/${activeClass.id}`,
+        `${process.env.REACT_APP_API}/api/users/${userId}/${activeClass.id}`,
         "DELETE",
 
         null,
@@ -147,7 +150,7 @@ const Classes = (props) => {
       handleGroupStyling();
       handleFormatting();
     }
-  }, [props.activeClass]); //props.generalSelection.groups
+  }, [activeClass]); //props.generalSelection.groups
   const handleOnDragEnd = (result) => {
     if (!result.destination) {
       //if outside draggable container dont swap.
@@ -173,11 +176,11 @@ const Classes = (props) => {
       temp.students.splice(result.destination.index, 0, draggedItem);
     }
 
-    let newTempList = checkActiveClass(tempClassList, temp);
+    tempClassList = checkActiveClass(tempClassList, temp);
     if (props.userId) {
       props.handleDatabaseUpdate(temp);
     }
-    props.handleUpdate(temp, newTempList);
+    dispatch({type:"UPDATE_CLASS", temp, tempClassList})
   };
   return activeClass ? (
     <React.Fragment>
@@ -215,18 +218,4 @@ const Classes = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    activeClass: state.activeClass,
-    classList: state.classList,
-    userId: state.userId,
-  };
-};
-const mapDispatchToProps = (dispatch) => {
-  return {
-    handleUpdate: (temp, tempClassList) => {
-      dispatch({ type: "UPDATE_CLASS", temp, tempClassList });
-    },
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(Classes);
+export default Classes;

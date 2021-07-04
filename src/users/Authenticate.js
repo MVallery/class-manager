@@ -16,11 +16,12 @@ import {useHttpClient} from '../general/http-hook';
 import { GoogleLogin } from 'react-google-login';
 import GoogleIcon from './FormElements/GoogleIcon';
 import "./Authenticate.css";
-import {connect} from 'react-redux';
+import {useSelector,useDispatch} from 'react-redux';
 
 const Authenticate = props => {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const {isLoading, error, sendRequest, clearError} = useHttpClient();  
+  const dispatch = useDispatch();
   const [formState, inputHandler, setFormData] = useForm(
     {
       email: {
@@ -76,9 +77,8 @@ const Authenticate = props => {
             expiration: tokenExpirationDate.toISOString(),
           })
         );
-        props.login(responseData.userId, responseData.token);
-        props.handleUpdate(responseData.classList[0], responseData.classList);
-
+        dispatch({type:"LOGIN",userId:responseData.userId, token:responseData.token})
+        dispatch({type:"UPDATE_CLASS", temp:responseData.classList[0], tempClassList:responseData.classList})
       } catch (err) {
       }
 
@@ -99,8 +99,7 @@ const Authenticate = props => {
           'Content-Type': 'application/json'
           }
         );
-
-        props.login(responseData.userId, responseData.token);
+        dispatch({type:"LOGIN",userId:responseData.userId, token:responseData.token})
       } catch (err) {
       }
     }
@@ -143,8 +142,8 @@ const Authenticate = props => {
           expiration: tokenExpirationDate.toISOString(),
         })
       );
-      props.login(responseData.userId, id_token);
-      props.handleUpdate(responseData.classList[0], responseData.classList);
+      dispatch({type:"LOGIN", userId:responseData.userId, token:id_token})
+      dispatch({type:"UPDATE_CLASS", temp:responseData.classList[0], tempClassList:responseData.classList})
     }catch(error){
       console.log(error)
     }
@@ -214,20 +213,6 @@ const Authenticate = props => {
     </React.Fragment>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    activeClass: state.activeClass,
-    classList: state.classList,
-    userId:state.userId,
-    token:state.token,
-    isLoggedIn:state.isLoggedIn
-  }
-}
-const mapDispatchToProps = (dispatch) => {
-  return{
-    handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp, tempClassList })},
-    login: (userId, token) => {dispatch({type:'LOGIN', userId, token })},
-  }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(Authenticate);
+
+export default Authenticate;
 

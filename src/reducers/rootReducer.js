@@ -27,6 +27,7 @@ const rootReducer = (state = initState, action) => {
         inputClassName: action.inputClassName
       }
     case 'UPDATE_CLASS':
+      console.log('rootreducerupdateclass', action.tempClassList)
       return {
         ...state,
         activeClass: action.temp,

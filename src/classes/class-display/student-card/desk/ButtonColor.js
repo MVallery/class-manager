@@ -3,12 +3,13 @@ import ColorLens from "@material-ui/icons/ColorLens";
 import IconButton from "@material-ui/core/IconButton";
 import { TwitterPicker } from "react-color";
 import { checkActiveClass } from '../../../../app-files/general';
-import { useSelector, connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 const ButtonColor = props => {
   const {smallStyle, index} = props;
   const activeClass = useSelector((state)=>state.activeClass)
   const classList = useSelector((state)=>state.classList)
+  const dispatch = useDispatch();
   const popover = {
     position: "absolute",
     zIndex: "2",
@@ -28,8 +29,8 @@ const ButtonColor = props => {
     let temp = JSON.parse(JSON.stringify(activeClass));
 
     temp.students[index].displayColorPicker = false;
-    let newTempList = checkActiveClass(tempClassList, temp);
-    props.handleUpdate(temp, newTempList);
+    tempClassList = checkActiveClass(tempClassList, temp);
+    dispatch({type:"UPDATE_CLASS", temp, tempClassList})
   };
 
   const handleColorSelect = (index, e) => {
@@ -37,11 +38,11 @@ const ButtonColor = props => {
     let tempClassList = JSON.parse(JSON.stringify(classList));
 
     temp.students[index].background = e.hex;
-    let newTempList = checkActiveClass(tempClassList, temp);
+    tempClassList = checkActiveClass(tempClassList, temp);
     if (props.userId) {
       props.handleDatabaseUpdate(temp);
     }
-    props.handleUpdate(temp, newTempList);
+    dispatch({type:"UPDATE_CLASS", temp, tempClassList})
   };
 
   const handleOpenColorPicker = (index) => {
@@ -49,8 +50,8 @@ const ButtonColor = props => {
     let temp = JSON.parse(JSON.stringify(activeClass));
     temp.students[index].displayColorPicker =
       !temp.students[index].displayColorPicker;
-    let newTempList = checkActiveClass(tempClassList, temp);
-    props.handleUpdate(temp, newTempList);
+    tempClassList = checkActiveClass(tempClassList, temp);
+    dispatch({type:"UPDATE_CLASS", temp, tempClassList})
   };
 
   return(
@@ -83,11 +84,5 @@ const ButtonColor = props => {
     </React.Fragment>
   )
 }
-const mapDispatchToProps = (dispatch) => {
-  return {
-    handleUpdate: (temp, tempClassList) => {
-      dispatch({ type: "UPDATE_CLASS", temp, tempClassList });
-    },
-  };
-};
-export default connect(null, mapDispatchToProps)(ButtonColor);
+
+export default ButtonColor;

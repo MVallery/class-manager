@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 
 const SignButton = props => {
-  const buttonLabel = props.isLoggedIn? 'Sign out' : 'Sign in'
+  const isLoggedIn = useSelector(state=>state.isLoggedIn)
+  const buttonLabel = isLoggedIn? 'Sign out' : 'Sign in'
   return (
       <button className="logout-signup-button">
         <Link className="link-style" to="/authenticate">
@@ -13,12 +14,5 @@ const SignButton = props => {
     )
 
 }
-const mapStateToProps = (state) => {
-  return {
-    // activeClass: state.activeClass,
-    // classList: state.classList,
-    // userId: state.userId,
-    isLoggedIn: state.isLoggedIn,
-  };
-};
-export default connect(mapStateToProps)(SignButton);
+
+export default SignButton;
