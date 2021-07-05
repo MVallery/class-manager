@@ -1,7 +1,8 @@
 import React from 'react';
-import Modal from "../general/components/Modal";
-import NewClass from './components/NewClass';
+import Modal from "../../general/components/Modal";
+import NewClass from './NewClass';
 const NewClassModal = props =>{
+  console.log(props)
   return (
         <Modal
         show={props.showAddNewClassModal}

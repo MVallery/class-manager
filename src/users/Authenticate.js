@@ -95,7 +95,6 @@ const Authenticate = props => {
           }),
           {
             'Accept': 'application/json',
-
           'Content-Type': 'application/json'
           }
         );

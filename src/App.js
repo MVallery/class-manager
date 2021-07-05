@@ -1,20 +1,17 @@
 import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 import { CSSTransition } from "react-transition-group";
 
 import Classes from "./classes/Classes";
-import NewClass from "./classes/components/NewClass";
 import Home from "./general/Home";
 import Authenticate from "./users/Authenticate";
 import { styles } from "./AppStyles";
-import { colorPallet, checkActiveClass, cap } from "./app-files/general";
-
-import Modal from "./general/components/Modal";
+import { cap } from "./app-files/general";
+import NewClassModal from "./classes/new-class/NewClassModal";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import "./App.css";
-
 
 class MyStudents extends React.Component {
   constructor(props) {
@@ -42,9 +39,6 @@ class MyStudents extends React.Component {
       }
     }
   }
-  handleState = (data) => {
-    this.setState(data);
-  };
 
   showAddNewClassHandler = () => {
     this.setState({ showAddNewClassModal: true });
@@ -55,85 +49,45 @@ class MyStudents extends React.Component {
 
   handleChange = (e) => {
     const { name, value } = e.target;
-    this.props['handle'+cap(name)](value)
-
-  };
-
-  handleInput = (e) => {
-    const { value } = e.target;
-    let temp = JSON.parse(JSON.stringify(this.state.activeClass));
-    let tempClassList = JSON.parse(JSON.stringify(this.state.classList));
-
-    temp.styling.groups = Number(value);
-    let newTempList = checkActiveClass(tempClassList, temp);
-    for (let i = 0; i < value - (temp.students.length % value); i++) {
-      temp.students.push({ name: "blank", key: Math.floor(Math.random()) });
-    }
-    this.props.handleUpdate(temp, newTempList)
-  };
-
-  handleThemeInput = (e) => {
-    const { name, value } = e.target;
-    let temp = JSON.parse(JSON.stringify(this.props.activeClass));
-    let tempClassList = JSON.parse(JSON.stringify(this.props.classList));
-    temp.styling.theme = value;
-    for (let x in temp.students) {
-      temp.students[x].background = colorPallet(value);
-    }
-    let newTempList = checkActiveClass(tempClassList, temp);
-    this.props.handleUpdate(temp, newTempList)
-
+    this.props["handle" + cap(name)](value);
   };
 
   render() {
     return (
       <React.Fragment>
-          <Modal
-            show={this.state.showAddNewClassModal}
-            onCancel={this.cancelAddNewClassHandler}
-            header={<div>Create a new class: </div>}
-            footerClass="worksheet-item__modal-actions"
-          >
-            <NewClass
-              {...this}
-              {...this.state}
-              cancelAddNewClassHandler={this.cancelAddNewClassHandler}
+        <NewClassModal
+              showAddNewClassModal={this.state.showAddNewClassModal}
+              setAddNewClassModal={this.cancelAddNewClassHandler}
+              handleChange={this.handleChange}
             />
-          </Modal>
-          <Switch>
-            <Route path="/" exact>
-              <Home showAddNewClassHandler={this.showAddNewClassHandler} />
-            </Route>
-            <Route path="/signup" exact>
-              <Authenticate history={this.props.history}/>
-            </Route>
-            <Route path="/authenticate" exact>
-              <Authenticate history={this.props.history}/>
-            </Route>
-            <Route
-              path="/new-class"
-              exact
-              render={(props) => <NewClass {...this} {...this.state} />}
-            />
-            <Route
+        <Switch>
+          <Route path="/" exact>
+            <Home showAddNewClassHandler={this.showAddNewClassHandler} />
+          </Route>
+          <Route path="/signup" exact>
+            <Authenticate history={this.props.history} />
+          </Route>
+          <Route path="/authenticate" exact>
+            <Authenticate history={this.props.history} />
+          </Route>
+          <Route
             path="/classes"
             exact
             render={(props) => {
-              return(
-            <CSSTransition
-              in={true}
-              mountOnEnter
-              unmountOnExit
-              timeout={500}
-              classNames="transition-classes"
-            >
-              <Classes {...this} {...this.state} />
-
-            </CSSTransition>
-              )}}
-              />
-
-          </Switch>
+              return (
+                <CSSTransition
+                  in={true}
+                  mountOnEnter
+                  unmountOnExit
+                  timeout={500}
+                  classNames="transition-classes"
+                >
+                  <Classes {...this} {...this.state}/>
+                </CSSTransition>
+              );
+            }}
+          />
+        </Switch>
       </React.Fragment>
     );
   }
@@ -149,18 +103,28 @@ const mapStateToProps = (state) => {
     classList: state.classList,
     inputNames: state.inputNames,
     inputClassName: state.inputClassName,
-    isLoggedIn:state.isLoggedIn,
-    token:state.token,
-    userId:state.userId
-  }
-}
+    isLoggedIn: state.isLoggedIn,
+    token: state.token,
+    userId: state.userId,
+  };
+};
 const mapDispatchToProps = (dispatch) => {
-  return{
-    login: (userId, token) => {dispatch({type:'LOGIN', userId,token })},
-    logout: ()=> {dispatch({type:'LOGOUT'})},
-    handleInputNames: (inputNames) => {dispatch({type:'INPUT_NAMES', inputNames})},
-    handleInputClassName: (inputClassName) => {dispatch({type:'INPUT_CLASS_NAME', inputClassName})},
-    handleUpdate: (temp, tempClassList) => {dispatch({type:'UPDATE_CLASS', temp,tempClassList })}
-  }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(withRouter(MyStudents)));
+  return {
+    login: (userId, token) => {
+      dispatch({ type: "LOGIN", userId, token });
+    },
+    handleUpdate: (temp, tempClassList) => {
+      dispatch({ type: "UPDATE_CLASS", temp, tempClassList });
+    },
+    handleInputNames: (inputNames) => { //needed for onChange
+      dispatch({ type: "INPUT_NAMES", inputNames });
+    },
+    handleInputClassName: (inputClassName) => {
+      dispatch({ type: "INPUT_CLASS_NAME", inputClassName });
+    },
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(withRouter(MyStudents)));

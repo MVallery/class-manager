@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
-import SwitchClassMenu from "./SwitchClassMenu";
-import NewClassModal from "../NewClassModal";
+import SwitchClassMenu from "./switch-class/SwitchClassMenu";
+import NewClassModal from "../new-class/NewClassModal";
 import SignButton from './SignButton';
 import { useSelector, useDispatch } from "react-redux";
 import "./NavLinks.css";
@@ -22,7 +22,6 @@ const MainMenu = (props) => {
           <div className="navlinks-container">
             <SwitchClassMenu setAddNewClassModal={setAddNewClassModal} />
             <NewClassModal
-              handleChange={props.handleChange}
               showAddNewClassModal={showAddNewClassModal}
               setAddNewClassModal={setAddNewClassModal}
             />

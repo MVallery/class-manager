@@ -7,11 +7,11 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { checkActiveClass } from "../app-files/general";
 
 import { useHttpClient } from "../general/http-hook";
-import ClassTitleMenu from "./Menu/ClassTitleMenu";
-import GeneralClassButtons from "./components/GeneralClassButtons";
+import ClassTitleMenu from "./Menu/edit-class/ClassTitleMenu";
+import GeneralClassButtons from "./general-class-buttons/GeneralClassButtons";
 import StudentCardsDisplay from "./class-display/StuCardsDisplay";
 import StudentContainer from "./class-display/StudentContainer";
-import NewClass from "./components/NewClass";
+import NewClass from "./new-class/NewClass";
 import "./Classes.css";
 import { getStyle } from "./util";
 // Connects all components in subfolder together and acts as the main display page.
@@ -70,7 +70,7 @@ const Classes = (props) => {
   };
 
   const studentCards = activeClass
-    ? props.activeClass.students.map((record, index) => {
+    ? activeClass.students.map((record, index) => {
         return (
           <StudentCard
             smallStyle={smallStyle}
@@ -152,31 +152,35 @@ const Classes = (props) => {
     }
   }, [activeClass]); //props.generalSelection.groups
   const handleOnDragEnd = (result) => {
-    if (!result.destination) {
-      //if outside draggable container dont swap.
-      return;
+    
+    const dragEndSwap = (activeClass, classList, result)=>{
+      let temp = JSON.parse(JSON.stringify(activeClass));
+      let tempClassList = JSON.parse(JSON.stringify(classList));
+      if (!result.destination) {
+        //if outside draggable container dont swap.
+        return;
+      }
+      let draggedItem = temp.students[result.source.index];
+      let swappedItem = temp.students[result.destination.index];
+      if (draggedItem === swappedItem) {
+        return;
+      }
+      temp.students = temp.students.filter(
+        (item) => item !== draggedItem && item !== swappedItem
+      );
+      //ensuring that the splice does not change the index of the swapped/dragged item.
+      if (result.source.index > result.destination.index) {
+        temp.students.splice(result.destination.index, 0, draggedItem);
+        temp.students.splice(result.source.index, 0, swappedItem);
+      } else {
+        temp.students.splice(result.source.index, 0, swappedItem);
+        temp.students.splice(result.destination.index, 0, draggedItem);
+      }
+  
+      tempClassList = checkActiveClass(tempClassList, temp);
+      return {temp, tempClassList}
     }
-    let temp = JSON.parse(JSON.stringify(activeClass));
-    let tempClassList = JSON.parse(JSON.stringify(classList));
-
-    let draggedItem = activeClass.students[result.source.index];
-    let swappedItem = activeClass.students[result.destination.index];
-    if (draggedItem === swappedItem) {
-      return;
-    }
-    temp.students = activeClass.students.filter(
-      (item) => item !== draggedItem && item !== swappedItem
-    );
-    //ensuring that the splice does not change the index of the swapped/dragged item.
-    if (result.source.index > result.destination.index) {
-      temp.students.splice(result.destination.index, 0, draggedItem);
-      temp.students.splice(result.source.index, 0, swappedItem);
-    } else {
-      temp.students.splice(result.source.index, 0, swappedItem);
-      temp.students.splice(result.destination.index, 0, draggedItem);
-    }
-
-    tempClassList = checkActiveClass(tempClassList, temp);
+    const {temp, tempClassList} = dragEndSwap(activeClass, classList, result)
     if (props.userId) {
       props.handleDatabaseUpdate(temp);
     }
@@ -186,7 +190,6 @@ const Classes = (props) => {
     <React.Fragment>
       <MainMenu
         handleChange={props.handleChange}
-        handleState={props.handleState}
       >
         <ClassTitleMenu
           {...props}

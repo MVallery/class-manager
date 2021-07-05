@@ -61,14 +61,7 @@ const Input = (props) => {
         value={inputState.value}
       />
     ) : (
-//      : props.element ==='checkbox' ? (
-//       <Checkbox name={props.name} value={props.value} checked={props.checked} onChange={props.onChange} color='primary'/>
 
-//     ): props.element === 'radio'? (
-//       <Checkbox></Checkbox>
-//     ): props.element === 'text-field'? (
-// <Checkbox></Checkbox>
-//     ):(
       <textarea
         id={props.id}
         rows={props.rows || 3}

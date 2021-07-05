@@ -20,7 +20,7 @@ const ButtonSelect = props => {
   const handleSelection = (index) => {
     let temp = JSON.parse(JSON.stringify(activeClass));
     temp.students[index].isChecked = !temp.students[index].isChecked;
-    dispatch({ type: "UPDATE_CLASS", temp, classList });
+    dispatch({ type: "UPDATE_CLASS", temp, tempClassList:classList });
   };
 
   return(
